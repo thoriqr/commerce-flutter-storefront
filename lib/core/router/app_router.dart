@@ -2,6 +2,8 @@ import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_page.dart';
 import 'package:commerce_flutter_storefront/features/categories/presentation/categories_page.dart';
 import 'package:commerce_flutter_storefront/features/home/presentation/pages/home_page.dart';
+import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/pages/product_listing_page.dart';
 import 'package:commerce_flutter_storefront/features/shell/presentation/pages/app_shell_page.dart';
 import 'package:go_router/go_router.dart';
 
@@ -35,16 +37,13 @@ final router = GoRouter(
         ),
       ],
     ),
+    GoRoute(
+      path: AppRoutes.products,
+      builder: (context, state) {
+        final source = state.extra as ProductSource;
 
-    // todo
-    // GoRoute(
-    //   path: AppRoutes.products,
-    //   builder: ...
-    // ),
-
-    // GoRoute(
-    //   path: AppRoutes.product,
-    //   builder: ...
-    // ),
+        return ProductListingPage(source: source);
+      },
+    ),
   ],
 );

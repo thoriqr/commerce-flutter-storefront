@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/utils/image_utils.dart';
 import 'package:commerce_flutter_storefront/features/banner/data/models/hero_banner.dart';
 import 'package:commerce_flutter_storefront/features/banner/presentation/widgets/banner_indicator.dart';
+import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HeroBannerCarousel extends StatefulWidget {
   const HeroBannerCarousel({super.key, required this.banners});
@@ -80,11 +83,15 @@ class _HeroBannerCarouselState extends State<HeroBannerCarousel> {
 
                     return GestureDetector(
                       onTap: () {
-                        debugPrint(
-                          '${banner.targetType} - ${banner.targetValue}',
-                        );
+                        final source = switch (banner.targetType) {
+                          BannerTargetType.collection =>
+                            ProductSource.collection(banner.targetValue),
+                          BannerTargetType.category => ProductSource.category(
+                            banner.targetValue,
+                          ),
+                        };
 
-                        // nanti GoRouter di sini
+                        context.push(AppRoutes.products, extra: source);
                       },
                       child: Image.network(
                         ImageUtils.buildUrl(banner.imageKey),
