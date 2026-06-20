@@ -1,6 +1,6 @@
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_page.dart';
-import 'package:commerce_flutter_storefront/features/categories/presentation/categories_page.dart';
+import 'package:commerce_flutter_storefront/features/category/presentation/pages/category_tree_page.dart';
 import 'package:commerce_flutter_storefront/features/home/presentation/pages/home_page.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/pages/product_listing_page.dart';
@@ -23,7 +23,7 @@ final router = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.categories,
-              builder: (_, _) => const CategoriesPage(),
+              builder: (_, _) => const CategoryTreePage(),
             ),
           ],
         ),
