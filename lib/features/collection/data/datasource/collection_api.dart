@@ -1,6 +1,6 @@
 import 'package:commerce_flutter_storefront/core/models/api_response.dart';
-import 'package:commerce_flutter_storefront/features/collection/models/collection_detail.dart';
-import 'package:commerce_flutter_storefront/features/collection/models/collection_preview.dart';
+import 'package:commerce_flutter_storefront/features/collection/data/models/collection_detail.dart';
+import 'package:commerce_flutter_storefront/features/collection/data/models/collection_preview.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 

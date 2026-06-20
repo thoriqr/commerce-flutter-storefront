@@ -48,7 +48,7 @@ final class CollectionPreviewProvider
   }
 }
 
-String _$collectionPreviewHash() => r'cac702a706fb55ce5eb11febed1c9ee0224f3eff';
+String _$collectionPreviewHash() => r'72063ad449e34c57ccbc70622b7ee0731b61a3f2';
 
 @ProviderFor(collectionDetail)
 final collectionDetailProvider = CollectionDetailFamily._();
