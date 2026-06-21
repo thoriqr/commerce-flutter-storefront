@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/features/category/presentation/providers/category_provider.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/popular_category_section.dart';
+import 'package:commerce_flutter_storefront/features/home/presentation/widgets/home_popular_category_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,8 +13,8 @@ class HomePopularCategorySection extends ConsumerWidget {
 
     return categories.when(
       data: (data) => PopularCategorySection(categories: data),
-      loading: () => const SizedBox.shrink(),
-      error: (_, _) => const SizedBox.shrink(),
+      loading: () => const HomePopularCategorySkeleton(),
+      error: (error, _) => Center(child: Text(error.toString())),
     );
   }
 }
