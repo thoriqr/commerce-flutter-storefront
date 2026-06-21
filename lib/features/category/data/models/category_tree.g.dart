@@ -13,7 +13,11 @@ _CategoryTree _$CategoryTreeFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       slug: json['slug'] as String,
       slugPath: json['slugPath'] as String,
-      children: CategoryTree.fromJson(json['children'] as Map<String, dynamic>),
+      children:
+          (json['children'] as List<dynamic>?)
+              ?.map((e) => CategoryTree.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$CategoryTreeToJson(_CategoryTree instance) =>

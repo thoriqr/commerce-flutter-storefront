@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$CategoryTree {
 
- int get id; int? get parentId; String get name; String get slug; String get slugPath; CategoryTree get children;
+ int get id; int? get parentId; String get name; String get slug; String get slugPath; List<CategoryTree> get children;
 /// Create a copy of CategoryTree
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,12 +28,12 @@ $CategoryTreeCopyWith<CategoryTree> get copyWith => _$CategoryTreeCopyWithImpl<C
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryTree&&(identical(other.id, id) || other.id == id)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.slugPath, slugPath) || other.slugPath == slugPath)&&(identical(other.children, children) || other.children == children));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CategoryTree&&(identical(other.id, id) || other.id == id)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.slugPath, slugPath) || other.slugPath == slugPath)&&const DeepCollectionEquality().equals(other.children, children));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,parentId,name,slug,slugPath,children);
+int get hashCode => Object.hash(runtimeType,id,parentId,name,slug,slugPath,const DeepCollectionEquality().hash(children));
 
 @override
 String toString() {
@@ -48,11 +48,11 @@ abstract mixin class $CategoryTreeCopyWith<$Res>  {
   factory $CategoryTreeCopyWith(CategoryTree value, $Res Function(CategoryTree) _then) = _$CategoryTreeCopyWithImpl;
 @useResult
 $Res call({
- int id, int? parentId, String name, String slug, String slugPath, CategoryTree children
+ int id, int? parentId, String name, String slug, String slugPath, List<CategoryTree> children
 });
 
 
-$CategoryTreeCopyWith<$Res> get children;
+
 
 }
 /// @nodoc
@@ -73,19 +73,10 @@ as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_n
 as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,slugPath: null == slugPath ? _self.slugPath : slugPath // ignore: cast_nullable_to_non_nullable
 as String,children: null == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
-as CategoryTree,
+as List<CategoryTree>,
   ));
 }
-/// Create a copy of CategoryTree
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CategoryTreeCopyWith<$Res> get children {
-  
-  return $CategoryTreeCopyWith<$Res>(_self.children, (value) {
-    return _then(_self.copyWith(children: value));
-  });
-}
+
 }
 
 
@@ -167,7 +158,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int? parentId,  String name,  String slug,  String slugPath,  CategoryTree children)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int? parentId,  String name,  String slug,  String slugPath,  List<CategoryTree> children)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CategoryTree() when $default != null:
 return $default(_that.id,_that.parentId,_that.name,_that.slug,_that.slugPath,_that.children);case _:
@@ -188,7 +179,7 @@ return $default(_that.id,_that.parentId,_that.name,_that.slug,_that.slugPath,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int? parentId,  String name,  String slug,  String slugPath,  CategoryTree children)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int? parentId,  String name,  String slug,  String slugPath,  List<CategoryTree> children)  $default,) {final _that = this;
 switch (_that) {
 case _CategoryTree():
 return $default(_that.id,_that.parentId,_that.name,_that.slug,_that.slugPath,_that.children);case _:
@@ -208,7 +199,7 @@ return $default(_that.id,_that.parentId,_that.name,_that.slug,_that.slugPath,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int? parentId,  String name,  String slug,  String slugPath,  CategoryTree children)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int? parentId,  String name,  String slug,  String slugPath,  List<CategoryTree> children)?  $default,) {final _that = this;
 switch (_that) {
 case _CategoryTree() when $default != null:
 return $default(_that.id,_that.parentId,_that.name,_that.slug,_that.slugPath,_that.children);case _:
@@ -223,7 +214,7 @@ return $default(_that.id,_that.parentId,_that.name,_that.slug,_that.slugPath,_th
 @JsonSerializable()
 
 class _CategoryTree implements CategoryTree {
-  const _CategoryTree({required this.id, required this.parentId, required this.name, required this.slug, required this.slugPath, required this.children});
+  const _CategoryTree({required this.id, required this.parentId, required this.name, required this.slug, required this.slugPath, final  List<CategoryTree> children = const []}): _children = children;
   factory _CategoryTree.fromJson(Map<String, dynamic> json) => _$CategoryTreeFromJson(json);
 
 @override final  int id;
@@ -231,7 +222,13 @@ class _CategoryTree implements CategoryTree {
 @override final  String name;
 @override final  String slug;
 @override final  String slugPath;
-@override final  CategoryTree children;
+ final  List<CategoryTree> _children;
+@override@JsonKey() List<CategoryTree> get children {
+  if (_children is EqualUnmodifiableListView) return _children;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_children);
+}
+
 
 /// Create a copy of CategoryTree
 /// with the given fields replaced by the non-null parameter values.
@@ -246,12 +243,12 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryTree&&(identical(other.id, id) || other.id == id)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.slugPath, slugPath) || other.slugPath == slugPath)&&(identical(other.children, children) || other.children == children));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CategoryTree&&(identical(other.id, id) || other.id == id)&&(identical(other.parentId, parentId) || other.parentId == parentId)&&(identical(other.name, name) || other.name == name)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.slugPath, slugPath) || other.slugPath == slugPath)&&const DeepCollectionEquality().equals(other._children, _children));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,parentId,name,slug,slugPath,children);
+int get hashCode => Object.hash(runtimeType,id,parentId,name,slug,slugPath,const DeepCollectionEquality().hash(_children));
 
 @override
 String toString() {
@@ -266,11 +263,11 @@ abstract mixin class _$CategoryTreeCopyWith<$Res> implements $CategoryTreeCopyWi
   factory _$CategoryTreeCopyWith(_CategoryTree value, $Res Function(_CategoryTree) _then) = __$CategoryTreeCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int? parentId, String name, String slug, String slugPath, CategoryTree children
+ int id, int? parentId, String name, String slug, String slugPath, List<CategoryTree> children
 });
 
 
-@override $CategoryTreeCopyWith<$Res> get children;
+
 
 }
 /// @nodoc
@@ -290,21 +287,12 @@ as int,parentId: freezed == parentId ? _self.parentId : parentId // ignore: cast
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,slugPath: null == slugPath ? _self.slugPath : slugPath // ignore: cast_nullable_to_non_nullable
-as String,children: null == children ? _self.children : children // ignore: cast_nullable_to_non_nullable
-as CategoryTree,
+as String,children: null == children ? _self._children : children // ignore: cast_nullable_to_non_nullable
+as List<CategoryTree>,
   ));
 }
 
-/// Create a copy of CategoryTree
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$CategoryTreeCopyWith<$Res> get children {
-  
-  return $CategoryTreeCopyWith<$Res>(_self.children, (value) {
-    return _then(_self.copyWith(children: value));
-  });
-}
+
 }
 
 // dart format on

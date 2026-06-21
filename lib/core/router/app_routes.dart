@@ -5,4 +5,8 @@ abstract final class AppRoutes {
 
   static const products = '/products';
   static const product = '/product/:slug';
+
+  static String productDetail(String slug) {
+    return '/product/$slug';
+  }
 }

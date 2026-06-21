@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ProductDetailPage extends StatelessWidget {
-  const ProductDetailPage({super.key});
+  const ProductDetailPage({super.key, required this.slug});
+
+  final String slug;
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("ProductDetailPage"));
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(child: Text(slug)),
+    );
   }
 }

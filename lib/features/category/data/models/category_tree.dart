@@ -11,7 +11,8 @@ abstract class CategoryTree with _$CategoryTree {
     required String name,
     required String slug,
     required String slugPath,
-    required CategoryTree children,
+
+    @Default([]) List<CategoryTree> children,
   }) = _CategoryTree;
 
   factory CategoryTree.fromJson(Map<String, dynamic> json) =>
