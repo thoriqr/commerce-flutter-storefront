@@ -18,5 +18,5 @@ Future<List<CategoryTree>> categoryTree(Ref ref) {
 
 @riverpod
 Future<CategoryDetail> categoryDetail(Ref ref, String slugPath) {
-  return ref.watch(categoryRepositoryProvider).getCategoryDetail(slugPath);
+  return ref.read(categoryRepositoryProvider).getCategoryDetail(slugPath);
 }

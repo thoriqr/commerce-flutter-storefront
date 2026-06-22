@@ -146,7 +146,7 @@ final class CatalogFilterByCategoryProvider
 }
 
 String _$catalogFilterByCategoryHash() =>
-    r'06c2490d919ec38101d371f81adf2d973f3366af';
+    r'156159fa4259c23126fb1c59c75dabe1d24c98d5';
 
 final class CatalogFilterByCategoryFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<List<CatalogFilterGroup>>, String> {

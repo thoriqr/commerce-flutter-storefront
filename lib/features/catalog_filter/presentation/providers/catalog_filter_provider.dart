@@ -17,6 +17,6 @@ Future<List<CatalogFilterGroup>> catalogFilterByCategory(
   String slugPath,
 ) {
   return ref
-      .watch(catalogFilterRepositoryProvider)
+      .read(catalogFilterRepositoryProvider)
       .getCatalogFilterByCategory(slugPath);
 }

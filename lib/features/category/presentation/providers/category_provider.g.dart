@@ -146,7 +146,7 @@ final class CategoryDetailProvider
   }
 }
 
-String _$categoryDetailHash() => r'35e9ce10c18073638f61cd5691f7763e0d68eb62';
+String _$categoryDetailHash() => r'059d86d8698dcb658c2ab01cfec10578450bebe1';
 
 final class CategoryDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<CategoryDetail>, String> {

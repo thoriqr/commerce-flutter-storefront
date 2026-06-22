@@ -150,7 +150,7 @@ final class ProductsByCategoryProvider
 }
 
 String _$productsByCategoryHash() =>
-    r'2334c402de4b410dc38d1dd0edc29b7d490131ec';
+    r'b88c8644cd4f7e86f562ab8e56f0c49a1bf6efca';
 
 final class ProductsByCategoryFamily extends $Family
     with
@@ -234,7 +234,7 @@ final class ProductsByCollectionProvider
 }
 
 String _$productsByCollectionHash() =>
-    r'811e4de5887c104bfb63d89e82ee40e5a435c882';
+    r'2dc2fa8db6d103e14724c7da5976c85eacd532e4';
 
 final class ProductsByCollectionFamily extends $Family
     with
@@ -258,4 +258,160 @@ final class ProductsByCollectionFamily extends $Family
 
   @override
   String toString() => r'productsByCollectionProvider';
+}
+
+@ProviderFor(productDetail)
+final productDetailProvider = ProductDetailFamily._();
+
+final class ProductDetailProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ProductDetail>,
+          ProductDetail,
+          FutureOr<ProductDetail>
+        >
+    with $FutureModifier<ProductDetail>, $FutureProvider<ProductDetail> {
+  ProductDetailProvider._({
+    required ProductDetailFamily super.from,
+    required int super.argument,
+  }) : super(
+         retry: null,
+         name: r'productDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$productDetailHash();
+
+  @override
+  String toString() {
+    return r'productDetailProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<ProductDetail> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ProductDetail> create(Ref ref) {
+    final argument = this.argument as int;
+    return productDetail(ref, argument);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProductDetailProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$productDetailHash() => r'402f51b8a1763b79622440c4f8164ad0939f8c48';
+
+final class ProductDetailFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<ProductDetail>, int> {
+  ProductDetailFamily._()
+    : super(
+        retry: null,
+        name: r'productDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ProductDetailProvider call(int id) =>
+      ProductDetailProvider._(argument: id, from: this);
+
+  @override
+  String toString() => r'productDetailProvider';
+}
+
+@ProviderFor(productVariantDetail)
+final productVariantDetailProvider = ProductVariantDetailFamily._();
+
+final class ProductVariantDetailProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ProductVariantDetail>,
+          ProductVariantDetail,
+          FutureOr<ProductVariantDetail>
+        >
+    with
+        $FutureModifier<ProductVariantDetail>,
+        $FutureProvider<ProductVariantDetail> {
+  ProductVariantDetailProvider._({
+    required ProductVariantDetailFamily super.from,
+    required (int, int) super.argument,
+  }) : super(
+         retry: null,
+         name: r'productVariantDetailProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$productVariantDetailHash();
+
+  @override
+  String toString() {
+    return r'productVariantDetailProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<ProductVariantDetail> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ProductVariantDetail> create(Ref ref) {
+    final argument = this.argument as (int, int);
+    return productVariantDetail(ref, argument.$1, argument.$2);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ProductVariantDetailProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$productVariantDetailHash() =>
+    r'eade813a81598d915ec2e4101664fe4badf3cdaf';
+
+final class ProductVariantDetailFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<ProductVariantDetail>, (int, int)> {
+  ProductVariantDetailFamily._()
+    : super(
+        retry: null,
+        name: r'productVariantDetailProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ProductVariantDetailProvider call(int productId, int variantId) =>
+      ProductVariantDetailProvider._(
+        argument: (productId, variantId),
+        from: this,
+      );
+
+  @override
+  String toString() => r'productVariantDetailProvider';
 }

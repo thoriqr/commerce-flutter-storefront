@@ -1,6 +1,8 @@
 import 'package:commerce_flutter_storefront/features/product/data/datasource/product_api.dart';
+import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_listing_query_params.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_listing_result.dart';
+import 'package:commerce_flutter_storefront/features/product/data/models/product_variant_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/repositories/product_repository.dart';
 
 class ProductRepositoryImpl implements ProductRepository {
@@ -36,5 +38,22 @@ class ProductRepositoryImpl implements ProductRepository {
     final res = await _api.getProductsByCollection(slug, params.toQuery());
 
     return ProductListingResult(products: res.data, meta: res.meta);
+  }
+
+  @override
+  Future<ProductDetail> getProductDetail(int id) async {
+    final res = await _api.getProductDetail(id);
+
+    return res.data;
+  }
+
+  @override
+  Future<ProductVariantDetail> getProductVariantDetail(
+    int productId,
+    int variantId,
+  ) async {
+    final res = await _api.getProductVariantDetail(productId, variantId);
+
+    return res.data;
   }
 }

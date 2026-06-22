@@ -12,5 +12,5 @@ Future<List<CollectionPreview>> collectionPreview(Ref ref) {
 
 @riverpod
 Future<CollectionDetail> collectionDetail(Ref ref, String slug) {
-  return ref.watch(collectionRepositoryProvider).getCollectionBySlug(slug);
+  return ref.read(collectionRepositoryProvider).getCollectionBySlug(slug);
 }

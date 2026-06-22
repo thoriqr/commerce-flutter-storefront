@@ -105,7 +105,7 @@ final class CollectionDetailProvider
   }
 }
 
-String _$collectionDetailHash() => r'c8dda3a129a221d611d56629f0a7c8fb37655745';
+String _$collectionDetailHash() => r'4f9e3c2042800e8bebdb618c34958141e6c25600';
 
 final class CollectionDetailFamily extends $Family
     with $FunctionalFamilyOverride<FutureOr<CollectionDetail>, String> {
