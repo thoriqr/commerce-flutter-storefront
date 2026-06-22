@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ApiResponse<T> {
 
- bool get success; T get data; ApiMeta? get meta;
+ bool get success; T get data;
 /// Create a copy of ApiResponse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ApiResponseCopyWith<T, ApiResponse<T>> get copyWith => _$ApiResponseCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApiResponse<T>&&(identical(other.success, success) || other.success == success)&&const DeepCollectionEquality().equals(other.data, data)&&(identical(other.meta, meta) || other.meta == meta));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApiResponse<T>&&(identical(other.success, success) || other.success == success)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,const DeepCollectionEquality().hash(data),meta);
+int get hashCode => Object.hash(runtimeType,success,const DeepCollectionEquality().hash(data));
 
 @override
 String toString() {
-  return 'ApiResponse<$T>(success: $success, data: $data, meta: $meta)';
+  return 'ApiResponse<$T>(success: $success, data: $data)';
 }
 
 
@@ -48,11 +48,11 @@ abstract mixin class $ApiResponseCopyWith<T,$Res>  {
   factory $ApiResponseCopyWith(ApiResponse<T> value, $Res Function(ApiResponse<T>) _then) = _$ApiResponseCopyWithImpl;
 @useResult
 $Res call({
- bool success, T data, ApiMeta? meta
+ bool success, T data
 });
 
 
-$ApiMetaCopyWith<$Res>? get meta;
+
 
 }
 /// @nodoc
@@ -65,27 +65,14 @@ class _$ApiResponseCopyWithImpl<T,$Res>
 
 /// Create a copy of ApiResponse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? data = freezed,Object? meta = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? success = null,Object? data = freezed,}) {
   return _then(_self.copyWith(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as T,meta: freezed == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
-as ApiMeta?,
+as T,
   ));
 }
-/// Create a copy of ApiResponse
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ApiMetaCopyWith<$Res>? get meta {
-    if (_self.meta == null) {
-    return null;
-  }
 
-  return $ApiMetaCopyWith<$Res>(_self.meta!, (value) {
-    return _then(_self.copyWith(meta: value));
-  });
-}
 }
 
 
@@ -167,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success,  T data,  ApiMeta? meta)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool success,  T data)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApiResponse() when $default != null:
-return $default(_that.success,_that.data,_that.meta);case _:
+return $default(_that.success,_that.data);case _:
   return orElse();
 
 }
@@ -188,10 +175,10 @@ return $default(_that.success,_that.data,_that.meta);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success,  T data,  ApiMeta? meta)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool success,  T data)  $default,) {final _that = this;
 switch (_that) {
 case _ApiResponse():
-return $default(_that.success,_that.data,_that.meta);case _:
+return $default(_that.success,_that.data);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -208,10 +195,10 @@ return $default(_that.success,_that.data,_that.meta);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success,  T data,  ApiMeta? meta)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool success,  T data)?  $default,) {final _that = this;
 switch (_that) {
 case _ApiResponse() when $default != null:
-return $default(_that.success,_that.data,_that.meta);case _:
+return $default(_that.success,_that.data);case _:
   return null;
 
 }
@@ -223,12 +210,11 @@ return $default(_that.success,_that.data,_that.meta);case _:
 @JsonSerializable(genericArgumentFactories: true)
 
 class _ApiResponse<T> implements ApiResponse<T> {
-  const _ApiResponse({required this.success, required this.data, this.meta});
+  const _ApiResponse({required this.success, required this.data});
   factory _ApiResponse.fromJson(Map<String, dynamic> json,T Function(Object?) fromJsonT) => _$ApiResponseFromJson(json,fromJsonT);
 
 @override final  bool success;
 @override final  T data;
-@override final  ApiMeta? meta;
 
 /// Create a copy of ApiResponse
 /// with the given fields replaced by the non-null parameter values.
@@ -243,16 +229,16 @@ Map<String, dynamic> toJson(Object? Function(T) toJsonT) {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApiResponse<T>&&(identical(other.success, success) || other.success == success)&&const DeepCollectionEquality().equals(other.data, data)&&(identical(other.meta, meta) || other.meta == meta));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApiResponse<T>&&(identical(other.success, success) || other.success == success)&&const DeepCollectionEquality().equals(other.data, data));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,success,const DeepCollectionEquality().hash(data),meta);
+int get hashCode => Object.hash(runtimeType,success,const DeepCollectionEquality().hash(data));
 
 @override
 String toString() {
-  return 'ApiResponse<$T>(success: $success, data: $data, meta: $meta)';
+  return 'ApiResponse<$T>(success: $success, data: $data)';
 }
 
 
@@ -263,11 +249,11 @@ abstract mixin class _$ApiResponseCopyWith<T,$Res> implements $ApiResponseCopyWi
   factory _$ApiResponseCopyWith(_ApiResponse<T> value, $Res Function(_ApiResponse<T>) _then) = __$ApiResponseCopyWithImpl;
 @override @useResult
 $Res call({
- bool success, T data, ApiMeta? meta
+ bool success, T data
 });
 
 
-@override $ApiMetaCopyWith<$Res>? get meta;
+
 
 }
 /// @nodoc
@@ -280,28 +266,15 @@ class __$ApiResponseCopyWithImpl<T,$Res>
 
 /// Create a copy of ApiResponse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? data = freezed,Object? meta = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? success = null,Object? data = freezed,}) {
   return _then(_ApiResponse<T>(
 success: null == success ? _self.success : success // ignore: cast_nullable_to_non_nullable
 as bool,data: freezed == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
-as T,meta: freezed == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
-as ApiMeta?,
+as T,
   ));
 }
 
-/// Create a copy of ApiResponse
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ApiMetaCopyWith<$Res>? get meta {
-    if (_self.meta == null) {
-    return null;
-  }
 
-  return $ApiMetaCopyWith<$Res>(_self.meta!, (value) {
-    return _then(_self.copyWith(meta: value));
-  });
-}
 }
 
 // dart format on
