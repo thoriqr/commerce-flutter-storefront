@@ -1,7 +1,7 @@
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:commerce_flutter_storefront/features/collection/data/models/collection_detail.dart';
 import 'package:commerce_flutter_storefront/features/collection/data/models/collection_preview.dart';
 import 'package:commerce_flutter_storefront/features/collection/di/collection_repository_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'collection_provider.g.dart';
 

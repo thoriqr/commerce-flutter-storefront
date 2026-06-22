@@ -1,5 +1,5 @@
-import 'package:commerce_flutter_storefront/features/collection/di/collection_api_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:commerce_flutter_storefront/features/collection/di/collection_api_provider.dart';
 
 import '../domain/repositories/collection_repository.dart';
 import '../data/repositories/collection_repository_impl.dart';
