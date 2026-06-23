@@ -1,6 +1,7 @@
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_category_header_section.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_collection_header_section.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_grid_section.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_search_header_section.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class ProductListingPage extends StatelessWidget {
         children: [
           _buildHeader(),
 
-          const Expanded(child: SizedBox()),
+          Expanded(child: ProductGridSection(source: source)),
         ],
       ),
     );
