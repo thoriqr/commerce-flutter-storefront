@@ -1,10 +1,9 @@
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_category_header_section.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_collection_header_section.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_grid_section.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_toolbar_section.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_search_header_section.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_content.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_search_header.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductListingPage extends StatelessWidget {
   const ProductListingPage({super.key, required this.source});
@@ -14,29 +13,30 @@ class ProductListingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Column(
         children: [
-          _buildHeader(),
+          AppSearchHeader(
+            initialValue: switch (source) {
+              SearchSource(:final query) => query,
+              _ => '',
+            },
+            onSearch: (query) {
+              switch (source) {
+                case SearchSource():
+                  context.replace(
+                    AppRoutes.products,
+                    extra: SearchSource(query),
+                  );
 
-          ProductListingToolbarSection(source: source),
+                default:
+                  context.push(AppRoutes.products, extra: SearchSource(query));
+              }
+            },
+          ),
 
-          Expanded(child: ProductGridSection(source: source)),
+          Expanded(child: ProductListingContent(source: source)),
         ],
       ),
     );
-  }
-
-  Widget _buildHeader() {
-    switch (source) {
-      case CollectionSource(:final slug):
-        return ProductCollectionHeaderSection(slug: slug);
-
-      case CategorySource(:final slugPath):
-        return ProductCategoryHeaderSection(slugPath: slugPath);
-
-      case SearchSource(:final query):
-        return ProductSearchHeaderSection(query: query);
-    }
   }
 }

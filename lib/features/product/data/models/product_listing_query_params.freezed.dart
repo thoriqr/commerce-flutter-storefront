@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductListingQueryParams {
 
- String? get cursor; int get limit; int? get priceMin; int? get priceMax; ProductSortBy get sortBy; SortDirection get sortDir; Map<String, String> get filters;
+ String? get cursor; int get limit; int? get priceMin; int? get priceMax; ProductSortBy get sortBy; SortDirection get sortDir; Map<String, List<String>> get filters;
 /// Create a copy of ProductListingQueryParams
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $ProductListingQueryParamsCopyWith<$Res>  {
   factory $ProductListingQueryParamsCopyWith(ProductListingQueryParams value, $Res Function(ProductListingQueryParams) _then) = _$ProductListingQueryParamsCopyWithImpl;
 @useResult
 $Res call({
- String? cursor, int limit, int? priceMin, int? priceMax, ProductSortBy sortBy, SortDirection sortDir, Map<String, String> filters
+ String? cursor, int limit, int? priceMin, int? priceMax, ProductSortBy sortBy, SortDirection sortDir, Map<String, List<String>> filters
 });
 
 
@@ -71,7 +71,7 @@ as int?,priceMax: freezed == priceMax ? _self.priceMax : priceMax // ignore: cas
 as int?,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
 as ProductSortBy,sortDir: null == sortDir ? _self.sortDir : sortDir // ignore: cast_nullable_to_non_nullable
 as SortDirection,filters: null == filters ? _self.filters : filters // ignore: cast_nullable_to_non_nullable
-as Map<String, String>,
+as Map<String, List<String>>,
   ));
 }
 
@@ -156,7 +156,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cursor,  int limit,  int? priceMin,  int? priceMax,  ProductSortBy sortBy,  SortDirection sortDir,  Map<String, String> filters)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? cursor,  int limit,  int? priceMin,  int? priceMax,  ProductSortBy sortBy,  SortDirection sortDir,  Map<String, List<String>> filters)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductListingQueryParams() when $default != null:
 return $default(_that.cursor,_that.limit,_that.priceMin,_that.priceMax,_that.sortBy,_that.sortDir,_that.filters);case _:
@@ -177,7 +177,7 @@ return $default(_that.cursor,_that.limit,_that.priceMin,_that.priceMax,_that.sor
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cursor,  int limit,  int? priceMin,  int? priceMax,  ProductSortBy sortBy,  SortDirection sortDir,  Map<String, String> filters)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? cursor,  int limit,  int? priceMin,  int? priceMax,  ProductSortBy sortBy,  SortDirection sortDir,  Map<String, List<String>> filters)  $default,) {final _that = this;
 switch (_that) {
 case _ProductListingQueryParams():
 return $default(_that.cursor,_that.limit,_that.priceMin,_that.priceMax,_that.sortBy,_that.sortDir,_that.filters);case _:
@@ -197,7 +197,7 @@ return $default(_that.cursor,_that.limit,_that.priceMin,_that.priceMax,_that.sor
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cursor,  int limit,  int? priceMin,  int? priceMax,  ProductSortBy sortBy,  SortDirection sortDir,  Map<String, String> filters)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? cursor,  int limit,  int? priceMin,  int? priceMax,  ProductSortBy sortBy,  SortDirection sortDir,  Map<String, List<String>> filters)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductListingQueryParams() when $default != null:
 return $default(_that.cursor,_that.limit,_that.priceMin,_that.priceMax,_that.sortBy,_that.sortDir,_that.filters);case _:
@@ -212,7 +212,7 @@ return $default(_that.cursor,_that.limit,_that.priceMin,_that.priceMax,_that.sor
 
 
 class _ProductListingQueryParams implements ProductListingQueryParams {
-  const _ProductListingQueryParams({this.cursor, this.limit = 12, this.priceMin, this.priceMax, this.sortBy = ProductSortBy.createdAt, this.sortDir = SortDirection.desc, final  Map<String, String> filters = const {}}): _filters = filters;
+  const _ProductListingQueryParams({this.cursor, this.limit = 12, this.priceMin, this.priceMax, this.sortBy = ProductSortBy.createdAt, this.sortDir = SortDirection.desc, final  Map<String, List<String>> filters = const {}}): _filters = filters;
   
 
 @override final  String? cursor;
@@ -221,8 +221,8 @@ class _ProductListingQueryParams implements ProductListingQueryParams {
 @override final  int? priceMax;
 @override@JsonKey() final  ProductSortBy sortBy;
 @override@JsonKey() final  SortDirection sortDir;
- final  Map<String, String> _filters;
-@override@JsonKey() Map<String, String> get filters {
+ final  Map<String, List<String>> _filters;
+@override@JsonKey() Map<String, List<String>> get filters {
   if (_filters is EqualUnmodifiableMapView) return _filters;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableMapView(_filters);
@@ -259,7 +259,7 @@ abstract mixin class _$ProductListingQueryParamsCopyWith<$Res> implements $Produ
   factory _$ProductListingQueryParamsCopyWith(_ProductListingQueryParams value, $Res Function(_ProductListingQueryParams) _then) = __$ProductListingQueryParamsCopyWithImpl;
 @override @useResult
 $Res call({
- String? cursor, int limit, int? priceMin, int? priceMax, ProductSortBy sortBy, SortDirection sortDir, Map<String, String> filters
+ String? cursor, int limit, int? priceMin, int? priceMax, ProductSortBy sortBy, SortDirection sortDir, Map<String, List<String>> filters
 });
 
 
@@ -285,7 +285,7 @@ as int?,priceMax: freezed == priceMax ? _self.priceMax : priceMax // ignore: cas
 as int?,sortBy: null == sortBy ? _self.sortBy : sortBy // ignore: cast_nullable_to_non_nullable
 as ProductSortBy,sortDir: null == sortDir ? _self.sortDir : sortDir // ignore: cast_nullable_to_non_nullable
 as SortDirection,filters: null == filters ? _self._filters : filters // ignore: cast_nullable_to_non_nullable
-as Map<String, String>,
+as Map<String, List<String>>,
   ));
 }
 

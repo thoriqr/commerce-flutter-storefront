@@ -19,7 +19,7 @@ abstract class ProductListingQueryParams with _$ProductListingQueryParams {
 
     @Default(SortDirection.desc) SortDirection sortDir,
 
-    @Default({}) Map<String, String> filters,
+    @Default({}) Map<String, List<String>> filters,
   }) = _ProductListingQueryParams;
 }
 
@@ -38,7 +38,7 @@ extension ProductListingQueryParamsX on ProductListingQueryParams {
 
       'sortDir': sortDir.value,
 
-      ...filters,
+      ...filters.map((key, values) => MapEntry(key, values.join(','))),
     };
   }
 }

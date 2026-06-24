@@ -59,7 +59,7 @@ class ProductListing extends _$ProductListing {
     await _reload(params);
   }
 
-  Future<void> applyFilters(Map<String, String> filters) async {
+  Future<void> applyFilters(Map<String, List<String>> filters) async {
     final current = state.value;
 
     if (current == null) return;
@@ -72,7 +72,7 @@ class ProductListing extends _$ProductListing {
   Future<void> applyAllFilters({
     int? priceMin,
     int? priceMax,
-    required Map<String, String> filters,
+    required Map<String, List<String>> filters,
   }) async {
     final current = state.value;
 

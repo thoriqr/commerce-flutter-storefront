@@ -1,5 +1,5 @@
 import 'package:commerce_flutter_storefront/features/banner/presentation/widgets/hero_banner_carousel.dart';
-import 'package:commerce_flutter_storefront/features/home/presentation/widgets/home_hero_section_skeleton.dart';
+import 'package:commerce_flutter_storefront/features/home/presentation/widgets/skeleton/home_hero_section_skeleton.dart';
 import 'package:commerce_flutter_storefront/features/banner/presentation/providers/banner_provider.dart';
 import 'package:flutter/material.dart';
 

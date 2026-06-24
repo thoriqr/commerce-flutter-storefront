@@ -1,6 +1,6 @@
 import 'package:commerce_flutter_storefront/features/collection/presentation/providers/collection_provider.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/widgets/collection_preview_section.dart';
-import 'package:commerce_flutter_storefront/features/home/presentation/widgets/home_collection_preview_section_skeleton.dart';
+import 'package:commerce_flutter_storefront/features/home/presentation/widgets/skeleton/home_collection_preview_section_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

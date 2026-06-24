@@ -11,7 +11,7 @@ class CatalogFilterSection extends StatelessWidget {
 
   final List<CatalogFilterGroup> filters;
 
-  final Map<String, String> selectedFilters;
+  final Map<String, List<String>> selectedFilters;
 
   final void Function(String name, String value) onSelected;
 
@@ -41,7 +41,9 @@ class CatalogFilterSection extends StatelessWidget {
                         )
                       : null,
                   label: Text('${item.label} (${item.count})'),
-                  selected: selectedFilters[group.name] == item.value,
+                  selected:
+                      selectedFilters[group.name]?.contains(item.value) ??
+                      false,
                   onSelected: (_) {
                     onSelected(group.name, item.value);
                   },

@@ -25,7 +25,7 @@ class _ProductFilterDrawerState extends ConsumerState<ProductFilterDrawer> {
   late final TextEditingController _minPriceController;
   late final TextEditingController _maxPriceController;
 
-  final Map<String, String> _selectedFilters = {};
+  final Map<String, List<String>> _selectedFilters = {};
 
   @override
   void initState() {
@@ -145,10 +145,20 @@ class _ProductFilterDrawerState extends ConsumerState<ProductFilterDrawer> {
                   selectedFilters: _selectedFilters,
                   onSelected: (name, value) {
                     setState(() {
-                      if (_selectedFilters[name] == value) {
+                      final values = List<String>.from(
+                        _selectedFilters[name] ?? [],
+                      );
+
+                      if (values.contains(value)) {
+                        values.remove(value);
+                      } else {
+                        values.add(value);
+                      }
+
+                      if (values.isEmpty) {
                         _selectedFilters.remove(name);
                       } else {
-                        _selectedFilters[name] = value;
+                        _selectedFilters[name] = values;
                       }
                     });
                   },
