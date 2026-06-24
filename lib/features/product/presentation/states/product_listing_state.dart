@@ -13,6 +13,8 @@ abstract class ProductListingState with _$ProductListingState {
     required CursorMeta meta,
     required ProductListingQueryParams params,
     required ProductSortOption selectedSort,
+
+    @Default(0) int activeFilterCount,
     @Default(false) bool isLoadingMore,
   }) = _ProductListingState;
 }

@@ -69,6 +69,61 @@ class ProductListing extends _$ProductListing {
     await _reload(params);
   }
 
+  Future<void> applyAllFilters({
+    int? priceMin,
+    int? priceMax,
+    required Map<String, String> filters,
+  }) async {
+    final current = state.value;
+
+    if (current == null) return;
+
+    final params = current.params.copyWith(
+      cursor: null,
+      priceMin: priceMin,
+      priceMax: priceMax,
+      filters: filters,
+    );
+
+    final activeFilterCount =
+        filters.length + ((priceMin != null || priceMax != null) ? 1 : 0);
+
+    final result = await _fetchProducts(source, params);
+
+    state = AsyncData(
+      current.copyWith(
+        products: result.products,
+        meta: result.meta,
+        params: params,
+        activeFilterCount: activeFilterCount,
+      ),
+    );
+  }
+
+  Future<void> clearAllFilters() async {
+    final current = state.value;
+
+    if (current == null) return;
+
+    final params = current.params.copyWith(
+      cursor: null,
+      filters: {},
+      priceMin: null,
+      priceMax: null,
+    );
+
+    final result = await _fetchProducts(source, params);
+
+    state = AsyncData(
+      current.copyWith(
+        products: result.products,
+        meta: result.meta,
+        params: params,
+        activeFilterCount: 0,
+      ),
+    );
+  }
+
   Future<void> applyPriceRange({int? priceMin, int? priceMax}) async {
     final current = state.value;
 

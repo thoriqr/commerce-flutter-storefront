@@ -1,4 +1,3 @@
-import 'package:commerce_flutter_storefront/features/catalog_filter/data/models/catalog_filter_value.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'catalog_filter_group.freezed.dart';
@@ -14,4 +13,17 @@ abstract class CatalogFilterGroup with _$CatalogFilterGroup {
 
   factory CatalogFilterGroup.fromJson(Map<String, dynamic> json) =>
       _$CatalogFilterGroupFromJson(json);
+}
+
+@freezed
+abstract class CatalogFilterValue with _$CatalogFilterValue {
+  const factory CatalogFilterValue({
+    required String value,
+    required String label,
+    required int count,
+    required String? hexColor,
+  }) = _CatalogFilterValue;
+
+  factory CatalogFilterValue.fromJson(Map<String, dynamic> json) =>
+      _$CatalogFilterValueFromJson(json);
 }

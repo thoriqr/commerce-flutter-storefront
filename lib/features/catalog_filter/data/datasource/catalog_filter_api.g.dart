@@ -24,7 +24,7 @@ class _CatalogFilterApi implements CatalogFilterApi {
     String query,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'q': query};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ApiResponse<List<CatalogFilterGroup>>>(
@@ -63,7 +63,7 @@ class _CatalogFilterApi implements CatalogFilterApi {
     String slugPath,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'slugPath': slugPath};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ApiResponse<List<CatalogFilterGroup>>>(

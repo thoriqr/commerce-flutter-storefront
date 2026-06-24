@@ -1,3 +1,6 @@
+import 'package:commerce_flutter_storefront/features/catalog_filter/data/models/catalog_filter_group.dart';
+import 'package:commerce_flutter_storefront/features/catalog_filter/presentation/providers/catalog_filter_provider.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_filter_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,6 +17,19 @@ class ProductListingToolbarSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final listing = ref.watch(productListingProvider(source));
 
+    final AsyncValue<List<CatalogFilterGroup>>? catalogFilters =
+        switch (source) {
+          CategorySource(:final slugPath) => ref.watch(
+            catalogFilterByCategoryProvider(slugPath),
+          ),
+
+          SearchSource(:final query) => ref.watch(
+            catalogFilterBySearchProvider(query),
+          ),
+
+          CollectionSource() => null,
+        };
+
     return listing.when(
       loading: () => const SizedBox.shrink(),
       error: (_, _) => const SizedBox.shrink(),
@@ -23,11 +39,29 @@ class ProductListingToolbarSection extends ConsumerWidget {
           child: Row(
             children: [
               OutlinedButton.icon(
-                onPressed: () {
-                  debugPrint('OPEN FILTER');
-                },
+                onPressed: catalogFilters is AsyncLoading
+                    ? null
+                    : () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (_) {
+                            return ProductFilterDrawer(
+                              source: source,
+                              catalogFilters: switch (catalogFilters) {
+                                AsyncData(:final value) => value,
+                                _ => [],
+                              },
+                            );
+                          },
+                        );
+                      },
                 icon: const Icon(Icons.tune),
-                label: const Text('Filter'),
+                label: Text(
+                  state.activeFilterCount > 0
+                      ? 'Filter (${state.activeFilterCount})'
+                      : 'Filter',
+                ),
               ),
 
               const Spacer(),

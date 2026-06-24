@@ -21,3 +21,19 @@ Map<String, dynamic> _$CatalogFilterGroupToJson(_CatalogFilterGroup instance) =>
       'label': instance.label,
       'values': instance.values,
     };
+
+_CatalogFilterValue _$CatalogFilterValueFromJson(Map<String, dynamic> json) =>
+    _CatalogFilterValue(
+      value: json['value'] as String,
+      label: json['label'] as String,
+      count: (json['count'] as num).toInt(),
+      hexColor: json['hexColor'] as String?,
+    );
+
+Map<String, dynamic> _$CatalogFilterValueToJson(_CatalogFilterValue instance) =>
+    <String, dynamic>{
+      'value': instance.value,
+      'label': instance.label,
+      'count': instance.count,
+      'hexColor': instance.hexColor,
+    };

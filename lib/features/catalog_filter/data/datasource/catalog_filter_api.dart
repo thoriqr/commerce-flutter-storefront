@@ -11,11 +11,11 @@ abstract class CatalogFilterApi {
 
   @GET("/store/products/filters")
   Future<ApiResponse<List<CatalogFilterGroup>>> getCatalogFilterBySearch(
-    @Path("q") String query,
+    @Query("q") String query,
   );
 
   @GET("/store/categories/filters")
   Future<ApiResponse<List<CatalogFilterGroup>>> getCatalogFilterByCategory(
-    @Path("slugPath") String slugPath,
+    @Query("slugPath") String slugPath,
   );
 }

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductListingState {
 
- List<ProductSummary> get products; CursorMeta get meta; ProductListingQueryParams get params; ProductSortOption get selectedSort; bool get isLoadingMore;
+ List<ProductSummary> get products; CursorMeta get meta; ProductListingQueryParams get params; ProductSortOption get selectedSort; int get activeFilterCount; bool get isLoadingMore;
 /// Create a copy of ProductListingState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $ProductListingStateCopyWith<ProductListingState> get copyWith => _$ProductListi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductListingState&&const DeepCollectionEquality().equals(other.products, products)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.params, params) || other.params == params)&&(identical(other.selectedSort, selectedSort) || other.selectedSort == selectedSort)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductListingState&&const DeepCollectionEquality().equals(other.products, products)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.params, params) || other.params == params)&&(identical(other.selectedSort, selectedSort) || other.selectedSort == selectedSort)&&(identical(other.activeFilterCount, activeFilterCount) || other.activeFilterCount == activeFilterCount)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(products),meta,params,selectedSort,isLoadingMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(products),meta,params,selectedSort,activeFilterCount,isLoadingMore);
 
 @override
 String toString() {
-  return 'ProductListingState(products: $products, meta: $meta, params: $params, selectedSort: $selectedSort, isLoadingMore: $isLoadingMore)';
+  return 'ProductListingState(products: $products, meta: $meta, params: $params, selectedSort: $selectedSort, activeFilterCount: $activeFilterCount, isLoadingMore: $isLoadingMore)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $ProductListingStateCopyWith<$Res>  {
   factory $ProductListingStateCopyWith(ProductListingState value, $Res Function(ProductListingState) _then) = _$ProductListingStateCopyWithImpl;
 @useResult
 $Res call({
- List<ProductSummary> products, CursorMeta meta, ProductListingQueryParams params, ProductSortOption selectedSort, bool isLoadingMore
+ List<ProductSummary> products, CursorMeta meta, ProductListingQueryParams params, ProductSortOption selectedSort, int activeFilterCount, bool isLoadingMore
 });
 
 
@@ -62,13 +62,14 @@ class _$ProductListingStateCopyWithImpl<$Res>
 
 /// Create a copy of ProductListingState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? products = null,Object? meta = null,Object? params = null,Object? selectedSort = null,Object? isLoadingMore = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? products = null,Object? meta = null,Object? params = null,Object? selectedSort = null,Object? activeFilterCount = null,Object? isLoadingMore = null,}) {
   return _then(_self.copyWith(
 products: null == products ? _self.products : products // ignore: cast_nullable_to_non_nullable
 as List<ProductSummary>,meta: null == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
 as CursorMeta,params: null == params ? _self.params : params // ignore: cast_nullable_to_non_nullable
 as ProductListingQueryParams,selectedSort: null == selectedSort ? _self.selectedSort : selectedSort // ignore: cast_nullable_to_non_nullable
-as ProductSortOption,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as ProductSortOption,activeFilterCount: null == activeFilterCount ? _self.activeFilterCount : activeFilterCount // ignore: cast_nullable_to_non_nullable
+as int,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -172,10 +173,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<ProductSummary> products,  CursorMeta meta,  ProductListingQueryParams params,  ProductSortOption selectedSort,  bool isLoadingMore)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( List<ProductSummary> products,  CursorMeta meta,  ProductListingQueryParams params,  ProductSortOption selectedSort,  int activeFilterCount,  bool isLoadingMore)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductListingState() when $default != null:
-return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.isLoadingMore);case _:
+return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.activeFilterCount,_that.isLoadingMore);case _:
   return orElse();
 
 }
@@ -193,10 +194,10 @@ return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<ProductSummary> products,  CursorMeta meta,  ProductListingQueryParams params,  ProductSortOption selectedSort,  bool isLoadingMore)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( List<ProductSummary> products,  CursorMeta meta,  ProductListingQueryParams params,  ProductSortOption selectedSort,  int activeFilterCount,  bool isLoadingMore)  $default,) {final _that = this;
 switch (_that) {
 case _ProductListingState():
-return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.isLoadingMore);case _:
+return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.activeFilterCount,_that.isLoadingMore);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -213,10 +214,10 @@ return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<ProductSummary> products,  CursorMeta meta,  ProductListingQueryParams params,  ProductSortOption selectedSort,  bool isLoadingMore)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( List<ProductSummary> products,  CursorMeta meta,  ProductListingQueryParams params,  ProductSortOption selectedSort,  int activeFilterCount,  bool isLoadingMore)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductListingState() when $default != null:
-return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.isLoadingMore);case _:
+return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.activeFilterCount,_that.isLoadingMore);case _:
   return null;
 
 }
@@ -228,7 +229,7 @@ return $default(_that.products,_that.meta,_that.params,_that.selectedSort,_that.
 
 
 class _ProductListingState implements ProductListingState {
-  const _ProductListingState({required final  List<ProductSummary> products, required this.meta, required this.params, required this.selectedSort, this.isLoadingMore = false}): _products = products;
+  const _ProductListingState({required final  List<ProductSummary> products, required this.meta, required this.params, required this.selectedSort, this.activeFilterCount = 0, this.isLoadingMore = false}): _products = products;
   
 
  final  List<ProductSummary> _products;
@@ -241,6 +242,7 @@ class _ProductListingState implements ProductListingState {
 @override final  CursorMeta meta;
 @override final  ProductListingQueryParams params;
 @override final  ProductSortOption selectedSort;
+@override@JsonKey() final  int activeFilterCount;
 @override@JsonKey() final  bool isLoadingMore;
 
 /// Create a copy of ProductListingState
@@ -253,16 +255,16 @@ _$ProductListingStateCopyWith<_ProductListingState> get copyWith => __$ProductLi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductListingState&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.params, params) || other.params == params)&&(identical(other.selectedSort, selectedSort) || other.selectedSort == selectedSort)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductListingState&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.params, params) || other.params == params)&&(identical(other.selectedSort, selectedSort) || other.selectedSort == selectedSort)&&(identical(other.activeFilterCount, activeFilterCount) || other.activeFilterCount == activeFilterCount)&&(identical(other.isLoadingMore, isLoadingMore) || other.isLoadingMore == isLoadingMore));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),meta,params,selectedSort,isLoadingMore);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),meta,params,selectedSort,activeFilterCount,isLoadingMore);
 
 @override
 String toString() {
-  return 'ProductListingState(products: $products, meta: $meta, params: $params, selectedSort: $selectedSort, isLoadingMore: $isLoadingMore)';
+  return 'ProductListingState(products: $products, meta: $meta, params: $params, selectedSort: $selectedSort, activeFilterCount: $activeFilterCount, isLoadingMore: $isLoadingMore)';
 }
 
 
@@ -273,7 +275,7 @@ abstract mixin class _$ProductListingStateCopyWith<$Res> implements $ProductList
   factory _$ProductListingStateCopyWith(_ProductListingState value, $Res Function(_ProductListingState) _then) = __$ProductListingStateCopyWithImpl;
 @override @useResult
 $Res call({
- List<ProductSummary> products, CursorMeta meta, ProductListingQueryParams params, ProductSortOption selectedSort, bool isLoadingMore
+ List<ProductSummary> products, CursorMeta meta, ProductListingQueryParams params, ProductSortOption selectedSort, int activeFilterCount, bool isLoadingMore
 });
 
 
@@ -290,13 +292,14 @@ class __$ProductListingStateCopyWithImpl<$Res>
 
 /// Create a copy of ProductListingState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? products = null,Object? meta = null,Object? params = null,Object? selectedSort = null,Object? isLoadingMore = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? products = null,Object? meta = null,Object? params = null,Object? selectedSort = null,Object? activeFilterCount = null,Object? isLoadingMore = null,}) {
   return _then(_ProductListingState(
 products: null == products ? _self._products : products // ignore: cast_nullable_to_non_nullable
 as List<ProductSummary>,meta: null == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
 as CursorMeta,params: null == params ? _self.params : params // ignore: cast_nullable_to_non_nullable
 as ProductListingQueryParams,selectedSort: null == selectedSort ? _self.selectedSort : selectedSort // ignore: cast_nullable_to_non_nullable
-as ProductSortOption,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
+as ProductSortOption,activeFilterCount: null == activeFilterCount ? _self.activeFilterCount : activeFilterCount // ignore: cast_nullable_to_non_nullable
+as int,isLoadingMore: null == isLoadingMore ? _self.isLoadingMore : isLoadingMore // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
