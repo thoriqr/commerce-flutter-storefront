@@ -1,4 +1,4 @@
-import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_chip_skeleton.dart';
+import 'package:commerce_flutter_storefront/features/category/presentation/widgets/skeleton/category_chip_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:commerce_flutter_storefront/core/widgets/skeleton.dart';
 

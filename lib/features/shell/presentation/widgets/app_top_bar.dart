@@ -10,16 +10,23 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      title: AppSearchBar(
-        onSearch: (query) {
-          context.push(AppRoutes.products, extra: SearchSource(query));
-        },
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 1,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: AppSearchBar(
+            onSearch: (query) {
+              context.push(AppRoutes.products, extra: SearchSource(query));
+            },
+          ),
+        ),
       ),
-      centerTitle: false,
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(72);
 }

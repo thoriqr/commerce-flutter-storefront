@@ -49,7 +49,7 @@ class _ProductGridSliver extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.62,
+          childAspectRatio: 0.70,
         ),
       ),
     );
@@ -72,7 +72,7 @@ class _ProductGridSkeletonSliver extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 16,
-          childAspectRatio: 0.62,
+          childAspectRatio: 0.70,
         ),
       ),
     );

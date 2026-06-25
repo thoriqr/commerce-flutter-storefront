@@ -1,6 +1,6 @@
 import 'package:commerce_flutter_storefront/features/category/presentation/providers/category_provider.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_tree_section.dart';
-import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_tree_section_skeleton.dart';
+import 'package:commerce_flutter_storefront/features/category/presentation/widgets/skeleton/category_tree_section_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

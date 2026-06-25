@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/features/collection/presentation/providers/collection_provider.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/widgets/collection_header.dart';
+import 'package:commerce_flutter_storefront/features/collection/presentation/widgets/skeleton/collection_header_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,12 +18,7 @@ class ProductCollectionHeaderSection extends ConsumerWidget {
         return CollectionHeader(collection: collection);
       },
 
-      loading: () {
-        return const Padding(
-          padding: EdgeInsets.all(24),
-          child: Center(child: CircularProgressIndicator()),
-        );
-      },
+      loading: () => const CollectionHeaderSkeleton(),
 
       error: (_, _) {
         return const Padding(

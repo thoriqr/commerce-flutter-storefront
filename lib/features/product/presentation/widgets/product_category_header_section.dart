@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/features/category/presentation/providers/category_provider.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_header.dart';
+import 'package:commerce_flutter_storefront/features/category/presentation/widgets/skeleton/category_header_skeleton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,12 +17,7 @@ class ProductCategoryHeaderSection extends ConsumerWidget {
       data: (category) {
         return CategoryHeader(category: category);
       },
-      loading: () {
-        return const Padding(
-          padding: EdgeInsets.all(24),
-          child: Center(child: CircularProgressIndicator()),
-        );
-      },
+      loading: () => const CategoryHeaderSkeleton(),
       error: (_, _) {
         return const Padding(
           padding: EdgeInsets.all(16),

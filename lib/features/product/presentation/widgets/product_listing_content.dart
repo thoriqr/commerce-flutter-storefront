@@ -64,8 +64,11 @@ class _ProductListingContentState extends ConsumerState<ProductListingContent> {
       slivers: [
         SliverToBoxAdapter(child: _buildHeader()),
 
-        SliverToBoxAdapter(
-          child: ProductListingToolbarSection(source: widget.source),
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: ProductToolbarHeaderDelegate(
+            child: ProductListingToolbarSection(source: widget.source),
+          ),
         ),
 
         ProductGridSection(source: widget.source),
@@ -80,10 +83,10 @@ class ProductToolbarHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 
   @override
-  double get minExtent => 72;
+  double get minExtent => 60;
 
   @override
-  double get maxExtent => 72;
+  double get maxExtent => 60;
 
   @override
   Widget build(
@@ -91,11 +94,15 @@ class ProductToolbarHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return child;
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      elevation: overlapsContent ? 1 : 0,
+      child: child,
+    );
   }
 
   @override
   bool shouldRebuild(ProductToolbarHeaderDelegate oldDelegate) {
-    return false;
+    return child != oldDelegate.child;
   }
 }

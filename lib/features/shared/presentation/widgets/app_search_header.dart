@@ -15,26 +15,30 @@ class AppSearchHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-        child: Row(
-          children: [
-            IconButton(
-              onPressed: context.pop,
-              icon: const Icon(Icons.arrow_back),
-            ),
-
-            const SizedBox(width: 8),
-
-            Expanded(
-              child: AppSearchBar(
-                initialValue: initialValue,
-                onSearch: onSearch,
+    return Material(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      elevation: 1,
+      child: SafeArea(
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: context.pop,
+                icon: const Icon(Icons.arrow_back),
               ),
-            ),
-          ],
+
+              const SizedBox(width: 8),
+
+              Expanded(
+                child: AppSearchBar(
+                  initialValue: initialValue,
+                  onSearch: onSearch,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

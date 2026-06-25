@@ -17,6 +17,11 @@ class ProductListingToolbarSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final listing = ref.watch(productListingProvider(source));
 
+    final state = switch (listing) {
+      AsyncData(:final value) => value,
+      _ => null,
+    };
+
     final AsyncValue<List<CatalogFilterGroup>>? catalogFilters =
         switch (source) {
           CategorySource(:final slugPath) => ref.watch(
@@ -30,63 +35,54 @@ class ProductListingToolbarSection extends ConsumerWidget {
           CollectionSource() => null,
         };
 
-    return listing.when(
-      loading: () => const SizedBox.shrink(),
-      error: (_, _) => const SizedBox.shrink(),
-      data: (state) {
-        return Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-          child: Row(
-            children: [
-              OutlinedButton.icon(
-                onPressed: catalogFilters is AsyncLoading
-                    ? null
-                    : () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (_) {
-                            return ProductFilterDrawer(
-                              source: source,
-                              catalogFilters: switch (catalogFilters) {
-                                AsyncData(:final value) => value,
-                                _ => [],
-                              },
-                            );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+      child: Row(
+        children: [
+          OutlinedButton.icon(
+            onPressed: catalogFilters is AsyncLoading
+                ? null
+                : () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (_) {
+                        return ProductFilterDrawer(
+                          source: source,
+                          catalogFilters: switch (catalogFilters) {
+                            AsyncData(:final value) => value,
+                            _ => [],
                           },
                         );
                       },
-                icon: const Icon(Icons.tune),
-                label: Text(
-                  state.activeFilterCount > 0
-                      ? 'Filter (${state.activeFilterCount})'
-                      : 'Filter',
-                ),
-              ),
-
-              const Spacer(),
-
-              DropdownButton<ProductSortOption>(
-                value: state.selectedSort,
-                underline: const SizedBox(),
-                items: ProductSortOption.values.map((option) {
-                  return DropdownMenuItem(
-                    value: option,
-                    child: Text(option.label),
-                  );
-                }).toList(),
-                onChanged: (option) {
-                  if (option == null) return;
-
-                  ref
-                      .read(productListingProvider(source).notifier)
-                      .applySort(option);
-                },
-              ),
-            ],
+                    );
+                  },
+            icon: const Icon(Icons.tune),
+            label: Text(
+              (state?.activeFilterCount ?? 0) > 0
+                  ? 'Filter (${state!.activeFilterCount})'
+                  : 'Filter',
+            ),
           ),
-        );
-      },
+
+          const Spacer(),
+
+          DropdownButton<ProductSortOption>(
+            value: state?.selectedSort ?? ProductSortOption.newest,
+            underline: const SizedBox(),
+            items: ProductSortOption.values.map((option) {
+              return DropdownMenuItem(value: option, child: Text(option.label));
+            }).toList(),
+            onChanged: (option) {
+              if (option == null) return;
+
+              ref
+                  .read(productListingProvider(source).notifier)
+                  .applySort(option);
+            },
+          ),
+        ],
+      ),
     );
   }
 }
