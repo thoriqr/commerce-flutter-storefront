@@ -35,6 +35,8 @@ class ProductListingToolbarSection extends ConsumerWidget {
           CollectionSource() => null,
         };
 
+    final activeFilterCount = state?.activeFilterCount ?? 0;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       child: Row(
@@ -60,26 +62,84 @@ class ProductListingToolbarSection extends ConsumerWidget {
             icon: const Icon(Icons.tune),
             label: Text(
               (state?.activeFilterCount ?? 0) > 0
-                  ? 'Filter (${state!.activeFilterCount})'
+                  ? 'Filter ($activeFilterCount)'
                   : 'Filter',
+            ),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(0, 40),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+
+              foregroundColor: Theme.of(context).colorScheme.onSurface,
+
+              textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+              ),
+
+              elevation: 0,
+              shadowColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(999),
+              ),
+
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outline,
+                width: 1.0,
+              ),
             ),
           ),
 
           const Spacer(),
 
-          DropdownButton<ProductSortOption>(
-            value: state?.selectedSort ?? ProductSortOption.newest,
-            underline: const SizedBox(),
-            items: ProductSortOption.values.map((option) {
-              return DropdownMenuItem(value: option, child: Text(option.label));
-            }).toList(),
-            onChanged: (option) {
-              if (option == null) return;
-
+          PopupMenuButton<ProductSortOption>(
+            onSelected: (option) {
               ref
                   .read(productListingProvider(source).notifier)
                   .applySort(option);
             },
+
+            itemBuilder: (context) {
+              final selectedSort =
+                  state?.selectedSort ?? ProductSortOption.newest;
+
+              return ProductSortOption.values.map((option) {
+                final isSelected = option == selectedSort;
+
+                return PopupMenuItem<ProductSortOption>(
+                  value: option,
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(option.label)),
+
+                      if (isSelected)
+                        Icon(
+                          Icons.check,
+                          size: 18,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                    ],
+                  ),
+                );
+              }).toList();
+            },
+
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  (state?.selectedSort ?? ProductSortOption.newest).label,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
+                ),
+
+                const SizedBox(width: 4),
+
+                const Icon(Icons.keyboard_arrow_down, size: 20),
+              ],
+            ),
           ),
         ],
       ),

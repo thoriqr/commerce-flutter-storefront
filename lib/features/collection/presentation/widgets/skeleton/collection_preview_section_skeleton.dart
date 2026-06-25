@@ -1,5 +1,5 @@
 import 'package:commerce_flutter_storefront/core/widgets/skeleton.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_card_skeleton.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/skeleton/product_card_skeleton.dart';
 import 'package:flutter/material.dart';
 
 class CollectionPreviewSectionSkeleton extends StatelessWidget {

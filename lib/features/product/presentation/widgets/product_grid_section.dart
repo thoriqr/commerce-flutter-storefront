@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/product_source.dart';
 import '../notifiers/product_listing_notifier.dart';
 import 'product_card.dart';
-import 'product_card_skeleton.dart';
+import 'skeleton/product_card_skeleton.dart';
 
 class ProductGridSection extends ConsumerWidget {
   const ProductGridSection({super.key, required this.source});
