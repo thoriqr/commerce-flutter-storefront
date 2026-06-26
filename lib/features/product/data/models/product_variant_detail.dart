@@ -6,9 +6,9 @@ part 'product_variant_detail.g.dart';
 @freezed
 abstract class ProductVariantDetail with _$ProductVariantDetail {
   const factory ProductVariantDetail({
-    required int id,
-    required int imageKey,
-    required int slug,
+    required int variantId,
+    required int price,
+    required int stock,
     required String? sku,
     required String currency,
     required int weight,

@@ -50,9 +50,9 @@ final router = GoRouter(
     GoRoute(
       path: AppRoutes.product,
       builder: (context, state) {
-        final slug = state.pathParameters['slug']!;
+        final id = int.parse(state.pathParameters['id']!);
 
-        return ProductDetailPage(slug: slug);
+        return ProductDetailPage(id: id);
       },
     ),
   ],

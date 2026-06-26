@@ -53,18 +53,18 @@ _ProductImage _$ProductImageFromJson(Map<String, dynamic> json) =>
     _ProductImage(
       id: (json['id'] as num).toInt(),
       imageKey: json['imageKey'] as String,
-      slug: json['slug'] as String,
       type: $enumDecode(_$ProductImageTypeEnumMap, json['type']),
-      signature: ProductImageSignature.fromJson(
-        json['signature'] as Map<String, dynamic>,
-      ),
+      signature: json['signature'] == null
+          ? null
+          : ProductImageSignature.fromJson(
+              json['signature'] as Map<String, dynamic>,
+            ),
     );
 
 Map<String, dynamic> _$ProductImageToJson(_ProductImage instance) =>
     <String, dynamic>{
       'id': instance.id,
       'imageKey': instance.imageKey,
-      'slug': instance.slug,
       'type': _$ProductImageTypeEnumMap[instance.type]!,
       'signature': instance.signature,
     };

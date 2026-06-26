@@ -347,7 +347,7 @@ $ProductCategoryCopyWith<$Res> get category {
 /// @nodoc
 mixin _$ProductImage {
 
- int get id; String get imageKey; String get slug; ProductImageType get type; ProductImageSignature get signature;
+ int get id; String get imageKey; ProductImageType get type; ProductImageSignature? get signature;
 /// Create a copy of ProductImage
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -360,16 +360,16 @@ $ProductImageCopyWith<ProductImage> get copyWith => _$ProductImageCopyWithImpl<P
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductImage&&(identical(other.id, id) || other.id == id)&&(identical(other.imageKey, imageKey) || other.imageKey == imageKey)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.type, type) || other.type == type)&&(identical(other.signature, signature) || other.signature == signature));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductImage&&(identical(other.id, id) || other.id == id)&&(identical(other.imageKey, imageKey) || other.imageKey == imageKey)&&(identical(other.type, type) || other.type == type)&&(identical(other.signature, signature) || other.signature == signature));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,imageKey,slug,type,signature);
+int get hashCode => Object.hash(runtimeType,id,imageKey,type,signature);
 
 @override
 String toString() {
-  return 'ProductImage(id: $id, imageKey: $imageKey, slug: $slug, type: $type, signature: $signature)';
+  return 'ProductImage(id: $id, imageKey: $imageKey, type: $type, signature: $signature)';
 }
 
 
@@ -380,11 +380,11 @@ abstract mixin class $ProductImageCopyWith<$Res>  {
   factory $ProductImageCopyWith(ProductImage value, $Res Function(ProductImage) _then) = _$ProductImageCopyWithImpl;
 @useResult
 $Res call({
- int id, String imageKey, String slug, ProductImageType type, ProductImageSignature signature
+ int id, String imageKey, ProductImageType type, ProductImageSignature? signature
 });
 
 
-$ProductImageSignatureCopyWith<$Res> get signature;
+$ProductImageSignatureCopyWith<$Res>? get signature;
 
 }
 /// @nodoc
@@ -397,23 +397,25 @@ class _$ProductImageCopyWithImpl<$Res>
 
 /// Create a copy of ProductImage
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? imageKey = null,Object? slug = null,Object? type = null,Object? signature = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? imageKey = null,Object? type = null,Object? signature = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,imageKey: null == imageKey ? _self.imageKey : imageKey // ignore: cast_nullable_to_non_nullable
-as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as ProductImageType,signature: null == signature ? _self.signature : signature // ignore: cast_nullable_to_non_nullable
-as ProductImageSignature,
+as ProductImageType,signature: freezed == signature ? _self.signature : signature // ignore: cast_nullable_to_non_nullable
+as ProductImageSignature?,
   ));
 }
 /// Create a copy of ProductImage
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ProductImageSignatureCopyWith<$Res> get signature {
-  
-  return $ProductImageSignatureCopyWith<$Res>(_self.signature, (value) {
+$ProductImageSignatureCopyWith<$Res>? get signature {
+    if (_self.signature == null) {
+    return null;
+  }
+
+  return $ProductImageSignatureCopyWith<$Res>(_self.signature!, (value) {
     return _then(_self.copyWith(signature: value));
   });
 }
@@ -498,10 +500,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String imageKey,  String slug,  ProductImageType type,  ProductImageSignature signature)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String imageKey,  ProductImageType type,  ProductImageSignature? signature)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductImage() when $default != null:
-return $default(_that.id,_that.imageKey,_that.slug,_that.type,_that.signature);case _:
+return $default(_that.id,_that.imageKey,_that.type,_that.signature);case _:
   return orElse();
 
 }
@@ -519,10 +521,10 @@ return $default(_that.id,_that.imageKey,_that.slug,_that.type,_that.signature);c
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String imageKey,  String slug,  ProductImageType type,  ProductImageSignature signature)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String imageKey,  ProductImageType type,  ProductImageSignature? signature)  $default,) {final _that = this;
 switch (_that) {
 case _ProductImage():
-return $default(_that.id,_that.imageKey,_that.slug,_that.type,_that.signature);case _:
+return $default(_that.id,_that.imageKey,_that.type,_that.signature);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -539,10 +541,10 @@ return $default(_that.id,_that.imageKey,_that.slug,_that.type,_that.signature);c
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String imageKey,  String slug,  ProductImageType type,  ProductImageSignature signature)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String imageKey,  ProductImageType type,  ProductImageSignature? signature)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductImage() when $default != null:
-return $default(_that.id,_that.imageKey,_that.slug,_that.type,_that.signature);case _:
+return $default(_that.id,_that.imageKey,_that.type,_that.signature);case _:
   return null;
 
 }
@@ -554,14 +556,13 @@ return $default(_that.id,_that.imageKey,_that.slug,_that.type,_that.signature);c
 @JsonSerializable()
 
 class _ProductImage implements ProductImage {
-  const _ProductImage({required this.id, required this.imageKey, required this.slug, required this.type, required this.signature});
+  const _ProductImage({required this.id, required this.imageKey, required this.type, this.signature});
   factory _ProductImage.fromJson(Map<String, dynamic> json) => _$ProductImageFromJson(json);
 
 @override final  int id;
 @override final  String imageKey;
-@override final  String slug;
 @override final  ProductImageType type;
-@override final  ProductImageSignature signature;
+@override final  ProductImageSignature? signature;
 
 /// Create a copy of ProductImage
 /// with the given fields replaced by the non-null parameter values.
@@ -576,16 +577,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductImage&&(identical(other.id, id) || other.id == id)&&(identical(other.imageKey, imageKey) || other.imageKey == imageKey)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.type, type) || other.type == type)&&(identical(other.signature, signature) || other.signature == signature));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductImage&&(identical(other.id, id) || other.id == id)&&(identical(other.imageKey, imageKey) || other.imageKey == imageKey)&&(identical(other.type, type) || other.type == type)&&(identical(other.signature, signature) || other.signature == signature));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,imageKey,slug,type,signature);
+int get hashCode => Object.hash(runtimeType,id,imageKey,type,signature);
 
 @override
 String toString() {
-  return 'ProductImage(id: $id, imageKey: $imageKey, slug: $slug, type: $type, signature: $signature)';
+  return 'ProductImage(id: $id, imageKey: $imageKey, type: $type, signature: $signature)';
 }
 
 
@@ -596,11 +597,11 @@ abstract mixin class _$ProductImageCopyWith<$Res> implements $ProductImageCopyWi
   factory _$ProductImageCopyWith(_ProductImage value, $Res Function(_ProductImage) _then) = __$ProductImageCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String imageKey, String slug, ProductImageType type, ProductImageSignature signature
+ int id, String imageKey, ProductImageType type, ProductImageSignature? signature
 });
 
 
-@override $ProductImageSignatureCopyWith<$Res> get signature;
+@override $ProductImageSignatureCopyWith<$Res>? get signature;
 
 }
 /// @nodoc
@@ -613,14 +614,13 @@ class __$ProductImageCopyWithImpl<$Res>
 
 /// Create a copy of ProductImage
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? imageKey = null,Object? slug = null,Object? type = null,Object? signature = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? imageKey = null,Object? type = null,Object? signature = freezed,}) {
   return _then(_ProductImage(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,imageKey: null == imageKey ? _self.imageKey : imageKey // ignore: cast_nullable_to_non_nullable
-as String,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
 as String,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as ProductImageType,signature: null == signature ? _self.signature : signature // ignore: cast_nullable_to_non_nullable
-as ProductImageSignature,
+as ProductImageType,signature: freezed == signature ? _self.signature : signature // ignore: cast_nullable_to_non_nullable
+as ProductImageSignature?,
   ));
 }
 
@@ -628,9 +628,12 @@ as ProductImageSignature,
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$ProductImageSignatureCopyWith<$Res> get signature {
-  
-  return $ProductImageSignatureCopyWith<$Res>(_self.signature, (value) {
+$ProductImageSignatureCopyWith<$Res>? get signature {
+    if (_self.signature == null) {
+    return null;
+  }
+
+  return $ProductImageSignatureCopyWith<$Res>(_self.signature!, (value) {
     return _then(_self.copyWith(signature: value));
   });
 }

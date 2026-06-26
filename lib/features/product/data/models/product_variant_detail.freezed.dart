@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ProductVariantDetail {
 
- int get id; int get imageKey; int get slug; String? get sku; String get currency; int get weight; String get weightUnit; bool get isAvailable; ProductVariantDetailWarning? get warning;
+ int get variantId; int get price; int get stock; String? get sku; String get currency; int get weight; String get weightUnit; bool get isAvailable; ProductVariantDetailWarning? get warning;
 /// Create a copy of ProductVariantDetail
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ProductVariantDetailCopyWith<ProductVariantDetail> get copyWith => _$ProductVar
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductVariantDetail&&(identical(other.id, id) || other.id == id)&&(identical(other.imageKey, imageKey) || other.imageKey == imageKey)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.sku, sku) || other.sku == sku)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.weightUnit, weightUnit) || other.weightUnit == weightUnit)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable)&&(identical(other.warning, warning) || other.warning == warning));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductVariantDetail&&(identical(other.variantId, variantId) || other.variantId == variantId)&&(identical(other.price, price) || other.price == price)&&(identical(other.stock, stock) || other.stock == stock)&&(identical(other.sku, sku) || other.sku == sku)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.weightUnit, weightUnit) || other.weightUnit == weightUnit)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable)&&(identical(other.warning, warning) || other.warning == warning));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,imageKey,slug,sku,currency,weight,weightUnit,isAvailable,warning);
+int get hashCode => Object.hash(runtimeType,variantId,price,stock,sku,currency,weight,weightUnit,isAvailable,warning);
 
 @override
 String toString() {
-  return 'ProductVariantDetail(id: $id, imageKey: $imageKey, slug: $slug, sku: $sku, currency: $currency, weight: $weight, weightUnit: $weightUnit, isAvailable: $isAvailable, warning: $warning)';
+  return 'ProductVariantDetail(variantId: $variantId, price: $price, stock: $stock, sku: $sku, currency: $currency, weight: $weight, weightUnit: $weightUnit, isAvailable: $isAvailable, warning: $warning)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ProductVariantDetailCopyWith<$Res>  {
   factory $ProductVariantDetailCopyWith(ProductVariantDetail value, $Res Function(ProductVariantDetail) _then) = _$ProductVariantDetailCopyWithImpl;
 @useResult
 $Res call({
- int id, int imageKey, int slug, String? sku, String currency, int weight, String weightUnit, bool isAvailable, ProductVariantDetailWarning? warning
+ int variantId, int price, int stock, String? sku, String currency, int weight, String weightUnit, bool isAvailable, ProductVariantDetailWarning? warning
 });
 
 
@@ -65,11 +65,11 @@ class _$ProductVariantDetailCopyWithImpl<$Res>
 
 /// Create a copy of ProductVariantDetail
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? imageKey = null,Object? slug = null,Object? sku = freezed,Object? currency = null,Object? weight = null,Object? weightUnit = null,Object? isAvailable = null,Object? warning = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? variantId = null,Object? price = null,Object? stock = null,Object? sku = freezed,Object? currency = null,Object? weight = null,Object? weightUnit = null,Object? isAvailable = null,Object? warning = freezed,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,imageKey: null == imageKey ? _self.imageKey : imageKey // ignore: cast_nullable_to_non_nullable
-as int,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+variantId: null == variantId ? _self.variantId : variantId // ignore: cast_nullable_to_non_nullable
+as int,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as int,stock: null == stock ? _self.stock : stock // ignore: cast_nullable_to_non_nullable
 as int,sku: freezed == sku ? _self.sku : sku // ignore: cast_nullable_to_non_nullable
 as String?,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,weight: null == weight ? _self.weight : weight // ignore: cast_nullable_to_non_nullable
@@ -161,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int imageKey,  int slug,  String? sku,  String currency,  int weight,  String weightUnit,  bool isAvailable,  ProductVariantDetailWarning? warning)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int variantId,  int price,  int stock,  String? sku,  String currency,  int weight,  String weightUnit,  bool isAvailable,  ProductVariantDetailWarning? warning)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ProductVariantDetail() when $default != null:
-return $default(_that.id,_that.imageKey,_that.slug,_that.sku,_that.currency,_that.weight,_that.weightUnit,_that.isAvailable,_that.warning);case _:
+return $default(_that.variantId,_that.price,_that.stock,_that.sku,_that.currency,_that.weight,_that.weightUnit,_that.isAvailable,_that.warning);case _:
   return orElse();
 
 }
@@ -182,10 +182,10 @@ return $default(_that.id,_that.imageKey,_that.slug,_that.sku,_that.currency,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int imageKey,  int slug,  String? sku,  String currency,  int weight,  String weightUnit,  bool isAvailable,  ProductVariantDetailWarning? warning)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int variantId,  int price,  int stock,  String? sku,  String currency,  int weight,  String weightUnit,  bool isAvailable,  ProductVariantDetailWarning? warning)  $default,) {final _that = this;
 switch (_that) {
 case _ProductVariantDetail():
-return $default(_that.id,_that.imageKey,_that.slug,_that.sku,_that.currency,_that.weight,_that.weightUnit,_that.isAvailable,_that.warning);case _:
+return $default(_that.variantId,_that.price,_that.stock,_that.sku,_that.currency,_that.weight,_that.weightUnit,_that.isAvailable,_that.warning);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +202,10 @@ return $default(_that.id,_that.imageKey,_that.slug,_that.sku,_that.currency,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int imageKey,  int slug,  String? sku,  String currency,  int weight,  String weightUnit,  bool isAvailable,  ProductVariantDetailWarning? warning)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int variantId,  int price,  int stock,  String? sku,  String currency,  int weight,  String weightUnit,  bool isAvailable,  ProductVariantDetailWarning? warning)?  $default,) {final _that = this;
 switch (_that) {
 case _ProductVariantDetail() when $default != null:
-return $default(_that.id,_that.imageKey,_that.slug,_that.sku,_that.currency,_that.weight,_that.weightUnit,_that.isAvailable,_that.warning);case _:
+return $default(_that.variantId,_that.price,_that.stock,_that.sku,_that.currency,_that.weight,_that.weightUnit,_that.isAvailable,_that.warning);case _:
   return null;
 
 }
@@ -217,12 +217,12 @@ return $default(_that.id,_that.imageKey,_that.slug,_that.sku,_that.currency,_tha
 @JsonSerializable()
 
 class _ProductVariantDetail implements ProductVariantDetail {
-  const _ProductVariantDetail({required this.id, required this.imageKey, required this.slug, required this.sku, required this.currency, required this.weight, required this.weightUnit, required this.isAvailable, required this.warning});
+  const _ProductVariantDetail({required this.variantId, required this.price, required this.stock, required this.sku, required this.currency, required this.weight, required this.weightUnit, required this.isAvailable, required this.warning});
   factory _ProductVariantDetail.fromJson(Map<String, dynamic> json) => _$ProductVariantDetailFromJson(json);
 
-@override final  int id;
-@override final  int imageKey;
-@override final  int slug;
+@override final  int variantId;
+@override final  int price;
+@override final  int stock;
 @override final  String? sku;
 @override final  String currency;
 @override final  int weight;
@@ -243,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductVariantDetail&&(identical(other.id, id) || other.id == id)&&(identical(other.imageKey, imageKey) || other.imageKey == imageKey)&&(identical(other.slug, slug) || other.slug == slug)&&(identical(other.sku, sku) || other.sku == sku)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.weightUnit, weightUnit) || other.weightUnit == weightUnit)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable)&&(identical(other.warning, warning) || other.warning == warning));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ProductVariantDetail&&(identical(other.variantId, variantId) || other.variantId == variantId)&&(identical(other.price, price) || other.price == price)&&(identical(other.stock, stock) || other.stock == stock)&&(identical(other.sku, sku) || other.sku == sku)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.weightUnit, weightUnit) || other.weightUnit == weightUnit)&&(identical(other.isAvailable, isAvailable) || other.isAvailable == isAvailable)&&(identical(other.warning, warning) || other.warning == warning));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,imageKey,slug,sku,currency,weight,weightUnit,isAvailable,warning);
+int get hashCode => Object.hash(runtimeType,variantId,price,stock,sku,currency,weight,weightUnit,isAvailable,warning);
 
 @override
 String toString() {
-  return 'ProductVariantDetail(id: $id, imageKey: $imageKey, slug: $slug, sku: $sku, currency: $currency, weight: $weight, weightUnit: $weightUnit, isAvailable: $isAvailable, warning: $warning)';
+  return 'ProductVariantDetail(variantId: $variantId, price: $price, stock: $stock, sku: $sku, currency: $currency, weight: $weight, weightUnit: $weightUnit, isAvailable: $isAvailable, warning: $warning)';
 }
 
 
@@ -263,7 +263,7 @@ abstract mixin class _$ProductVariantDetailCopyWith<$Res> implements $ProductVar
   factory _$ProductVariantDetailCopyWith(_ProductVariantDetail value, $Res Function(_ProductVariantDetail) _then) = __$ProductVariantDetailCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int imageKey, int slug, String? sku, String currency, int weight, String weightUnit, bool isAvailable, ProductVariantDetailWarning? warning
+ int variantId, int price, int stock, String? sku, String currency, int weight, String weightUnit, bool isAvailable, ProductVariantDetailWarning? warning
 });
 
 
@@ -280,11 +280,11 @@ class __$ProductVariantDetailCopyWithImpl<$Res>
 
 /// Create a copy of ProductVariantDetail
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? imageKey = null,Object? slug = null,Object? sku = freezed,Object? currency = null,Object? weight = null,Object? weightUnit = null,Object? isAvailable = null,Object? warning = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? variantId = null,Object? price = null,Object? stock = null,Object? sku = freezed,Object? currency = null,Object? weight = null,Object? weightUnit = null,Object? isAvailable = null,Object? warning = freezed,}) {
   return _then(_ProductVariantDetail(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,imageKey: null == imageKey ? _self.imageKey : imageKey // ignore: cast_nullable_to_non_nullable
-as int,slug: null == slug ? _self.slug : slug // ignore: cast_nullable_to_non_nullable
+variantId: null == variantId ? _self.variantId : variantId // ignore: cast_nullable_to_non_nullable
+as int,price: null == price ? _self.price : price // ignore: cast_nullable_to_non_nullable
+as int,stock: null == stock ? _self.stock : stock // ignore: cast_nullable_to_non_nullable
 as int,sku: freezed == sku ? _self.sku : sku // ignore: cast_nullable_to_non_nullable
 as String?,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,weight: null == weight ? _self.weight : weight // ignore: cast_nullable_to_non_nullable

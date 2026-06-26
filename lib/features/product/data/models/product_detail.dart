@@ -29,9 +29,8 @@ abstract class ProductImage with _$ProductImage {
   const factory ProductImage({
     required int id,
     required String imageKey,
-    required String slug,
     required ProductImageType type,
-    required ProductImageSignature signature,
+    ProductImageSignature? signature,
   }) = _ProductImage;
 
   factory ProductImage.fromJson(Map<String, dynamic> json) =>

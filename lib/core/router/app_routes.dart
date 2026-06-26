@@ -4,9 +4,9 @@ abstract final class AppRoutes {
   static const account = '/account';
 
   static const products = '/products';
-  static const product = '/product/:slug';
+  static const product = '/product/:id';
 
-  static String productDetail(String slug) {
-    return '/product/$slug';
+  static String productDetail(int id) {
+    return '/product/$id';
   }
 }

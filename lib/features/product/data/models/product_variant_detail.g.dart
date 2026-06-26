@@ -9,9 +9,9 @@ part of 'product_variant_detail.dart';
 _ProductVariantDetail _$ProductVariantDetailFromJson(
   Map<String, dynamic> json,
 ) => _ProductVariantDetail(
-  id: (json['id'] as num).toInt(),
-  imageKey: (json['imageKey'] as num).toInt(),
-  slug: (json['slug'] as num).toInt(),
+  variantId: (json['variantId'] as num).toInt(),
+  price: (json['price'] as num).toInt(),
+  stock: (json['stock'] as num).toInt(),
   sku: json['sku'] as String?,
   currency: json['currency'] as String,
   weight: (json['weight'] as num).toInt(),
@@ -26,9 +26,9 @@ _ProductVariantDetail _$ProductVariantDetailFromJson(
 Map<String, dynamic> _$ProductVariantDetailToJson(
   _ProductVariantDetail instance,
 ) => <String, dynamic>{
-  'id': instance.id,
-  'imageKey': instance.imageKey,
-  'slug': instance.slug,
+  'variantId': instance.variantId,
+  'price': instance.price,
+  'stock': instance.stock,
   'sku': instance.sku,
   'currency': instance.currency,
   'weight': instance.weight,
