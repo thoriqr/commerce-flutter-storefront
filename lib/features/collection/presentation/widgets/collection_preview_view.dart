@@ -5,8 +5,8 @@ import 'package:commerce_flutter_storefront/features/product/presentation/widget
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CollectionPreviewSection extends StatelessWidget {
-  const CollectionPreviewSection({super.key, required this.collection});
+class CollectionPreviewView extends StatelessWidget {
+  const CollectionPreviewView({super.key, required this.collection});
 
   final CollectionPreview collection;
 

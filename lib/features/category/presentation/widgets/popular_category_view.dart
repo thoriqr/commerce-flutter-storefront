@@ -2,8 +2,8 @@ import 'package:commerce_flutter_storefront/features/category/data/models/popula
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_chip.dart';
 import 'package:flutter/material.dart';
 
-class PopularCategorySection extends StatelessWidget {
-  const PopularCategorySection({super.key, required this.categories});
+class PopularCategoryView extends StatelessWidget {
+  const PopularCategoryView({super.key, required this.categories});
 
   final List<PopularCategory> categories;
 
