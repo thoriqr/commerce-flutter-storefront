@@ -4,6 +4,7 @@ import 'package:commerce_flutter_storefront/core/utils/image_utils.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_summary.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({super.key, required this.product});
@@ -26,9 +27,11 @@ class ProductCard extends StatelessWidget {
               aspectRatio: 1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  ImageUtils.buildUrl(product.imageKey),
-                  fit: BoxFit.cover,
+                child: Skeleton.replace(
+                  child: Image.network(
+                    ImageUtils.buildUrl(product.imageKey),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

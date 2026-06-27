@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ProductSearchHeaderSection extends StatelessWidget {
-  const ProductSearchHeaderSection({super.key, required this.query});
+class ProductSearchHeader extends StatelessWidget {
+  const ProductSearchHeader({super.key, required this.query});
 
   final String query;
 
