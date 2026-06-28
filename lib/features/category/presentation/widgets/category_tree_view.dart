@@ -5,8 +5,8 @@ import 'package:commerce_flutter_storefront/features/product/domain/product_sour
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CategoryTreeSection extends StatelessWidget {
-  const CategoryTreeSection({super.key, required this.categories});
+class CategoryTreeView extends StatelessWidget {
+  const CategoryTreeView({super.key, required this.categories});
 
   final List<CategoryTree> categories;
 
