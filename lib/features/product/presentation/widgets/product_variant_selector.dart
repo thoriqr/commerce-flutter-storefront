@@ -3,8 +3,8 @@ import 'package:commerce_flutter_storefront/features/product/presentation/provid
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductVariantSelectorSection extends ConsumerWidget {
-  const ProductVariantSelectorSection({
+class ProductVariantSelector extends ConsumerWidget {
+  const ProductVariantSelector({
     super.key,
     required this.product,
     required this.selectedVariant,
@@ -25,7 +25,7 @@ class ProductVariantSelectorSection extends ConsumerWidget {
         children: product.dimensions.map((dimension) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 20),
-            child: _DimensionSection(
+            child: _Dimension(
               product: product,
               dimension: dimension,
               selectedVariant: selectedVariant,
@@ -37,8 +37,8 @@ class ProductVariantSelectorSection extends ConsumerWidget {
   }
 }
 
-class _DimensionSection extends ConsumerWidget {
-  const _DimensionSection({
+class _Dimension extends ConsumerWidget {
+  const _Dimension({
     required this.product,
     required this.dimension,
     required this.selectedVariant,

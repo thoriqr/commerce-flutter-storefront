@@ -3,6 +3,8 @@ import 'package:commerce_flutter_storefront/features/product/data/models/product
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:commerce_flutter_storefront/features/product/data/mocks/product_variant_detail_mock.dart';
 
 class ProductVariantInfo extends ConsumerWidget {
   const ProductVariantInfo({
@@ -16,17 +18,23 @@ class ProductVariantInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final variant = ref.watch(
+    final variantAsync = ref.watch(
       productVariantDetailProvider(productId, variantId),
     );
 
-    return switch (variant) {
-      AsyncLoading() => const _Skeleton(),
+    if (variantAsync.hasError) {
+      return const SizedBox.shrink();
+    }
 
-      AsyncError() => const SizedBox.shrink(),
-
-      AsyncData(:final value) => _Content(variant: value),
+    final variant = switch (variantAsync) {
+      AsyncData(:final value) => value,
+      _ => ProductVariantDetailMock.item(),
     };
+
+    return Skeletonizer(
+      enabled: variantAsync.isLoading,
+      child: _Content(variant: variant),
+    );
   }
 }
 
@@ -52,7 +60,7 @@ class _Content extends StatelessWidget {
         const SizedBox(height: 4),
 
         Text(
-          _stockLabel(variant),
+          _stockLabel(),
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
@@ -61,7 +69,7 @@ class _Content extends StatelessWidget {
     );
   }
 
-  String _stockLabel(ProductVariantDetail variant) {
+  String _stockLabel() {
     switch (variant.warning) {
       case ProductVariantDetailWarning.outOfStock:
         return 'Out of stock';
@@ -75,20 +83,5 @@ class _Content extends StatelessWidget {
       case null:
         return '${variant.stock} available';
     }
-  }
-}
-
-class _Skeleton extends StatelessWidget {
-  const _Skeleton();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: SizedBox(
-        width: 20,
-        height: 20,
-        child: CircularProgressIndicator(strokeWidth: 2),
-      ),
-    );
   }
 }

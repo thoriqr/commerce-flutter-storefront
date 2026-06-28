@@ -8,6 +8,8 @@ import 'package:commerce_flutter_storefront/features/shared/presentation/widgets
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'package:commerce_flutter_storefront/features/product/data/mocks/product_detail_mock.dart';
 
 class ProductDetailPage extends ConsumerWidget {
   const ProductDetailPage({super.key, required this.id});
@@ -16,52 +18,49 @@ class ProductDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final product = ref.watch(productDetailProvider(id));
+    final productAsync = ref.watch(productDetailProvider(id));
 
-    return switch (product) {
-      AsyncLoading() => const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      ),
-
-      AsyncError() => const Scaffold(
+    if (productAsync.hasError) {
+      return const Scaffold(
         body: Center(child: Text('Failed to load product')),
-      ),
+      );
+    }
 
-      AsyncData(:final value) => Builder(
-        builder: (context) {
-          final selectedVariantId = ref.watch(
-            selectedVariantIdProvider(value.initialVariantId),
-          );
-
-          return Scaffold(
-            body: Column(
-              children: [
-                AppSearchHeader(
-                  initialValue: '',
-                  onSearch: (query) {
-                    context.push(
-                      AppRoutes.products,
-                      extra: SearchSource(query),
-                    );
-                  },
-                ),
-
-                Expanded(
-                  child: ProductDetailContent(
-                    product: value,
-                    selectedVariantId: selectedVariantId,
-                  ),
-                ),
-              ],
-            ),
-
-            bottomNavigationBar: ProductBottomBar(
-              productId: value.id,
-              variantId: selectedVariantId,
-            ),
-          );
-        },
-      ),
+    final product = switch (productAsync) {
+      AsyncData(:final value) => value,
+      _ => ProductDetailMock.item(),
     };
+
+    final selectedVariantId = ref.watch(
+      selectedVariantIdProvider(product.initialVariantId),
+    );
+
+    return Scaffold(
+      body: Column(
+        children: [
+          AppSearchHeader(
+            initialValue: '',
+            onSearch: (query) {
+              context.push(AppRoutes.products, extra: SearchSource(query));
+            },
+          ),
+
+          Expanded(
+            child: Skeletonizer(
+              enabled: productAsync.isLoading,
+              child: ProductDetailContent(
+                product: product,
+                selectedVariantId: selectedVariantId,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      bottomNavigationBar: ProductBottomBar(
+        productId: product.id,
+        variantId: selectedVariantId,
+      ),
+    );
   }
 }

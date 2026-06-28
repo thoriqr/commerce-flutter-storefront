@@ -1,10 +1,9 @@
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_carousel_section.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_description_section.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_info_section.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_image_carousel.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_variant_info.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_variant_selector_section.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_variant_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 
 class ProductDetailContent extends StatelessWidget {
   const ProductDetailContent({
@@ -25,13 +24,23 @@ class ProductDetailContent extends StatelessWidget {
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
-          child: ProductImageCarouselSection(
+          child: ProductImageCarousel(
             product: product,
             selectedVariantId: selectedVariantId,
           ),
         ),
 
-        SliverToBoxAdapter(child: ProductInfoSection(product: product)),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            child: Text(
+              product.name,
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+            ),
+          ),
+        ),
 
         SliverToBoxAdapter(
           child: Padding(
@@ -44,14 +53,32 @@ class ProductDetailContent extends StatelessWidget {
         ),
 
         SliverToBoxAdapter(
-          child: ProductVariantSelectorSection(
+          child: ProductVariantSelector(
             product: product,
             selectedVariant: selectedVariant,
           ),
         ),
 
         SliverToBoxAdapter(
-          child: ProductDescriptionSection(description: product.description),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            child: ReadMoreText(
+              product.description,
+              trimMode: TrimMode.Line,
+              trimLines: 4,
+              trimCollapsedText: ' Read More',
+              trimExpandedText: ' Show Less',
+              style: Theme.of(context).textTheme.bodyMedium,
+              moreStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+              lessStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
         ),
 
         const SliverToBoxAdapter(child: SizedBox(height: 32)),
