@@ -1,7 +1,9 @@
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/selected_variant_id_provider.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/attribute_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductVariantSelector extends ConsumerWidget {
   const ProductVariantSelector({
@@ -20,11 +22,11 @@ class ProductVariantSelector extends ConsumerWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       child: Column(
         children: product.dimensions.map((dimension) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.only(bottom: 16),
             child: _Dimension(
               product: product,
               dimension: dimension,
@@ -54,6 +56,8 @@ class _Dimension extends ConsumerWidget {
         .firstWhere((option) => option.dimensionKey == dimension.key)
         .valueKey;
 
+    final loading = Skeletonizer.of(context).enabled;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -64,7 +68,7 @@ class _Dimension extends ConsumerWidget {
           ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 8),
 
         SizedBox(
           height: 40,
@@ -75,9 +79,11 @@ class _Dimension extends ConsumerWidget {
             itemBuilder: (context, index) {
               final value = dimension.values[index];
 
-              return FilterChip(
+              return AttributeChip(
                 selected: selectedValue == value.key,
-                onSelected: (_) {
+                hexColor: value.hexColor,
+                loading: loading,
+                onPressed: () {
                   _selectVariant(
                     ref,
                     product,
@@ -86,7 +92,7 @@ class _Dimension extends ConsumerWidget {
                     value.key,
                   );
                 },
-                label: Text(value.label),
+                label: value.label,
               );
             },
           ),

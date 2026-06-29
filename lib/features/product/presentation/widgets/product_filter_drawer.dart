@@ -3,7 +3,7 @@ import 'package:commerce_flutter_storefront/features/catalog_filter/data/models/
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../catalog_filter/presentation/widgets/catalog_filter_section.dart';
+import '../../../catalog_filter/presentation/widgets/catalog_filter_view.dart';
 import '../../domain/product_source.dart';
 import '../notifiers/product_listing_notifier.dart';
 import 'package:flutter/services.dart';
@@ -204,7 +204,7 @@ class _ProductFilterDrawerState extends ConsumerState<ProductFilterDrawer> {
               if (showCatalogFilters && widget.catalogFilters.isNotEmpty) ...[
                 const SizedBox(height: 24),
 
-                CatalogFilterSection(
+                CatalogFilterView(
                   filters: widget.catalogFilters,
                   selectedFilters: _selectedFilters,
                   onSelected: (name, value) {

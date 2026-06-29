@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
+import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_variant_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/product_provider.dart';
 import 'package:flutter/material.dart';
@@ -11,10 +12,12 @@ class ProductVariantInfo extends ConsumerWidget {
     super.key,
     required this.productId,
     required this.variantId,
+    required this.productWarning,
   });
 
   final int productId;
   final int variantId;
+  final ProductDetailWarning? productWarning;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,15 +36,16 @@ class ProductVariantInfo extends ConsumerWidget {
 
     return Skeletonizer(
       enabled: variantAsync.isLoading,
-      child: _Content(variant: variant),
+      child: _Content(variant: variant, productWarning: productWarning),
     );
   }
 }
 
 class _Content extends StatelessWidget {
-  const _Content({required this.variant});
+  const _Content({required this.variant, required this.productWarning});
 
   final ProductVariantDetail variant;
+  final ProductDetailWarning? productWarning;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +56,7 @@ class _Content extends StatelessWidget {
       children: [
         Text(
           CurrencyUtils.formatRupiah(variant.price),
-          style: theme.textTheme.headlineSmall?.copyWith(
+          style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -61,8 +65,8 @@ class _Content extends StatelessWidget {
 
         Text(
           _stockLabel(),
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: _stockColor(context),
           ),
         ),
       ],
@@ -70,6 +74,14 @@ class _Content extends StatelessWidget {
   }
 
   String _stockLabel() {
+    switch (productWarning) {
+      case ProductDetailWarning.unavailable:
+        return 'Unavailable';
+
+      case null:
+        break;
+    }
+
     switch (variant.warning) {
       case ProductVariantDetailWarning.outOfStock:
         return 'Out of stock';
@@ -81,7 +93,29 @@ class _Content extends StatelessWidget {
         return 'Unavailable';
 
       case null:
-        return '${variant.stock} available';
+        return '${variant.stock} in stock';
+    }
+  }
+
+  Color _stockColor(BuildContext context) {
+    switch (productWarning) {
+      case ProductDetailWarning.unavailable:
+        return Colors.red;
+
+      case null:
+        break;
+    }
+
+    switch (variant.warning) {
+      case ProductVariantDetailWarning.lowStock:
+        return Colors.orange;
+
+      case ProductVariantDetailWarning.outOfStock:
+      case ProductVariantDetailWarning.unavailable:
+        return Colors.red;
+
+      case null:
+        return Theme.of(context).colorScheme.onSurfaceVariant;
     }
   }
 }

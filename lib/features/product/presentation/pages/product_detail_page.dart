@@ -60,6 +60,9 @@ class ProductDetailPage extends ConsumerWidget {
       bottomNavigationBar: ProductBottomBar(
         productId: product.id,
         variantId: selectedVariantId,
+        productWarning: product.warning,
+        productIsAvailable: product.isAvailable,
+        productLoading: productAsync.isLoading,
       ),
     );
   }

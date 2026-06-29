@@ -32,12 +32,12 @@ class ProductDetailContent extends StatelessWidget {
 
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
             child: Text(
               product.name,
               style: Theme.of(
                 context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w700),
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
           ),
         ),
@@ -48,6 +48,7 @@ class ProductDetailContent extends StatelessWidget {
             child: ProductVariantInfo(
               productId: product.id,
               variantId: selectedVariantId,
+              productWarning: product.warning,
             ),
           ),
         ),
@@ -61,14 +62,16 @@ class ProductDetailContent extends StatelessWidget {
 
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
             child: ReadMoreText(
               product.description,
               trimMode: TrimMode.Line,
               trimLines: 4,
-              trimCollapsedText: ' Read More',
-              trimExpandedText: ' Show Less',
-              style: Theme.of(context).textTheme.bodyMedium,
+              trimCollapsedText: ' More',
+              trimExpandedText: ' Less',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(height: 1.5),
               moreStyle: TextStyle(
                 color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.w600,
@@ -81,7 +84,7 @@ class ProductDetailContent extends StatelessWidget {
           ),
         ),
 
-        const SliverToBoxAdapter(child: SizedBox(height: 32)),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
       ],
     );
   }
