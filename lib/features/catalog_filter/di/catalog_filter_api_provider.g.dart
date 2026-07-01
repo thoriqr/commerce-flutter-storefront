@@ -53,4 +53,4 @@ final class CatalogFilterApiProvider
   }
 }
 
-String _$catalogFilterApiHash() => r'92ea3803b19126e000f9bad981d8df114dac6325';
+String _$catalogFilterApiHash() => r'51a37ffb57fbb04931149cc7665dfbd0f0e454ed';

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_api_provider.dart';
+part of 'refresh_dio_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,43 +9,42 @@ part of 'product_api_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(productApi)
-final productApiProvider = ProductApiProvider._();
+@ProviderFor(refreshDio)
+final refreshDioProvider = RefreshDioProvider._();
 
-final class ProductApiProvider
-    extends $FunctionalProvider<ProductApi, ProductApi, ProductApi>
-    with $Provider<ProductApi> {
-  ProductApiProvider._()
+final class RefreshDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
+    with $Provider<Dio> {
+  RefreshDioProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'productApiProvider',
+        name: r'refreshDioProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$productApiHash();
+  String debugGetCreateSourceHash() => _$refreshDioHash();
 
   @$internal
   @override
-  $ProviderElement<ProductApi> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<Dio> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  ProductApi create(Ref ref) {
-    return productApi(ref);
+  Dio create(Ref ref) {
+    return refreshDio(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ProductApi value) {
+  Override overrideWithValue(Dio value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<ProductApi>(value),
+      providerOverride: $SyncValueProvider<Dio>(value),
     );
   }
 }
 
-String _$productApiHash() => r'8b1f224f9d44d6d54a3ac5dfdc8c723ada72d730';
+String _$refreshDioHash() => r'376609e2e909de27eb94e9413236ffa2a5c00e53';

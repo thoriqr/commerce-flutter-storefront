@@ -48,4 +48,4 @@ final class CollectionApiProvider
   }
 }
 
-String _$collectionApiHash() => r'993cb7ee062bbc719fd068761402026a1a386a8b';
+String _$collectionApiHash() => r'2ba2816d16ea8af85e291dd480be3b7cf023c251';

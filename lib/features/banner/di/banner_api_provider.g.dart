@@ -48,4 +48,4 @@ final class BannerApiProvider
   }
 }
 
-String _$bannerApiHash() => r'7a76faab3aee2da342395e506b4c25188ad5577f';
+String _$bannerApiHash() => r'a35bb594acc176673cf2569793153246d55896d2';

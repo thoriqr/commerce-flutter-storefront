@@ -48,4 +48,4 @@ final class CategoryApiProvider
   }
 }
 
-String _$categoryApiHash() => r'ebf3a82c5048fe7450fb76334a8a64c544cc413b';
+String _$categoryApiHash() => r'cb0da6d6da47da2d033cb7895e6747fb5e4ebc48';

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_api_provider.dart';
+part of 'auth_api_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,43 +9,43 @@ part of 'product_api_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(productApi)
-final productApiProvider = ProductApiProvider._();
+@ProviderFor(authApi)
+final authApiProvider = AuthApiProvider._();
 
-final class ProductApiProvider
-    extends $FunctionalProvider<ProductApi, ProductApi, ProductApi>
-    with $Provider<ProductApi> {
-  ProductApiProvider._()
+final class AuthApiProvider
+    extends $FunctionalProvider<AuthApi, AuthApi, AuthApi>
+    with $Provider<AuthApi> {
+  AuthApiProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'productApiProvider',
+        name: r'authApiProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$productApiHash();
+  String debugGetCreateSourceHash() => _$authApiHash();
 
   @$internal
   @override
-  $ProviderElement<ProductApi> $createElement($ProviderPointer pointer) =>
+  $ProviderElement<AuthApi> $createElement($ProviderPointer pointer) =>
       $ProviderElement(pointer);
 
   @override
-  ProductApi create(Ref ref) {
-    return productApi(ref);
+  AuthApi create(Ref ref) {
+    return authApi(ref);
   }
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ProductApi value) {
+  Override overrideWithValue(AuthApi value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<ProductApi>(value),
+      providerOverride: $SyncValueProvider<AuthApi>(value),
     );
   }
 }
 
-String _$productApiHash() => r'8b1f224f9d44d6d54a3ac5dfdc8c723ada72d730';
+String _$authApiHash() => r'136ac5871a63581e0798e043bd03a687158597de';
