@@ -1,8 +1,10 @@
+import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/account/data/datasource/account_api.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
 import 'package:commerce_flutter_storefront/features/account/domain/repositories/account_repository.dart';
+import 'package:flutter/foundation.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   const AccountRepositoryImpl(this._api);
@@ -11,22 +13,17 @@ class AccountRepositoryImpl implements AccountRepository {
 
   @override
   Future<UserProfile> getUserProfile() async {
-    final res = await _api.getUserProfile();
-
-    return res.data;
+    debugPrint("========== REPOSITORY ==========");
+    return await _api.getUserProfile().unwrap();
   }
 
   @override
   Future<UserAddresses> getUserAddresses() async {
-    final res = await _api.getUserAddresses();
-
-    return res.data;
+    return await _api.getUserAddresses().unwrap();
   }
 
   @override
   Future<UserAddressDetail> getUserAddress(int id) async {
-    final res = await _api.getUserAddress(id);
-
-    return res.data;
+    return await _api.getUserAddress(id).unwrap();
   }
 }

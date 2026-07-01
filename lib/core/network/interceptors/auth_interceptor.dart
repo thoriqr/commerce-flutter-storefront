@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/auth/token_manager.dart';
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/auth_constants.dart';
 import 'package:dio/dio.dart';
 
@@ -15,6 +16,7 @@ class AuthInterceptor extends QueuedInterceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    // Attach the current access token.
     final accessToken = await tokenManager.getAccessToken();
 
     if (accessToken != null && accessToken.isNotEmpty) {
@@ -31,40 +33,54 @@ class AuthInterceptor extends QueuedInterceptor {
   ) async {
     final request = err.requestOptions;
 
-    if (AuthConstants.excludedPaths.contains(request.path)) {
-      handler.next(err);
-      return;
-    }
-
-    // handle 401
+    // Only handle unauthorized responses.
     if (err.response?.statusCode != 401) {
       handler.next(err);
       return;
     }
 
-    // Retry once
+    // Skip authentication endpoints.
+    if (AuthConstants.excludedPaths.contains(request.path)) {
+      handler.next(err);
+      return;
+    }
+
+    // Prevent infinite retry loops.
     if (request.extra[_retryKey] == true) {
       handler.next(err);
       return;
     }
 
+    // Guests cannot refresh because they do not have a refresh token.
+    final refreshToken = await tokenManager.getRefreshToken();
+
+    if (refreshToken == null || refreshToken.isEmpty) {
+      handler.next(err);
+      return;
+    }
+
     try {
+      // Refresh tokens.
       final tokens = await tokenManager.refresh();
 
+      // Retry the original request.
       final response = await _retry(request, tokens.accessToken);
 
       handler.resolve(response);
-    } catch (_) {
+    } on AppException {
+      // Refresh failed because the session is no longer valid.
+      handler.next(err);
+    } on DioException {
+      // Network failure while refreshing.
       handler.next(err);
     }
   }
 
   Future<Response<dynamic>> _retry(RequestOptions request, String accessToken) {
-    final headers = Map<String, dynamic>.from(request.headers);
-    headers['Authorization'] = 'Bearer $accessToken';
+    final headers = Map<String, dynamic>.from(request.headers)
+      ..['Authorization'] = 'Bearer $accessToken';
 
-    final extra = Map<String, dynamic>.from(request.extra);
-    extra[_retryKey] = true;
+    final extra = Map<String, dynamic>.from(request.extra)..[_retryKey] = true;
 
     return dio.request<dynamic>(
       request.path,

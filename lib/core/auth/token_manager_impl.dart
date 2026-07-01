@@ -35,6 +35,7 @@ class TokenManagerImpl implements TokenManager {
 
   @override
   Future<AuthTokens> refresh() {
+    // Reuse the current refresh request if one is already running.
     final current = _refreshFuture;
 
     if (current != null) {
@@ -45,6 +46,7 @@ class TokenManagerImpl implements TokenManager {
 
     _refreshFuture = future;
 
+    // Reset the refresh state once the request completes.
     future.whenComplete(() {
       if (identical(_refreshFuture, future)) {
         _refreshFuture = null;
@@ -56,13 +58,16 @@ class TokenManagerImpl implements TokenManager {
 
   Future<AuthTokens> _performRefresh() async {
     try {
+      // Request a new access/refresh token pair.
       final tokens = await _refreshRepository.refresh();
 
+      // Persist the latest tokens.
       await save(tokens);
 
       return tokens;
     } on AppException catch (e) {
-      if (e.code == 'UNAUTHORIZED') {
+      // Clear local credentials if the refresh token is no longer valid.
+      if (e.code == "UNAUTHORIZED") {
         await clear();
       }
 
