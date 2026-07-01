@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_image_carousel.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_variant_info.dart';
@@ -17,9 +18,11 @@ class ProductDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedVariant = product.variants.firstWhere(
-      (variant) => variant.id == selectedVariantId,
-    );
+    final selectedVariant = selectedVariantId == uninitializedVariantId
+        ? product.variants.first
+        : product.variants.firstWhere(
+            (variant) => variant.id == selectedVariantId,
+          );
 
     return CustomScrollView(
       slivers: [
@@ -52,7 +55,6 @@ class ProductDetailContent extends StatelessWidget {
             ),
           ),
         ),
-
         SliverToBoxAdapter(
           child: ProductVariantSelector(
             product: product,

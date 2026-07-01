@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
+import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_variant_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/product_provider.dart';
@@ -21,6 +22,17 @@ class ProductVariantInfo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Mock state (ProductDetail still loading)
+    if (variantId == uninitializedVariantId) {
+      return Skeletonizer(
+        enabled: true,
+        child: _Content(
+          variant: ProductVariantDetailMock.item(),
+          productWarning: productWarning,
+        ),
+      );
+    }
+
     final variantAsync = ref.watch(
       productVariantDetailProvider(productId, variantId),
     );

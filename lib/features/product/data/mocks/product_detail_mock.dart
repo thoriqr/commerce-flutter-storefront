@@ -1,3 +1,5 @@
+import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
+
 import '../models/product_detail.dart';
 
 class ProductDetailMock {
@@ -13,7 +15,7 @@ class ProductDetailMock {
       isAvailable: true,
       warning: null,
       isVariant: true,
-      initialVariantId: 101,
+      initialVariantId: uninitializedVariantId,
 
       category: const ProductCategory(
         name: 'T-Shirts',

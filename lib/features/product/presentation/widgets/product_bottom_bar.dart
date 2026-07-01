@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/product_provider.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_variant_info.dart';
@@ -25,18 +26,24 @@ class ProductBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final variantAsync = ref.watch(
-      productVariantDetailProvider(productId, variantId),
-    );
+    final isPending = variantId == uninitializedVariantId;
 
-    final variant = switch (variantAsync) {
-      AsyncData(:final value) => value,
-      _ => ProductVariantDetailMock.item(),
-    };
+    final variantAsync = isPending
+        ? null
+        : ref.watch(productVariantDetailProvider(productId, variantId));
 
-    final loading = productLoading || variantAsync.isLoading;
+    final variant = isPending
+        ? ProductVariantDetailMock.item()
+        : switch (variantAsync!) {
+            AsyncData(:final value) => value,
+            _ => ProductVariantDetailMock.item(),
+          };
 
-    final canAddToCart = productIsAvailable && variant.isAvailable;
+    final loading =
+        isPending || productLoading || (variantAsync?.isLoading ?? false);
+
+    final canAddToCart =
+        !isPending && productIsAvailable && variant.isAvailable;
 
     return SafeArea(
       top: false,
