@@ -4,8 +4,11 @@ part 'user_profile.freezed.dart';
 part 'user_profile.g.dart';
 
 enum UserProviderType {
-  google("GOOGLE"),
-  github("GITHUB");
+  @JsonValue('GOOGLE')
+  google('GOOGLE'),
+
+  @JsonValue('GITHUB')
+  github('GITHUB');
 
   const UserProviderType(this.value);
 
@@ -13,8 +16,11 @@ enum UserProviderType {
 }
 
 enum UserStatus {
-  active("ACTIVE"),
-  suspended("SUSPENDED");
+  @JsonValue('ACTIVE')
+  active('ACTIVE'),
+
+  @JsonValue('SUSPENDED')
+  suspended('SUSPENDED');
 
   const UserStatus(this.value);
 

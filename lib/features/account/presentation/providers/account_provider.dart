@@ -2,14 +2,12 @@ import 'package:commerce_flutter_storefront/features/account/data/models/user_ad
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
 import 'package:commerce_flutter_storefront/features/account/di/account_repository_provider.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_provider.g.dart';
 
 @riverpod
 Future<UserProfile> userProfile(Ref ref) {
-  debugPrint("========== USER PROFILE PROVIDER ==========");
   return ref.read(accountRepositoryProvider).getUserProfile();
 }
 

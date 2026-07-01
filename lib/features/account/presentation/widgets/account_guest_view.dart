@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:flutter/material.dart';
 
 class AccountGuestView extends StatelessWidget {
@@ -21,9 +22,7 @@ class AccountGuestView extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             FilledButton(
-              onPressed: () {
-                // TODO: Push LoginPage
-              },
+              onPressed: () => AuthRoutes.pushLogin(context),
               child: const Text("Login"),
             ),
           ],

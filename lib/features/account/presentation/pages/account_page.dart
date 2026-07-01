@@ -12,7 +12,6 @@ class AccountPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint("ACCOUNT BUILD");
     final profile = ref.watch(userProfileProvider);
 
     return profile.when(

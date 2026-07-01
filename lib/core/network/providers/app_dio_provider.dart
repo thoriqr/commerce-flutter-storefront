@@ -12,6 +12,7 @@ Dio appDio(Ref ref) {
   final dio = Dio(
     BaseOptions(
       baseUrl: "http://10.0.2.2:8000/v1",
+      contentType: Headers.jsonContentType,
       // baseUrl: "https://api.commerce.web.id/v1",
     ),
   );

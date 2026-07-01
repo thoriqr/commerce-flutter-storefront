@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/datasource/auth_api.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
@@ -10,19 +11,12 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthApi _api;
 
   @override
-  Future<AuthTokens> login({
-    required String email,
-    required String password,
-  }) async {
-    final res = await _api.login(
-      LoginRequest(email: email, password: password),
-    );
-
-    return res.data;
+  Future<AuthTokens> login({required String email, required String password}) {
+    return _api.login(LoginRequest(email: email, password: password)).unwrap();
   }
 
   @override
-  Future<void> logout({required String refreshToken}) async {
-    await _api.logout(RefreshRequest(refreshToken: refreshToken));
+  Future<void> logout({required String refreshToken}) {
+    return _api.logout(RefreshRequest(refreshToken: refreshToken)).unwrap();
   }
 }

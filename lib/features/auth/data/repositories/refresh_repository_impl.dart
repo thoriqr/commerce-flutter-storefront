@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/core/storage/secure_storage.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/datasource/refresh_api.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
@@ -22,8 +23,6 @@ class RefreshRepositoryImpl implements RefreshRepository {
       );
     }
 
-    final res = await _api.refresh(RefreshRequest(refreshToken: refreshToken));
-
-    return res.data;
+    return _api.refresh(RefreshRequest(refreshToken: refreshToken)).unwrap();
   }
 }

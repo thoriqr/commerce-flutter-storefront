@@ -36,8 +36,8 @@ Map<String, dynamic> _$UserProfileToJson(_UserProfile instance) =>
     };
 
 const _$UserStatusEnumMap = {
-  UserStatus.active: 'active',
-  UserStatus.suspended: 'suspended',
+  UserStatus.active: 'ACTIVE',
+  UserStatus.suspended: 'SUSPENDED',
 };
 
 _UserDefaultAddress _$UserDefaultAddressFromJson(Map<String, dynamic> json) =>
@@ -83,6 +83,6 @@ Map<String, dynamic> _$UserProviderToJson(_UserProvider instance) =>
     };
 
 const _$UserProviderTypeEnumMap = {
-  UserProviderType.google: 'google',
-  UserProviderType.github: 'github',
+  UserProviderType.google: 'GOOGLE',
+  UserProviderType.github: 'GITHUB',
 };

@@ -4,7 +4,6 @@ import 'package:commerce_flutter_storefront/features/account/data/models/user_ad
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
 import 'package:commerce_flutter_storefront/features/account/domain/repositories/account_repository.dart';
-import 'package:flutter/foundation.dart';
 
 class AccountRepositoryImpl implements AccountRepository {
   const AccountRepositoryImpl(this._api);
@@ -13,7 +12,6 @@ class AccountRepositoryImpl implements AccountRepository {
 
   @override
   Future<UserProfile> getUserProfile() async {
-    debugPrint("========== REPOSITORY ==========");
     return await _api.getUserProfile().unwrap();
   }
 

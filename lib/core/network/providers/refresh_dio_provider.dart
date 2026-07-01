@@ -7,7 +7,12 @@ part 'refresh_dio_provider.g.dart';
 
 @riverpod
 Dio refreshDio(Ref ref) {
-  final dio = Dio(BaseOptions(baseUrl: "http://10.0.2.2:8000/v1"));
+  final dio = Dio(
+    BaseOptions(
+      baseUrl: "http://10.0.2.2:8000/v1",
+      contentType: Headers.jsonContentType,
+    ),
+  );
   // final dio = Dio(BaseOptions(baseUrl: "https://api.commerce.web.id/v1"));
 
   dio.interceptors.addAll([MobileClientInterceptor(), ErrorInterceptor()]);

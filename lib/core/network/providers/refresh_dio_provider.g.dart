@@ -47,4 +47,4 @@ final class RefreshDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$refreshDioHash() => r'376609e2e909de27eb94e9413236ffa2a5c00e53';
+String _$refreshDioHash() => r'30a9049989b8fb698143195ca2d57542effd3721';
