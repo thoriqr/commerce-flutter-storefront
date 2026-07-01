@@ -4,6 +4,7 @@ import 'package:commerce_flutter_storefront/features/category/presentation/provi
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/popular_category_view.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/providers/collection_provider.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/widgets/collection_preview_view.dart';
+import 'package:commerce_flutter_storefront/features/shell/presentation/widgets/app_top_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,31 +38,33 @@ class HomePage extends ConsumerWidget {
       _ => CollectionPreviewMock.items(),
     };
 
-    return Skeletonizer(
-      enabled:
-          heroBanners.isLoading ||
-          popularCategories.isLoading ||
-          collectionPreviews.isLoading,
-      child: ListView(
-        children: [
-          const SizedBox(height: 16),
+    return Scaffold(
+      appBar: const AppTopBar(),
+      body: Skeletonizer(
+        enabled:
+            heroBanners.isLoading ||
+            popularCategories.isLoading ||
+            collectionPreviews.isLoading,
+        child: ListView(
+          children: [
+            const SizedBox(height: 16),
 
-          HeroBannerCarousel(banners: hero),
+            HeroBannerCarousel(banners: hero),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          PopularCategoryView(categories: categories),
+            PopularCategoryView(categories: categories),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          Column(
-            children: [
-              for (final collection in collections) ...[
-                CollectionPreviewView(collection: collection),
+            Column(
+              children: [
+                for (final collection in collections)
+                  CollectionPreviewView(collection: collection),
               ],
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

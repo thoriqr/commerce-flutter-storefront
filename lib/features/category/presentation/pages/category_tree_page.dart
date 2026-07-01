@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/features/category/presentation/providers/category_provider.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_tree_view.dart';
+import 'package:commerce_flutter_storefront/features/shell/presentation/widgets/app_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -17,9 +18,12 @@ class CategoryTreePage extends ConsumerWidget {
       _ => CategoryTreeMock.items(),
     };
 
-    return Skeletonizer(
-      enabled: categoriesAsync.isLoading,
-      child: CategoryTreeView(categories: categories),
+    return Scaffold(
+      appBar: const AppTopBar(),
+      body: Skeletonizer(
+        enabled: categoriesAsync.isLoading,
+        child: CategoryTreeView(categories: categories),
+      ),
     );
   }
 }
