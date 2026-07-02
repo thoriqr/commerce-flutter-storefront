@@ -1,11 +1,11 @@
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/catalog_filter/data/models/catalog_filter_group.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/controllers/product_listing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../catalog_filter/presentation/widgets/catalog_filter_view.dart';
 import '../../domain/product_source.dart';
-import '../notifiers/product_listing_notifier.dart';
 import 'package:flutter/services.dart';
 
 class ProductFilterDrawer extends ConsumerStatefulWidget {
@@ -33,7 +33,7 @@ class _ProductFilterDrawerState extends ConsumerState<ProductFilterDrawer> {
   void initState() {
     super.initState();
 
-    final listing = ref.read(productListingProvider(widget.source));
+    final listing = ref.read(productListingControllerProvider(widget.source));
 
     final params = listing.value?.params;
 
@@ -73,7 +73,9 @@ class _ProductFilterDrawerState extends ConsumerState<ProductFilterDrawer> {
   Future<void> _apply() async {
     const maxPriceLimit = 1000000000;
 
-    final notifier = ref.read(productListingProvider(widget.source).notifier);
+    final notifier = ref.read(
+      productListingControllerProvider(widget.source).notifier,
+    );
 
     final minPrice = int.tryParse(_minPriceController.text);
     final maxPrice = int.tryParse(_maxPriceController.text);
@@ -130,7 +132,7 @@ class _ProductFilterDrawerState extends ConsumerState<ProductFilterDrawer> {
     }
 
     await ref
-        .read(productListingProvider(widget.source).notifier)
+        .read(productListingControllerProvider(widget.source).notifier)
         .clearAllFilters();
   }
 

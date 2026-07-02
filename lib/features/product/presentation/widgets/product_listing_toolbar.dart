@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/features/catalog_filter/data/models/catalog_filter_group.dart';
 import 'package:commerce_flutter_storefront/features/catalog_filter/presentation/providers/catalog_filter_provider.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/controllers/product_listing_controller.dart';
 
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_filter_drawer.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/models/product_sort_option.dart';
 import '../../domain/product_source.dart';
-import '../notifiers/product_listing_notifier.dart';
 
 class ProductListingToolbar extends ConsumerWidget {
   const ProductListingToolbar({super.key, required this.source});
@@ -16,7 +16,7 @@ class ProductListingToolbar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final listing = ref.watch(productListingProvider(source));
+    final listing = ref.watch(productListingControllerProvider(source));
 
     final state = switch (listing) {
       AsyncData(:final value) => value,
@@ -88,7 +88,7 @@ class ProductListingToolbar extends ConsumerWidget {
           PopupMenuButton<ProductSortOption>(
             onSelected: (option) {
               ref
-                  .read(productListingProvider(source).notifier)
+                  .read(productListingControllerProvider(source).notifier)
                   .applySort(option);
             },
             itemBuilder: (context) {

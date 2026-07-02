@@ -22,17 +22,24 @@ class CartInterceptor extends Interceptor {
     handler.next(options);
   }
 
+  // The backend may issue a new cart id when:
+  //
+  // - a guest cart is created
+  // - a guest cart is merged into a user cart
+  // - the current cart becomes invalid
+  //
+  // Persist the latest cart id so future requests remain
+  // synchronized with the server.
   @override
   Future<void> onResponse(
     Response response,
     ResponseInterceptorHandler handler,
   ) async {
-    // TODO:
-    //
-    // Read x-cart-id from response.headers.
-    // Save the latest cart id through CartManager.
-    //
-    // This keeps guest carts and merged carts synchronized.
+    final cartId = response.headers.value(_cartHeader);
+
+    if (cartId != null && cartId.isNotEmpty) {
+      await cartManager.saveCartId(cartId);
+    }
 
     handler.next(response);
   }

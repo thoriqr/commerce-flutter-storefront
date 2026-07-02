@@ -4,7 +4,7 @@ import 'package:commerce_flutter_storefront/features/account/presentation/widget
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_info.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_logout_tile.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_security.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/notifiers/auth_notifier.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
 import 'package:commerce_flutter_storefront/features/shell/presentation/widgets/app_top_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,7 +16,7 @@ class AccountAuthenticatedPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
+    final auth = ref.watch(authMutationsProvider);
 
     return Scaffold(
       appBar: const AppTopBar(),
@@ -42,7 +42,7 @@ class AccountAuthenticatedPage extends ConsumerWidget {
           AccountLogoutTile(
             isLoading: auth.isLoading,
             onLogout: () async {
-              await ref.read(authProvider.notifier).logout();
+              await ref.read(authMutationsProvider.notifier).logout();
             },
           ),
         ],

@@ -7,10 +7,10 @@ import 'package:commerce_flutter_storefront/features/product/presentation/states
 import 'package:flutter/widgets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'product_listing_notifier.g.dart';
+part 'product_listing_controller.g.dart';
 
 @riverpod
-class ProductListing extends _$ProductListing {
+class ProductListingController extends _$ProductListingController {
   Future<ProductListingResult> _fetchProducts(
     ProductSource source,
     ProductListingQueryParams params,

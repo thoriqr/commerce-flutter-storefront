@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_listing_notifier.dart';
+part of 'product_listing_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,39 +9,41 @@ part of 'product_listing_notifier.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(ProductListing)
-final productListingProvider = ProductListingFamily._();
+@ProviderFor(ProductListingController)
+final productListingControllerProvider = ProductListingControllerFamily._();
 
-final class ProductListingProvider
-    extends $AsyncNotifierProvider<ProductListing, ProductListingState> {
-  ProductListingProvider._({
-    required ProductListingFamily super.from,
+final class ProductListingControllerProvider
+    extends
+        $AsyncNotifierProvider<ProductListingController, ProductListingState> {
+  ProductListingControllerProvider._({
+    required ProductListingControllerFamily super.from,
     required ProductSource super.argument,
   }) : super(
          retry: null,
-         name: r'productListingProvider',
+         name: r'productListingControllerProvider',
          isAutoDispose: true,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
 
   @override
-  String debugGetCreateSourceHash() => _$productListingHash();
+  String debugGetCreateSourceHash() => _$productListingControllerHash();
 
   @override
   String toString() {
-    return r'productListingProvider'
+    return r'productListingControllerProvider'
         ''
         '($argument)';
   }
 
   @$internal
   @override
-  ProductListing create() => ProductListing();
+  ProductListingController create() => ProductListingController();
 
   @override
   bool operator ==(Object other) {
-    return other is ProductListingProvider && other.argument == argument;
+    return other is ProductListingControllerProvider &&
+        other.argument == argument;
   }
 
   @override
@@ -50,34 +52,36 @@ final class ProductListingProvider
   }
 }
 
-String _$productListingHash() => r'0d16af92d2e9aae84375116f89d3cfc663ff910b';
+String _$productListingControllerHash() =>
+    r'e7faf10d7885764e05b4166577718f49eb8be681';
 
-final class ProductListingFamily extends $Family
+final class ProductListingControllerFamily extends $Family
     with
         $ClassFamilyOverride<
-          ProductListing,
+          ProductListingController,
           AsyncValue<ProductListingState>,
           ProductListingState,
           FutureOr<ProductListingState>,
           ProductSource
         > {
-  ProductListingFamily._()
+  ProductListingControllerFamily._()
     : super(
         retry: null,
-        name: r'productListingProvider',
+        name: r'productListingControllerProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
         isAutoDispose: true,
       );
 
-  ProductListingProvider call(ProductSource source) =>
-      ProductListingProvider._(argument: source, from: this);
+  ProductListingControllerProvider call(ProductSource source) =>
+      ProductListingControllerProvider._(argument: source, from: this);
 
   @override
-  String toString() => r'productListingProvider';
+  String toString() => r'productListingControllerProvider';
 }
 
-abstract class _$ProductListing extends $AsyncNotifier<ProductListingState> {
+abstract class _$ProductListingController
+    extends $AsyncNotifier<ProductListingState> {
   late final _$args = ref.$arg as ProductSource;
   ProductSource get source => _$args;
 

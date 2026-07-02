@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_notifier.dart';
+part of 'cart_mutations.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,32 +9,33 @@ part of 'auth_notifier.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(Auth)
-final authProvider = AuthProvider._();
+@ProviderFor(CartMutations)
+final cartMutationsProvider = CartMutationsProvider._();
 
-final class AuthProvider extends $AsyncNotifierProvider<Auth, void> {
-  AuthProvider._()
+final class CartMutationsProvider
+    extends $AsyncNotifierProvider<CartMutations, void> {
+  CartMutationsProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'authProvider',
+        name: r'cartMutationsProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$authHash();
+  String debugGetCreateSourceHash() => _$cartMutationsHash();
 
   @$internal
   @override
-  Auth create() => Auth();
+  CartMutations create() => CartMutations();
 }
 
-String _$authHash() => r'48f91457c60be1539ff631941aca9fb07b355aab';
+String _$cartMutationsHash() => r'80fd3fe4d2a08f4bdf4211206039d61eaf4b646d';
 
-abstract class _$Auth extends $AsyncNotifier<void> {
+abstract class _$CartMutations extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

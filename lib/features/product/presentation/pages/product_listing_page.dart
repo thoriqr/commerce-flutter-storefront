@@ -4,7 +4,7 @@ import 'package:commerce_flutter_storefront/features/category/presentation/widge
 import 'package:commerce_flutter_storefront/features/collection/presentation/providers/collection_provider.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/widgets/collection_header.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/notifiers/product_listing_notifier.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/controllers/product_listing_controller.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_grid.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_toolbar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_search_header.dart';
@@ -41,7 +41,9 @@ class _ProductListingPageState extends ConsumerState<ProductListingPage> {
     final position = _controller.position;
 
     if (position.pixels >= position.maxScrollExtent - 300) {
-      ref.read(productListingProvider(widget.source).notifier).loadMore();
+      ref
+          .read(productListingControllerProvider(widget.source).notifier)
+          .loadMore();
     }
   }
 
@@ -85,7 +87,7 @@ class _ProductListingPageState extends ConsumerState<ProductListingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final listing = ref.watch(productListingProvider(widget.source));
+    final listing = ref.watch(productListingControllerProvider(widget.source));
 
     return Scaffold(
       body: Column(

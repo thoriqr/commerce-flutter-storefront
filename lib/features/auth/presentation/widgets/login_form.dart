@@ -1,5 +1,5 @@
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/notifiers/auth_notifier.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +33,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     }
 
     await ref
-        .read(authProvider.notifier)
+        .read(authMutationsProvider.notifier)
         .login(
           email: _emailController.text.trim(),
           password: _passwordController.text,
@@ -42,7 +42,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authProvider, (previous, next) {
+    ref.listen(authMutationsProvider, (previous, next) {
       next.whenOrNull(
         data: (_) {
           if (mounted) {
@@ -52,7 +52,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       );
     });
 
-    final auth = ref.watch(authProvider);
+    final auth = ref.watch(authMutationsProvider);
 
     final isLoading = auth.isLoading;
 

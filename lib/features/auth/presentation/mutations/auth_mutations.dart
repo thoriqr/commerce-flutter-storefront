@@ -3,10 +3,10 @@ import 'package:commerce_flutter_storefront/features/account/presentation/provid
 import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'auth_notifier.g.dart';
+part 'auth_mutations.g.dart';
 
 @riverpod
-class Auth extends _$Auth {
+class AuthMutations extends _$AuthMutations {
   @override
   FutureOr<void> build() {}
 
