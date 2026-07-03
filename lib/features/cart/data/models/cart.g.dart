@@ -58,14 +58,11 @@ const _$CartItemWarningEnumMap = {
 _CartItemOption _$CartItemOptionFromJson(Map<String, dynamic> json) =>
     _CartItemOption(
       dimension: json['dimension'] as String,
-      string: json['string'] as String,
+      value: json['value'] as String,
     );
 
 Map<String, dynamic> _$CartItemOptionToJson(_CartItemOption instance) =>
-    <String, dynamic>{
-      'dimension': instance.dimension,
-      'string': instance.string,
-    };
+    <String, dynamic>{'dimension': instance.dimension, 'value': instance.value};
 
 _CartSummary _$CartSummaryFromJson(Map<String, dynamic> json) => _CartSummary(
   totalItems: (json['totalItems'] as num).toInt(),

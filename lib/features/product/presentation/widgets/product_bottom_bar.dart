@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/cart_mutations.dart';
 import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/product_provider.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:commerce_flutter_storefront/features/product/data/mocks/product_variant_detail_mock.dart';
 
-class ProductBottomBar extends ConsumerWidget {
+class ProductBottomBar extends ConsumerStatefulWidget {
   const ProductBottomBar({
     super.key,
     required this.productId,
@@ -25,12 +26,50 @@ class ProductBottomBar extends ConsumerWidget {
   final bool productLoading;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isPending = variantId == uninitializedVariantId;
+  ConsumerState<ProductBottomBar> createState() => _ProductBottomBarState();
+}
+
+class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
+  int _quantity = 1;
+
+  @override
+  void didUpdateWidget(covariant ProductBottomBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.variantId != widget.variantId) {
+      setState(() {
+        _quantity = 1;
+      });
+    }
+  }
+
+  void _increment(int stock) {
+    if (_quantity >= stock) return;
+
+    setState(() {
+      _quantity++;
+    });
+  }
+
+  void _decrement() {
+    if (_quantity <= 1) return;
+
+    setState(() {
+      _quantity--;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mutation = ref.watch(cartMutationsProvider);
+
+    final isPending = widget.variantId == uninitializedVariantId;
 
     final variantAsync = isPending
         ? null
-        : ref.watch(productVariantDetailProvider(productId, variantId));
+        : ref.watch(
+            productVariantDetailProvider(widget.productId, widget.variantId),
+          );
 
     final variant = isPending
         ? ProductVariantDetailMock.item()
@@ -40,10 +79,13 @@ class ProductBottomBar extends ConsumerWidget {
           };
 
     final loading =
-        isPending || productLoading || (variantAsync?.isLoading ?? false);
+        isPending ||
+        widget.productLoading ||
+        (variantAsync?.isLoading ?? false) ||
+        mutation.isLoading;
 
     final canAddToCart =
-        !isPending && productIsAvailable && variant.isAvailable;
+        !isPending && widget.productIsAvailable && variant.isAvailable;
 
     return SafeArea(
       top: false,
@@ -60,9 +102,9 @@ class ProductBottomBar extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ProductVariantInfo(
-              productId: productId,
-              variantId: variantId,
-              productWarning: productWarning,
+              productId: widget.productId,
+              variantId: widget.variantId,
+              productWarning: widget.productWarning,
             ),
 
             const SizedBox(height: 12),
@@ -79,17 +121,19 @@ class ProductBottomBar extends ConsumerWidget {
                   child: Row(
                     children: [
                       IconButton(
-                        onPressed: canAddToCart ? () {} : null,
+                        onPressed: loading || !canAddToCart ? null : _decrement,
                         icon: const Icon(Icons.remove),
                       ),
 
-                      const SizedBox(
+                      SizedBox(
                         width: 24,
-                        child: Center(child: Text('1')),
+                        child: Center(child: Text(_quantity.toString())),
                       ),
 
                       IconButton(
-                        onPressed: canAddToCart ? () {} : null,
+                        onPressed: loading || !canAddToCart
+                            ? null
+                            : () => _increment(variant.stock),
                         icon: const Icon(Icons.add),
                       ),
                     ],
@@ -106,12 +150,23 @@ class ProductBottomBar extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(999),
                       ),
                     ),
-                    onPressed: loading
+                    onPressed: loading || !canAddToCart
                         ? null
-                        : canAddToCart
-                        ? () {}
-                        : null,
-                    child: const Text('Add to Cart'),
+                        : () async {
+                            await ref
+                                .read(cartMutationsProvider.notifier)
+                                .addItem(
+                                  variantId: widget.variantId,
+                                  quantity: _quantity,
+                                );
+                          },
+                    child: mutation.isLoading
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Add to Cart'),
                   ),
                 ),
               ],

@@ -37,7 +37,7 @@ abstract class CartItem with _$CartItem {
 abstract class CartItemOption with _$CartItemOption {
   const factory CartItemOption({
     required String dimension,
-    required String string,
+    required String value,
   }) = _CartItemOption;
 
   factory CartItemOption.fromJson(Map<String, dynamic> json) =>

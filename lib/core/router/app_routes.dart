@@ -6,6 +6,8 @@ abstract final class AppRoutes {
   static const products = '/products';
   static const product = '/product/:id';
 
+  static const cart = '/cart';
+
   static String productDetail(int id) {
     return '/product/$id';
   }

@@ -4,7 +4,7 @@ import 'package:commerce_flutter_storefront/features/product/presentation/provid
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/selected_variant_id_provider.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_bottom_bar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_detail_content.dart';
-import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_search_header.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -38,7 +38,7 @@ class ProductDetailPage extends ConsumerWidget {
     return Scaffold(
       body: Column(
         children: [
-          AppSearchHeader(
+          AppHeader(
             initialValue: '',
             onSearch: (query) {
               context.push(AppRoutes.products, extra: SearchSource(query));

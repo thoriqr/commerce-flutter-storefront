@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_connected_accounts.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_default_address.dart';
@@ -5,9 +6,11 @@ import 'package:commerce_flutter_storefront/features/account/presentation/widget
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_logout_tile.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_security.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
-import 'package:commerce_flutter_storefront/features/shell/presentation/widgets/app_top_bar.dart';
+import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountAuthenticatedPage extends ConsumerWidget {
   const AccountAuthenticatedPage({super.key, required this.user});
@@ -19,7 +22,12 @@ class AccountAuthenticatedPage extends ConsumerWidget {
     final auth = ref.watch(authMutationsProvider);
 
     return Scaffold(
-      appBar: const AppTopBar(),
+      appBar: AppHeader(
+        showBackButton: false,
+        onSearch: (query) {
+          context.push(AppRoutes.products, extra: SearchSource(query));
+        },
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

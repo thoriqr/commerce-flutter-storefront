@@ -604,7 +604,7 @@ as List<CartItemOption>,
 /// @nodoc
 mixin _$CartItemOption {
 
- String get dimension; String get string;
+ String get dimension; String get value;
 /// Create a copy of CartItemOption
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -617,16 +617,16 @@ $CartItemOptionCopyWith<CartItemOption> get copyWith => _$CartItemOptionCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CartItemOption&&(identical(other.dimension, dimension) || other.dimension == dimension)&&(identical(other.string, string) || other.string == string));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is CartItemOption&&(identical(other.dimension, dimension) || other.dimension == dimension)&&(identical(other.value, value) || other.value == value));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,dimension,string);
+int get hashCode => Object.hash(runtimeType,dimension,value);
 
 @override
 String toString() {
-  return 'CartItemOption(dimension: $dimension, string: $string)';
+  return 'CartItemOption(dimension: $dimension, value: $value)';
 }
 
 
@@ -637,7 +637,7 @@ abstract mixin class $CartItemOptionCopyWith<$Res>  {
   factory $CartItemOptionCopyWith(CartItemOption value, $Res Function(CartItemOption) _then) = _$CartItemOptionCopyWithImpl;
 @useResult
 $Res call({
- String dimension, String string
+ String dimension, String value
 });
 
 
@@ -654,10 +654,10 @@ class _$CartItemOptionCopyWithImpl<$Res>
 
 /// Create a copy of CartItemOption
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? dimension = null,Object? string = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? dimension = null,Object? value = null,}) {
   return _then(_self.copyWith(
 dimension: null == dimension ? _self.dimension : dimension // ignore: cast_nullable_to_non_nullable
-as String,string: null == string ? _self.string : string // ignore: cast_nullable_to_non_nullable
+as String,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -743,10 +743,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String dimension,  String string)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String dimension,  String value)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CartItemOption() when $default != null:
-return $default(_that.dimension,_that.string);case _:
+return $default(_that.dimension,_that.value);case _:
   return orElse();
 
 }
@@ -764,10 +764,10 @@ return $default(_that.dimension,_that.string);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String dimension,  String string)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String dimension,  String value)  $default,) {final _that = this;
 switch (_that) {
 case _CartItemOption():
-return $default(_that.dimension,_that.string);case _:
+return $default(_that.dimension,_that.value);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -784,10 +784,10 @@ return $default(_that.dimension,_that.string);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String dimension,  String string)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String dimension,  String value)?  $default,) {final _that = this;
 switch (_that) {
 case _CartItemOption() when $default != null:
-return $default(_that.dimension,_that.string);case _:
+return $default(_that.dimension,_that.value);case _:
   return null;
 
 }
@@ -799,11 +799,11 @@ return $default(_that.dimension,_that.string);case _:
 @JsonSerializable()
 
 class _CartItemOption implements CartItemOption {
-  const _CartItemOption({required this.dimension, required this.string});
+  const _CartItemOption({required this.dimension, required this.value});
   factory _CartItemOption.fromJson(Map<String, dynamic> json) => _$CartItemOptionFromJson(json);
 
 @override final  String dimension;
-@override final  String string;
+@override final  String value;
 
 /// Create a copy of CartItemOption
 /// with the given fields replaced by the non-null parameter values.
@@ -818,16 +818,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CartItemOption&&(identical(other.dimension, dimension) || other.dimension == dimension)&&(identical(other.string, string) || other.string == string));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _CartItemOption&&(identical(other.dimension, dimension) || other.dimension == dimension)&&(identical(other.value, value) || other.value == value));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,dimension,string);
+int get hashCode => Object.hash(runtimeType,dimension,value);
 
 @override
 String toString() {
-  return 'CartItemOption(dimension: $dimension, string: $string)';
+  return 'CartItemOption(dimension: $dimension, value: $value)';
 }
 
 
@@ -838,7 +838,7 @@ abstract mixin class _$CartItemOptionCopyWith<$Res> implements $CartItemOptionCo
   factory _$CartItemOptionCopyWith(_CartItemOption value, $Res Function(_CartItemOption) _then) = __$CartItemOptionCopyWithImpl;
 @override @useResult
 $Res call({
- String dimension, String string
+ String dimension, String value
 });
 
 
@@ -855,10 +855,10 @@ class __$CartItemOptionCopyWithImpl<$Res>
 
 /// Create a copy of CartItemOption
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? dimension = null,Object? string = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? dimension = null,Object? value = null,}) {
   return _then(_CartItemOption(
 dimension: null == dimension ? _self.dimension : dimension // ignore: cast_nullable_to_non_nullable
-as String,string: null == string ? _self.string : string // ignore: cast_nullable_to_non_nullable
+as String,value: null == value ? _self.value : value // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

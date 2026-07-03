@@ -2,6 +2,7 @@ import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_page.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
+import 'package:commerce_flutter_storefront/features/cart/presentation/pages/cart_page.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/pages/category_tree_page.dart';
 import 'package:commerce_flutter_storefront/features/home/presentation/pages/home_page.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
@@ -58,5 +59,6 @@ final router = GoRouter(
       },
     ),
     GoRoute(path: AuthRoutes.login, builder: (_, _) => const LoginPage()),
+    GoRoute(path: AppRoutes.cart, builder: (_, _) => const CartPage()),
   ],
 );

@@ -8,7 +8,7 @@ import 'package:commerce_flutter_storefront/features/product/presentation/contro
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_grid.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_toolbar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_search_header.dart';
-import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_search_header.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -92,7 +92,7 @@ class _ProductListingPageState extends ConsumerState<ProductListingPage> {
     return Scaffold(
       body: Column(
         children: [
-          AppSearchHeader(
+          AppHeader(
             initialValue: switch (widget.source) {
               SearchSource(:final query) => query,
               _ => '',
