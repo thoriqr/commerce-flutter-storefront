@@ -2,10 +2,8 @@ import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AccountSecurity extends StatelessWidget {
-  const AccountSecurity({super.key, required this.hasPassword});
-
-  final bool hasPassword;
+class AccountOrders extends StatelessWidget {
+  const AccountOrders({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,19 +11,17 @@ class AccountSecurity extends StatelessWidget {
 
     return Card(
       child: ListTile(
-        leading: const Icon(Icons.lock_outline),
-        title: const Text('Password'),
+        leading: const Icon(Icons.receipt_long_outlined),
+        title: const Text('Orders'),
         subtitle: Text(
-          hasPassword
-              ? 'Manage your account password.'
-              : 'Create a password to enable email sign in.',
+          'View your order history and track purchases.',
           style: theme.textTheme.bodyMedium?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
-          context.push(AccountRoutes.security);
+          context.push(AccountRoutes.orders);
         },
       ),
     );

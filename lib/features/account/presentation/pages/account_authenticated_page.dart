@@ -4,6 +4,7 @@ import 'package:commerce_flutter_storefront/features/account/presentation/widget
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_default_address.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_info.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_logout_tile.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_orders.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_security.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
@@ -36,6 +37,10 @@ class AccountAuthenticatedPage extends ConsumerWidget {
           const SizedBox(height: 16),
 
           AccountDefaultAddress(address: user.defaultAddress),
+
+          const SizedBox(height: 16),
+
+          const AccountOrders(),
 
           const SizedBox(height: 16),
 

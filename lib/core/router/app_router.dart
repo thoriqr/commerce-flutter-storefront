@@ -1,6 +1,11 @@
+import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_addresses_page.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_orders_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_page.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_profile_page.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_security_page.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/pages/cart_page.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/pages/category_tree_page.dart';
@@ -60,5 +65,24 @@ final router = GoRouter(
     ),
     GoRoute(path: AuthRoutes.login, builder: (_, _) => const LoginPage()),
     GoRoute(path: AppRoutes.cart, builder: (_, _) => const CartPage()),
+    GoRoute(
+      path: AccountRoutes.profile,
+      builder: (_, _) => const AccountProfilePage(),
+    ),
+
+    GoRoute(
+      path: AccountRoutes.addresses,
+      builder: (_, _) => const AccountAddressesPage(),
+    ),
+
+    GoRoute(
+      path: AccountRoutes.orders,
+      builder: (_, _) => const AccountOrdersPage(),
+    ),
+
+    GoRoute(
+      path: AccountRoutes.security,
+      builder: (_, _) => const AccountSecurityPage(),
+    ),
   ],
 );

@@ -9,24 +9,38 @@ class AccountConnectedAccounts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
-      child: Column(
-        children: [
-          ListTile(title: const Text('Connected Accounts')),
-
-          if (providers.isEmpty)
-            const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: Text('No connected accounts'),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          children: [
+            const ListTile(
+              leading: Icon(Icons.link),
+              title: Text('Connected Accounts'),
+              subtitle: Text('Sign-in methods linked to your account.'),
             ),
 
-          for (final provider in providers)
-            ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.link)),
-              title: Text(provider.provider.value),
-              subtitle: Text(provider.providerEmail),
-            ),
-        ],
+            if (providers.isEmpty)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                child: Text(
+                  'No connected accounts.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+
+            for (final provider in providers)
+              ListTile(
+                leading: const CircleAvatar(child: Icon(Icons.link)),
+                title: Text(provider.provider.value),
+                subtitle: Text(provider.providerEmail),
+              ),
+          ],
+        ),
       ),
     );
   }

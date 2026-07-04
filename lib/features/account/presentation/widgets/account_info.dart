@@ -1,4 +1,6 @@
+import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../data/models/user_profile.dart';
 
@@ -9,32 +11,86 @@ class AccountInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final displayName = user.displayName?.trim() ?? '';
+
+    final initials = switch (displayName.split(RegExp(r'\s+'))) {
+      _ when displayName.isEmpty => '?',
+
+      final names when names.length >= 2 =>
+        '${names.first[0]}${names.last[0]}'.toUpperCase(),
+
+      final names =>
+        names.first.substring(0, names.first.length >= 2 ? 2 : 1).toUpperCase(),
+    };
+
+    final isVerified = user.status == UserStatus.active;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const CircleAvatar(radius: 36, child: Icon(Icons.person, size: 36)),
+            CircleAvatar(
+              radius: 36,
+              child: Text(
+                initials,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
 
             const SizedBox(height: 16),
 
-            Text(
-              user.displayName ?? '-',
-              style: Theme.of(context).textTheme.titleLarge,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Flexible(
+                  child: Text(
+                    user.displayName ?? '-',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleLarge,
+                  ),
+                ),
+
+                const SizedBox(width: 6),
+
+                IconButton(
+                  visualDensity: VisualDensity.compact,
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    context.push(AccountRoutes.profile);
+                  },
+                  icon: Icon(
+                    Icons.edit_outlined,
+                    size: 18,
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
+              ],
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
 
-            Text(user.email, style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              user.email,
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
             Chip(
               avatar: Icon(
-                user.status == UserStatus.active ? Icons.verified : Icons.block,
+                isVerified ? Icons.verified : Icons.warning_amber_rounded,
                 size: 18,
               ),
-              label: Text(user.status.value),
+              label: Text(isVerified ? 'Verified' : 'Account Restricted'),
             ),
           ],
         ),
