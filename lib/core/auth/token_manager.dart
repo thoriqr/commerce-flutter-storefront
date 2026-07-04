@@ -10,4 +10,6 @@ abstract interface class TokenManager {
   Future<AuthTokens> refresh();
 
   Future<void> clear();
+
+  Future<bool> isAuthenticated();
 }

@@ -13,6 +13,13 @@ class TokenManagerImpl implements TokenManager {
   Future<AuthTokens>? _refreshFuture;
 
   @override
+  Future<bool> isAuthenticated() async {
+    final accessToken = await getAccessToken();
+
+    return accessToken != null && accessToken.isNotEmpty;
+  }
+
+  @override
   Future<String?> getAccessToken() {
     return _storage.readAccessToken();
   }

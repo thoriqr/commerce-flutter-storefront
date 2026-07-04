@@ -14,6 +14,8 @@ abstract class Cart with _$Cart {
 
   factory Cart.fromJson(Map<String, dynamic> json) => _$CartFromJson(json);
 
+  bool get isEmpty => items.isEmpty;
+
   bool get canCheckout {
     return items.every((item) {
       switch (item.warning) {

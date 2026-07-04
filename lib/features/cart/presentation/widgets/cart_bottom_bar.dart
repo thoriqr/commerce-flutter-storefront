@@ -1,16 +1,27 @@
+import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/cart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CartBottomBar extends StatelessWidget {
+class CartBottomBar extends ConsumerWidget {
   const CartBottomBar({super.key, required this.cart, required this.enabled});
 
   final Cart cart;
   final bool enabled;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    final auth = ref.watch(isAuthenticatedProvider);
+
+    final isAuthenticated = switch (auth) {
+      AsyncData(:final value) => value,
+      _ => false,
+    };
 
     return SafeArea(
       top: false,
@@ -72,12 +83,20 @@ class CartBottomBar extends StatelessWidget {
             const SizedBox(height: 16),
 
             FilledButton(
-              onPressed: enabled && cart.canCheckout
-                  ? () {
+              onPressed: !enabled || !cart.canCheckout
+                  ? null
+                  : () {
+                      if (!isAuthenticated) {
+                        AuthRoutes.pushLogin(
+                          context,
+                          redirect: LoginRedirect.cart,
+                        );
+                        return;
+                      }
+
                       // TODO:
                       // Navigate to checkout page.
-                    }
-                  : null,
+                    },
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(52),
               ),

@@ -33,26 +33,70 @@ class CartPage extends ConsumerWidget {
       ),
 
       body: Skeletonizer(
-        // Only show skeleton during the initial load.
         enabled: cartAsync.isLoading && !cartAsync.hasValue,
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.separated(
-                padding: const EdgeInsets.all(16),
-                itemCount: cart.items.length,
-                separatorBuilder: (_, _) => const SizedBox(height: 12),
-                itemBuilder: (_, index) {
-                  return CartItemTile(
-                    item: cart.items[index],
-                    enabled: !isMutating,
-                  );
-                },
-              ),
-            ),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await ref.refresh(cartProvider.future);
+          },
+          child: cart.isEmpty
+              ? ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).height * 0.6,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shopping_cart_outlined,
+                            size: 64,
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
 
-            CartBottomBar(cart: cart, enabled: !isMutating),
-          ],
+                          const SizedBox(height: 16),
+
+                          Text(
+                            'Your cart is empty',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            'Browse products and add items to get started.',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      child: ListView.separated(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        itemCount: cart.items.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 12),
+                        itemBuilder: (_, index) {
+                          return CartItemTile(
+                            item: cart.items[index],
+                            enabled: !isMutating,
+                          );
+                        },
+                      ),
+                    ),
+
+                    CartBottomBar(cart: cart, enabled: !isMutating),
+                  ],
+                ),
         ),
       ),
     );

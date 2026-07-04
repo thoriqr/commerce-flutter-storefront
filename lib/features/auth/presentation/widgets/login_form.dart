@@ -1,11 +1,15 @@
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key});
+  const LoginForm({super.key, this.redirect});
+
+  final LoginRedirect? redirect;
 
   @override
   ConsumerState<LoginForm> createState() => _LoginFormState();
@@ -45,9 +49,16 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     ref.listen(authMutationsProvider, (previous, next) {
       next.whenOrNull(
         data: (_) {
-          if (mounted) {
-            context.pop();
+          if (!mounted) {
+            return;
           }
+
+          if (widget.redirect == LoginRedirect.cart) {
+            context.go(AppRoutes.cart);
+            return;
+          }
+
+          context.pop();
         },
       );
     });

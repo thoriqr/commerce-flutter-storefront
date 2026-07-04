@@ -38,6 +38,14 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
       _ => 0,
     };
 
+    void handleBack(BuildContext context) {
+      if (context.canPop()) {
+        context.pop();
+      } else {
+        context.go(AppRoutes.home);
+      }
+    }
+
     return Material(
       color: Theme.of(context).scaffoldBackgroundColor,
       elevation: 1,
@@ -49,7 +57,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
             children: [
               if (showBackButton) ...[
                 IconButton(
-                  onPressed: context.pop,
+                  onPressed: () => handleBack(context),
                   icon: const Icon(Icons.arrow_back),
                 ),
                 const SizedBox(width: 8),

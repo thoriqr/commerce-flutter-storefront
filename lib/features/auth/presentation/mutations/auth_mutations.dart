@@ -2,6 +2,7 @@ import 'package:commerce_flutter_storefront/core/auth/token_manager_provider.dar
 import 'package:commerce_flutter_storefront/core/cart/cart_manager_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_provider.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -23,6 +24,8 @@ class AuthMutations extends _$AuthMutations {
           .login(email: email, password: password);
 
       await tokenManager.save(tokens);
+
+      ref.invalidate(isAuthenticatedProvider);
 
       ref.invalidate(userProfileProvider);
       ref.invalidate(cartProvider);
@@ -49,6 +52,8 @@ class AuthMutations extends _$AuthMutations {
         // request fails or the refresh token has already expired.
         await tokenManager.clear();
         await cartManager.clear();
+
+        ref.invalidate(isAuthenticatedProvider);
 
         ref.invalidate(userProfileProvider);
         ref.invalidate(cartProvider);
