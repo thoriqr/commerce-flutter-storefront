@@ -5,12 +5,31 @@ part 'cart.g.dart';
 
 @freezed
 abstract class Cart with _$Cart {
+  const Cart._();
+
   const factory Cart({
     required List<CartItem> items,
     required CartSummary summary,
   }) = _Cart;
 
   factory Cart.fromJson(Map<String, dynamic> json) => _$CartFromJson(json);
+
+  bool get canCheckout {
+    return items.every((item) {
+      switch (item.warning) {
+        case null:
+        case CartItemWarning.lowStock:
+          return true;
+
+        case CartItemWarning.insufficientStock:
+        case CartItemWarning.outOfStock:
+        case CartItemWarning.unavailable:
+          return false;
+      }
+    });
+  }
+
+  bool get hasUnavailableItems => !canCheckout;
 }
 
 @freezed

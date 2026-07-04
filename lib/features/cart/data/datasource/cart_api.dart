@@ -1,6 +1,7 @@
 import 'package:commerce_flutter_storefront/core/models/api_response.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/add_cart_request.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/cart.dart';
+import 'package:commerce_flutter_storefront/features/cart/data/models/update_cart_request.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
@@ -19,7 +20,7 @@ abstract class CartApi {
   @PATCH("/cart/items/{variantId}")
   Future<ApiResponse<void>> updateCartItem(
     @Path("variantId") int variantId,
-    @Body() int quantity,
+    @Body() UpdateCartRequest request,
   );
 
   @DELETE("/cart/items/{variantId}")

@@ -218,8 +218,8 @@ return $default(_that.items,_that.summary);case _:
 /// @nodoc
 @JsonSerializable()
 
-class _Cart implements Cart {
-  const _Cart({required final  List<CartItem> items, required this.summary}): _items = items;
+class _Cart extends Cart {
+  const _Cart({required final  List<CartItem> items, required this.summary}): _items = items,super._();
   factory _Cart.fromJson(Map<String, dynamic> json) => _$CartFromJson(json);
 
  final  List<CartItem> _items;

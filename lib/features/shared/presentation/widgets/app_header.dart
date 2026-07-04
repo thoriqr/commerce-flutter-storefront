@@ -11,11 +11,19 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
     super.key,
     required this.onSearch,
     this.initialValue = '',
+    this.title,
     this.showBackButton = true,
+    this.showCartButton = true,
+    this.showMenuButton = false,
   });
 
+  final String? title;
   final String initialValue;
+
   final bool showBackButton;
+  final bool showCartButton;
+  final bool showMenuButton;
+
   final ValueChanged<String> onSearch;
 
   @override
@@ -44,27 +52,44 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                   onPressed: context.pop,
                   icon: const Icon(Icons.arrow_back),
                 ),
-
                 const SizedBox(width: 8),
               ],
 
               Expanded(
-                child: AppSearchBar(
-                  initialValue: initialValue,
-                  onSearch: onSearch,
-                ),
+                child: title != null
+                    ? Text(
+                        title!,
+                        style: Theme.of(context).textTheme.titleLarge,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      )
+                    : AppSearchBar(
+                        initialValue: initialValue,
+                        onSearch: onSearch,
+                      ),
               ),
 
-              const SizedBox(width: 8),
+              if (showCartButton || showMenuButton) const SizedBox(width: 8),
 
-              Badge(
-                isLabelVisible: totalItems > 0,
-                label: Text(totalItems.toString()),
-                child: IconButton(
-                  onPressed: () => context.push(AppRoutes.cart),
-                  icon: const Icon(Icons.shopping_cart_outlined),
+              if (showCartButton)
+                Badge(
+                  isLabelVisible: totalItems > 0,
+                  label: Text(totalItems.toString()),
+                  child: IconButton(
+                    onPressed: () => context.push(AppRoutes.cart),
+                    icon: const Icon(Icons.shopping_cart_outlined),
+                  ),
                 ),
-              ),
+
+              if (showMenuButton)
+                IconButton(
+                  onPressed: () {
+                    // TODO:
+                    // Open quick navigation menu
+                    // (Account, Orders, Wishlist, Addresses, etc.)
+                  },
+                  icon: const Icon(Icons.menu),
+                ),
             ],
           ),
         ),

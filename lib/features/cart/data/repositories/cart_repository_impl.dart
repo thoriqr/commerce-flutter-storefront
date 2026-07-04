@@ -2,6 +2,7 @@ import 'package:commerce_flutter_storefront/core/network/api_response_extension.
 import 'package:commerce_flutter_storefront/features/cart/data/datasource/cart_api.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/add_cart_request.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/cart.dart';
+import 'package:commerce_flutter_storefront/features/cart/data/models/update_cart_request.dart';
 import 'package:commerce_flutter_storefront/features/cart/domain/repositories/cart_repository.dart';
 
 class CartRepositoryImpl implements CartRepository {
@@ -23,7 +24,9 @@ class CartRepositoryImpl implements CartRepository {
 
   @override
   Future<void> updateCartItem(int variantId, int quantity) {
-    return _api.updateCartItem(variantId, quantity).unwrap();
+    return _api
+        .updateCartItem(variantId, UpdateCartRequest(quantity: quantity))
+        .unwrap();
   }
 
   @override
