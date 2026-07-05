@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_navigation_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -92,9 +93,36 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
               if (showMenuButton)
                 IconButton(
                   onPressed: () {
-                    // TODO:
-                    // Open quick navigation menu
-                    // (Account, Orders, Wishlist, Addresses, etc.)
+                    showGeneralDialog(
+                      context: context,
+                      barrierDismissible: true,
+                      barrierLabel: 'Navigation',
+                      transitionDuration: const Duration(milliseconds: 180),
+                      pageBuilder: (_, _, _) {
+                        return Material(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          child: const AppNavigationMenu(),
+                        );
+                      },
+                      transitionBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                            final offset =
+                                Tween<Offset>(
+                                  begin: const Offset(1, 0),
+                                  end: Offset.zero,
+                                ).animate(
+                                  CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOutCubic,
+                                  ),
+                                );
+
+                            return SlideTransition(
+                              position: offset,
+                              child: child,
+                            );
+                          },
+                    );
                   },
                   icon: const Icon(Icons.menu),
                 ),

@@ -24,7 +24,6 @@ class _AppShellPageState extends ConsumerState<AppShellPage> {
         await ref.refresh(userProfileProvider.future);
       } catch (_) {
         // Authentication failures are already handled by AuthInterceptor.
-        // Continue so the cart can be synchronized as a guest if needed.
       } finally {
         if (mounted) {
           ref.invalidate(cartProvider);
