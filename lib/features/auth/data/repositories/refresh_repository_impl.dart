@@ -5,6 +5,7 @@ import 'package:commerce_flutter_storefront/features/auth/data/datasource/refres
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/refresh_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/domain/repositories/refresh_repository.dart';
+import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 
 class RefreshRepositoryImpl implements RefreshRepository {
   const RefreshRepositoryImpl(this._api, this._storage);
@@ -18,7 +19,7 @@ class RefreshRepositoryImpl implements RefreshRepository {
 
     if (refreshToken == null || refreshToken.isEmpty) {
       throw const AppException(
-        code: 'UNAUTHORIZED',
+        code: ErrorCodes.unauthorized,
         message: 'Refresh token not found',
       );
     }

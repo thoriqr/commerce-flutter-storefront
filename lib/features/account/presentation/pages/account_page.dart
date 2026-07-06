@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_authenticated_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
@@ -21,7 +22,7 @@ class AccountPage extends ConsumerWidget {
         onRefresh: () => ref.refresh(userProfileProvider.future),
       ),
       error: (error, stackTrace) {
-        if (error is AppException && error.code == 'UNAUTHORIZED') {
+        if (error is AppException && error.code == ErrorCodes.unauthorized) {
           return const AccountGuestView();
         }
 

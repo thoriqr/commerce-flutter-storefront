@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/product/data/datasource/product_api.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_listing_query_params.dart';
@@ -15,7 +16,9 @@ class ProductRepositoryImpl implements ProductRepository {
     String query,
     ProductListingQueryParams params,
   ) async {
-    final res = await _api.getProductsBySearch(query, params.toQuery());
+    final res = await _api
+        .getProductsBySearch(query, params.toQuery())
+        .unwrap();
 
     return ProductListingResult(products: res.data, meta: res.meta);
   }
@@ -25,7 +28,9 @@ class ProductRepositoryImpl implements ProductRepository {
     String slugPath,
     ProductListingQueryParams params,
   ) async {
-    final res = await _api.getProductsByCategory(slugPath, params.toQuery());
+    final res = await _api
+        .getProductsByCategory(slugPath, params.toQuery())
+        .unwrap();
 
     return ProductListingResult(products: res.data, meta: res.meta);
   }
@@ -35,16 +40,16 @@ class ProductRepositoryImpl implements ProductRepository {
     String slug,
     ProductListingQueryParams params,
   ) async {
-    final res = await _api.getProductsByCollection(slug, params.toQuery());
+    final res = await _api
+        .getProductsByCollection(slug, params.toQuery())
+        .unwrap();
 
     return ProductListingResult(products: res.data, meta: res.meta);
   }
 
   @override
   Future<ProductDetail> getProductDetail(int id) async {
-    final res = await _api.getProductDetail(id);
-
-    return res.data;
+    return await _api.getProductDetail(id).unwrap();
   }
 
   @override
@@ -52,8 +57,6 @@ class ProductRepositoryImpl implements ProductRepository {
     int productId,
     int variantId,
   ) async {
-    final res = await _api.getProductVariantDetail(productId, variantId);
-
-    return res.data;
+    return await _api.getProductVariantDetail(productId, variantId).unwrap();
   }
 }

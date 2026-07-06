@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/auth/token_manager.dart';
+import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/storage/secure_storage.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
@@ -74,7 +75,7 @@ class TokenManagerImpl implements TokenManager {
       return tokens;
     } on AppException catch (e) {
       // Clear local credentials if the refresh token is no longer valid.
-      if (e.code == "UNAUTHORIZED") {
+      if (e.code == ErrorCodes.unauthorized) {
         await clear();
       }
 
