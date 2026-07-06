@@ -16,7 +16,10 @@ class AccountPage extends ConsumerWidget {
 
     return profile.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      data: (user) => AccountAuthenticatedPage(user: user),
+      data: (user) => AccountAuthenticatedPage(
+        user: user,
+        onRefresh: () => ref.refresh(userProfileProvider.future),
+      ),
       error: (error, stackTrace) {
         if (error is AppException && error.code == 'UNAUTHORIZED') {
           return const AccountGuestView();

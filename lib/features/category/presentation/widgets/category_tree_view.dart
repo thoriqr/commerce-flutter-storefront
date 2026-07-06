@@ -6,24 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoryTreeView extends StatelessWidget {
-  const CategoryTreeView({super.key, required this.categories});
+  const CategoryTreeView({
+    super.key,
+    required this.categories,
+    required this.onRefresh,
+  });
 
   final List<CategoryTree> categories;
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: categories.length,
-      separatorBuilder: (_, _) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(vertical: 24),
-          child: Divider(height: 1),
-        );
-      },
-      itemBuilder: (_, index) {
-        return CategoryGroup(category: categories[index]);
-      },
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(16),
+        itemCount: categories.length,
+        separatorBuilder: (_, _) {
+          return const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Divider(height: 1),
+          );
+        },
+        itemBuilder: (_, index) {
+          return CategoryGroup(category: categories[index]);
+        },
+      ),
     );
   }
 }

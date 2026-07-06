@@ -14,9 +14,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class AccountAuthenticatedPage extends ConsumerWidget {
-  const AccountAuthenticatedPage({super.key, required this.user});
+  const AccountAuthenticatedPage({
+    super.key,
+    required this.user,
+    required this.onRefresh,
+  });
 
   final UserProfile user;
+  final RefreshCallback onRefresh;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,36 +34,40 @@ class AccountAuthenticatedPage extends ConsumerWidget {
           context.push(AppRoutes.products, extra: SearchSource(query));
         },
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          AccountInfo(user: user),
+      body: RefreshIndicator(
+        onRefresh: onRefresh,
+        child: ListView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          children: [
+            AccountInfo(user: user),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          AccountDefaultAddress(address: user.defaultAddress),
+            AccountDefaultAddress(address: user.defaultAddress),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          const AccountOrders(),
+            const AccountOrders(),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          AccountConnectedAccounts(providers: user.providers),
+            AccountConnectedAccounts(providers: user.providers),
 
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          AccountSecurity(hasPassword: user.hasPassword),
+            AccountSecurity(hasPassword: user.hasPassword),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          AccountLogoutTile(
-            isLoading: auth.isLoading,
-            onLogout: () async {
-              await ref.read(authMutationsProvider.notifier).logout();
-            },
-          ),
-        ],
+            AccountLogoutTile(
+              isLoading: auth.isLoading,
+              onLogout: () async {
+                await ref.read(authMutationsProvider.notifier).logout();
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

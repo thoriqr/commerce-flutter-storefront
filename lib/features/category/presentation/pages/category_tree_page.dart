@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:commerce_flutter_storefront/features/category/data/mocks/category_tree_mock.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/section_error.dart';
 
 class CategoryTreePage extends ConsumerWidget {
   const CategoryTreePage({super.key});
@@ -21,6 +22,21 @@ class CategoryTreePage extends ConsumerWidget {
       _ => CategoryTreeMock.items(),
     };
 
+    final isInitialLoading =
+        categoriesAsync.isLoading && !categoriesAsync.hasValue;
+
+    final body = switch (categoriesAsync) {
+      AsyncError() => SectionError(
+        message: 'Unable to load categories.',
+        onRetry: () => ref.invalidate(categoryTreeProvider),
+      ),
+
+      _ => CategoryTreeView(
+        categories: categories,
+        onRefresh: () => ref.refresh(categoryTreeProvider.future),
+      ),
+    };
+
     return Scaffold(
       appBar: AppHeader(
         showBackButton: false,
@@ -28,10 +44,7 @@ class CategoryTreePage extends ConsumerWidget {
           context.push(AppRoutes.products, extra: SearchSource(query));
         },
       ),
-      body: Skeletonizer(
-        enabled: categoriesAsync.isLoading,
-        child: CategoryTreeView(categories: categories),
-      ),
+      body: Skeletonizer(enabled: isInitialLoading, child: body),
     );
   }
 }
