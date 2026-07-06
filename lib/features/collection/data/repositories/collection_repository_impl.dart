@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/collection/data/datasource/collection_api.dart';
 import 'package:commerce_flutter_storefront/features/collection/data/models/collection_detail.dart';
 import 'package:commerce_flutter_storefront/features/collection/data/models/collection_preview.dart';
@@ -10,15 +11,11 @@ class CollectionRepositoryImpl implements CollectionRepository {
 
   @override
   Future<List<CollectionPreview>> getCollectionPreview() async {
-    final res = await _api.getCollectionPreview();
-
-    return res.data;
+    return await _api.getCollectionPreview().unwrap();
   }
 
   @override
   Future<CollectionDetail> getCollectionBySlug(String slug) async {
-    final res = await _api.getCollectionBySlug(slug);
-
-    return res.data;
+    return await _api.getCollectionBySlug(slug).unwrap();
   }
 }

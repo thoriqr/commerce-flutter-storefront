@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/category/data/datasource/category_api.dart';
 import 'package:commerce_flutter_storefront/features/category/data/models/category_detail.dart';
 import 'package:commerce_flutter_storefront/features/category/data/models/category_tree.dart';
@@ -11,22 +12,16 @@ class CategoryRepositoryImpl implements CategoryRepository {
 
   @override
   Future<List<PopularCategory>> getPopularCategory() async {
-    final res = await _api.getPopularCategory();
-
-    return res.data;
+    return await _api.getPopularCategory().unwrap();
   }
 
   @override
   Future<List<CategoryTree>> getCategoryTree() async {
-    final res = await _api.getCategoryTree();
-
-    return res.data;
+    return await _api.getCategoryTree().unwrap();
   }
 
   @override
   Future<CategoryDetail> getCategoryDetail(String slugPath) async {
-    final res = await _api.getCategoryDetail(slugPath);
-
-    return res.data;
+    return await _api.getCategoryDetail(slugPath).unwrap();
   }
 }
