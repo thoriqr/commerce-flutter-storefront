@@ -1,5 +1,7 @@
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/core/validation/validators.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +23,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  bool _isSubmitting = false;
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -36,36 +40,46 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       return;
     }
 
-    await ref
-        .read(authMutationsProvider.notifier)
-        .login(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
-        );
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      await ref
+          .read(authMutationsProvider.notifier)
+          .login(
+            email: _emailController.text.trim(),
+            password: _passwordController.text,
+          );
+
+      // Wait until the latest profile has been loaded before
+      // leaving the login page to avoid a guest/authenticated flicker.
+      await ref.read(userProfileProvider.future);
+
+      if (!mounted) {
+        return;
+      }
+
+      if (widget.redirect == LoginRedirect.cart) {
+        context.go(AppRoutes.cart);
+        return;
+      }
+
+      context.pop();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        data: (_) {
-          if (!mounted) {
-            return;
-          }
-
-          if (widget.redirect == LoginRedirect.cart) {
-            context.go(AppRoutes.cart);
-            return;
-          }
-
-          context.pop();
-        },
-      );
-    });
-
     final auth = ref.watch(authMutationsProvider);
 
-    final isLoading = auth.isLoading;
+    final isLoading = _isSubmitting;
 
     final errorMessage = switch (auth) {
       AsyncError(:final error) when error is AppException => error.message,
@@ -109,13 +123,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               labelText: 'Email',
               border: OutlineInputBorder(),
             ),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Email is required.';
-              }
-
-              return null;
-            },
+            validator: Validators.email,
           ),
 
           const SizedBox(height: 16),
@@ -131,11 +139,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               errorText: errorMessage,
             ),
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Password is required.';
-              }
-
-              return null;
+              return Validators.string(
+                value,
+                field: 'Password',
+                min: 8,
+                max: 72,
+              );
             },
             onFieldSubmitted: (_) {
               if (!isLoading) {

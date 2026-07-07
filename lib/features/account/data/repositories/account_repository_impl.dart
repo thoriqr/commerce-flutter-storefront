@@ -1,5 +1,7 @@
 import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/account/data/datasource/account_api.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
@@ -16,6 +18,13 @@ class AccountRepositoryImpl implements AccountRepository {
   }
 
   @override
+  Future<void> updateUserProfile({required String displayName}) {
+    return _api
+        .updateUserProfile(UpsertProfileRequest(displayName: displayName))
+        .unwrap();
+  }
+
+  @override
   Future<UserAddresses> getUserAddresses() async {
     return await _api.getUserAddresses().unwrap();
   }
@@ -23,5 +32,71 @@ class AccountRepositoryImpl implements AccountRepository {
   @override
   Future<UserAddressDetail> getUserAddress(int id) async {
     return await _api.getUserAddress(id).unwrap();
+  }
+
+  @override
+  Future<void> createAddress({
+    required String label,
+    required String recipientName,
+    required String shippingProvinceId,
+    required String shippingCityId,
+    required String shippingDistrictId,
+    required String addressLine,
+    required String phone,
+    required String postalCode,
+  }) {
+    return _api
+        .createAddress(
+          UpsertAddressRequest(
+            label: label,
+            recipientName: recipientName,
+            shippingProvinceId: shippingProvinceId,
+            shippingCityId: shippingCityId,
+            shippingDistrictId: shippingDistrictId,
+            addressLine: addressLine,
+            phone: phone,
+            postalCode: postalCode,
+          ),
+        )
+        .unwrap();
+  }
+
+  @override
+  Future<void> updateAddress(
+    int id, {
+    required String label,
+    required String recipientName,
+    required String shippingProvinceId,
+    required String shippingCityId,
+    required String shippingDistrictId,
+    required String addressLine,
+    required String phone,
+    required String postalCode,
+  }) {
+    return _api
+        .updateAddress(
+          id,
+          UpsertAddressRequest(
+            label: label,
+            recipientName: recipientName,
+            shippingProvinceId: shippingProvinceId,
+            shippingCityId: shippingCityId,
+            shippingDistrictId: shippingDistrictId,
+            addressLine: addressLine,
+            phone: phone,
+            postalCode: postalCode,
+          ),
+        )
+        .unwrap();
+  }
+
+  @override
+  Future<void> deleteAddress(int id) {
+    return _api.deleteAddress(id).unwrap();
+  }
+
+  @override
+  Future<void> setDefaultAddress(int id) {
+    return _api.setDefaultAddress(id).unwrap();
   }
 }

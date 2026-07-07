@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserAddressDetail {
 
- String get label; String get recipientName; String get shippingProvinceId; String get shippingCityId; String get shippingDistrictId; String get addressLine; bool get isDefault; String get postalCode;
+ String get label; String get recipientName; String get shippingProvinceId; String get shippingCityId; String get shippingDistrictId; String get addressLine; String get phone; bool get isDefault; String get postalCode;
 /// Create a copy of UserAddressDetail
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $UserAddressDetailCopyWith<UserAddressDetail> get copyWith => _$UserAddressDetai
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserAddressDetail&&(identical(other.label, label) || other.label == label)&&(identical(other.recipientName, recipientName) || other.recipientName == recipientName)&&(identical(other.shippingProvinceId, shippingProvinceId) || other.shippingProvinceId == shippingProvinceId)&&(identical(other.shippingCityId, shippingCityId) || other.shippingCityId == shippingCityId)&&(identical(other.shippingDistrictId, shippingDistrictId) || other.shippingDistrictId == shippingDistrictId)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.postalCode, postalCode) || other.postalCode == postalCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserAddressDetail&&(identical(other.label, label) || other.label == label)&&(identical(other.recipientName, recipientName) || other.recipientName == recipientName)&&(identical(other.shippingProvinceId, shippingProvinceId) || other.shippingProvinceId == shippingProvinceId)&&(identical(other.shippingCityId, shippingCityId) || other.shippingCityId == shippingCityId)&&(identical(other.shippingDistrictId, shippingDistrictId) || other.shippingDistrictId == shippingDistrictId)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.postalCode, postalCode) || other.postalCode == postalCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,label,recipientName,shippingProvinceId,shippingCityId,shippingDistrictId,addressLine,isDefault,postalCode);
+int get hashCode => Object.hash(runtimeType,label,recipientName,shippingProvinceId,shippingCityId,shippingDistrictId,addressLine,phone,isDefault,postalCode);
 
 @override
 String toString() {
-  return 'UserAddressDetail(label: $label, recipientName: $recipientName, shippingProvinceId: $shippingProvinceId, shippingCityId: $shippingCityId, shippingDistrictId: $shippingDistrictId, addressLine: $addressLine, isDefault: $isDefault, postalCode: $postalCode)';
+  return 'UserAddressDetail(label: $label, recipientName: $recipientName, shippingProvinceId: $shippingProvinceId, shippingCityId: $shippingCityId, shippingDistrictId: $shippingDistrictId, addressLine: $addressLine, phone: $phone, isDefault: $isDefault, postalCode: $postalCode)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $UserAddressDetailCopyWith<$Res>  {
   factory $UserAddressDetailCopyWith(UserAddressDetail value, $Res Function(UserAddressDetail) _then) = _$UserAddressDetailCopyWithImpl;
 @useResult
 $Res call({
- String label, String recipientName, String shippingProvinceId, String shippingCityId, String shippingDistrictId, String addressLine, bool isDefault, String postalCode
+ String label, String recipientName, String shippingProvinceId, String shippingCityId, String shippingDistrictId, String addressLine, String phone, bool isDefault, String postalCode
 });
 
 
@@ -65,7 +65,7 @@ class _$UserAddressDetailCopyWithImpl<$Res>
 
 /// Create a copy of UserAddressDetail
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? label = null,Object? recipientName = null,Object? shippingProvinceId = null,Object? shippingCityId = null,Object? shippingDistrictId = null,Object? addressLine = null,Object? isDefault = null,Object? postalCode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? label = null,Object? recipientName = null,Object? shippingProvinceId = null,Object? shippingCityId = null,Object? shippingDistrictId = null,Object? addressLine = null,Object? phone = null,Object? isDefault = null,Object? postalCode = null,}) {
   return _then(_self.copyWith(
 label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
@@ -73,6 +73,7 @@ as String,shippingProvinceId: null == shippingProvinceId ? _self.shippingProvinc
 as String,shippingCityId: null == shippingCityId ? _self.shippingCityId : shippingCityId // ignore: cast_nullable_to_non_nullable
 as String,shippingDistrictId: null == shippingDistrictId ? _self.shippingDistrictId : shippingDistrictId // ignore: cast_nullable_to_non_nullable
 as String,addressLine: null == addressLine ? _self.addressLine : addressLine // ignore: cast_nullable_to_non_nullable
+as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String,isDefault: null == isDefault ? _self.isDefault : isDefault // ignore: cast_nullable_to_non_nullable
 as bool,postalCode: null == postalCode ? _self.postalCode : postalCode // ignore: cast_nullable_to_non_nullable
 as String,
@@ -160,10 +161,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String label,  String recipientName,  String shippingProvinceId,  String shippingCityId,  String shippingDistrictId,  String addressLine,  bool isDefault,  String postalCode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String label,  String recipientName,  String shippingProvinceId,  String shippingCityId,  String shippingDistrictId,  String addressLine,  String phone,  bool isDefault,  String postalCode)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserAddressDetail() when $default != null:
-return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.shippingCityId,_that.shippingDistrictId,_that.addressLine,_that.isDefault,_that.postalCode);case _:
+return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.shippingCityId,_that.shippingDistrictId,_that.addressLine,_that.phone,_that.isDefault,_that.postalCode);case _:
   return orElse();
 
 }
@@ -181,10 +182,10 @@ return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.s
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String label,  String recipientName,  String shippingProvinceId,  String shippingCityId,  String shippingDistrictId,  String addressLine,  bool isDefault,  String postalCode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String label,  String recipientName,  String shippingProvinceId,  String shippingCityId,  String shippingDistrictId,  String addressLine,  String phone,  bool isDefault,  String postalCode)  $default,) {final _that = this;
 switch (_that) {
 case _UserAddressDetail():
-return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.shippingCityId,_that.shippingDistrictId,_that.addressLine,_that.isDefault,_that.postalCode);case _:
+return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.shippingCityId,_that.shippingDistrictId,_that.addressLine,_that.phone,_that.isDefault,_that.postalCode);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -201,10 +202,10 @@ return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.s
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String label,  String recipientName,  String shippingProvinceId,  String shippingCityId,  String shippingDistrictId,  String addressLine,  bool isDefault,  String postalCode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String label,  String recipientName,  String shippingProvinceId,  String shippingCityId,  String shippingDistrictId,  String addressLine,  String phone,  bool isDefault,  String postalCode)?  $default,) {final _that = this;
 switch (_that) {
 case _UserAddressDetail() when $default != null:
-return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.shippingCityId,_that.shippingDistrictId,_that.addressLine,_that.isDefault,_that.postalCode);case _:
+return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.shippingCityId,_that.shippingDistrictId,_that.addressLine,_that.phone,_that.isDefault,_that.postalCode);case _:
   return null;
 
 }
@@ -216,7 +217,7 @@ return $default(_that.label,_that.recipientName,_that.shippingProvinceId,_that.s
 @JsonSerializable()
 
 class _UserAddressDetail implements UserAddressDetail {
-  const _UserAddressDetail({required this.label, required this.recipientName, required this.shippingProvinceId, required this.shippingCityId, required this.shippingDistrictId, required this.addressLine, required this.isDefault, required this.postalCode});
+  const _UserAddressDetail({required this.label, required this.recipientName, required this.shippingProvinceId, required this.shippingCityId, required this.shippingDistrictId, required this.addressLine, required this.phone, required this.isDefault, required this.postalCode});
   factory _UserAddressDetail.fromJson(Map<String, dynamic> json) => _$UserAddressDetailFromJson(json);
 
 @override final  String label;
@@ -225,6 +226,7 @@ class _UserAddressDetail implements UserAddressDetail {
 @override final  String shippingCityId;
 @override final  String shippingDistrictId;
 @override final  String addressLine;
+@override final  String phone;
 @override final  bool isDefault;
 @override final  String postalCode;
 
@@ -241,16 +243,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserAddressDetail&&(identical(other.label, label) || other.label == label)&&(identical(other.recipientName, recipientName) || other.recipientName == recipientName)&&(identical(other.shippingProvinceId, shippingProvinceId) || other.shippingProvinceId == shippingProvinceId)&&(identical(other.shippingCityId, shippingCityId) || other.shippingCityId == shippingCityId)&&(identical(other.shippingDistrictId, shippingDistrictId) || other.shippingDistrictId == shippingDistrictId)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.postalCode, postalCode) || other.postalCode == postalCode));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserAddressDetail&&(identical(other.label, label) || other.label == label)&&(identical(other.recipientName, recipientName) || other.recipientName == recipientName)&&(identical(other.shippingProvinceId, shippingProvinceId) || other.shippingProvinceId == shippingProvinceId)&&(identical(other.shippingCityId, shippingCityId) || other.shippingCityId == shippingCityId)&&(identical(other.shippingDistrictId, shippingDistrictId) || other.shippingDistrictId == shippingDistrictId)&&(identical(other.addressLine, addressLine) || other.addressLine == addressLine)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.isDefault, isDefault) || other.isDefault == isDefault)&&(identical(other.postalCode, postalCode) || other.postalCode == postalCode));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,label,recipientName,shippingProvinceId,shippingCityId,shippingDistrictId,addressLine,isDefault,postalCode);
+int get hashCode => Object.hash(runtimeType,label,recipientName,shippingProvinceId,shippingCityId,shippingDistrictId,addressLine,phone,isDefault,postalCode);
 
 @override
 String toString() {
-  return 'UserAddressDetail(label: $label, recipientName: $recipientName, shippingProvinceId: $shippingProvinceId, shippingCityId: $shippingCityId, shippingDistrictId: $shippingDistrictId, addressLine: $addressLine, isDefault: $isDefault, postalCode: $postalCode)';
+  return 'UserAddressDetail(label: $label, recipientName: $recipientName, shippingProvinceId: $shippingProvinceId, shippingCityId: $shippingCityId, shippingDistrictId: $shippingDistrictId, addressLine: $addressLine, phone: $phone, isDefault: $isDefault, postalCode: $postalCode)';
 }
 
 
@@ -261,7 +263,7 @@ abstract mixin class _$UserAddressDetailCopyWith<$Res> implements $UserAddressDe
   factory _$UserAddressDetailCopyWith(_UserAddressDetail value, $Res Function(_UserAddressDetail) _then) = __$UserAddressDetailCopyWithImpl;
 @override @useResult
 $Res call({
- String label, String recipientName, String shippingProvinceId, String shippingCityId, String shippingDistrictId, String addressLine, bool isDefault, String postalCode
+ String label, String recipientName, String shippingProvinceId, String shippingCityId, String shippingDistrictId, String addressLine, String phone, bool isDefault, String postalCode
 });
 
 
@@ -278,7 +280,7 @@ class __$UserAddressDetailCopyWithImpl<$Res>
 
 /// Create a copy of UserAddressDetail
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? label = null,Object? recipientName = null,Object? shippingProvinceId = null,Object? shippingCityId = null,Object? shippingDistrictId = null,Object? addressLine = null,Object? isDefault = null,Object? postalCode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? label = null,Object? recipientName = null,Object? shippingProvinceId = null,Object? shippingCityId = null,Object? shippingDistrictId = null,Object? addressLine = null,Object? phone = null,Object? isDefault = null,Object? postalCode = null,}) {
   return _then(_UserAddressDetail(
 label: null == label ? _self.label : label // ignore: cast_nullable_to_non_nullable
 as String,recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
@@ -286,6 +288,7 @@ as String,shippingProvinceId: null == shippingProvinceId ? _self.shippingProvinc
 as String,shippingCityId: null == shippingCityId ? _self.shippingCityId : shippingCityId // ignore: cast_nullable_to_non_nullable
 as String,shippingDistrictId: null == shippingDistrictId ? _self.shippingDistrictId : shippingDistrictId // ignore: cast_nullable_to_non_nullable
 as String,addressLine: null == addressLine ? _self.addressLine : addressLine // ignore: cast_nullable_to_non_nullable
+as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String,isDefault: null == isDefault ? _self.isDefault : isDefault // ignore: cast_nullable_to_non_nullable
 as bool,postalCode: null == postalCode ? _self.postalCode : postalCode // ignore: cast_nullable_to_non_nullable
 as String,

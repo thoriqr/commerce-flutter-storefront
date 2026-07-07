@@ -1,11 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'user_address_detail.freezed.dart';
-part 'user_address_detail.g.dart';
+part 'upsert_address_request.freezed.dart';
+part 'upsert_address_request.g.dart';
 
 @freezed
-abstract class UserAddressDetail with _$UserAddressDetail {
-  const factory UserAddressDetail({
+abstract class UpsertAddressRequest with _$UpsertAddressRequest {
+  const factory UpsertAddressRequest({
     required String label,
     required String recipientName,
     required String shippingProvinceId,
@@ -13,10 +13,9 @@ abstract class UserAddressDetail with _$UserAddressDetail {
     required String shippingDistrictId,
     required String addressLine,
     required String phone,
-    required bool isDefault,
     required String postalCode,
-  }) = _UserAddressDetail;
+  }) = _UpsertAddressRequest;
 
-  factory UserAddressDetail.fromJson(Map<String, dynamic> json) =>
-      _$UserAddressDetailFromJson(json);
+  factory UpsertAddressRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpsertAddressRequestFromJson(json);
 }
