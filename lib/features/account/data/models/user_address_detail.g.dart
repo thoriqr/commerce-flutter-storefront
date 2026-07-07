@@ -15,7 +15,6 @@ _UserAddressDetail _$UserAddressDetailFromJson(Map<String, dynamic> json) =>
       shippingDistrictId: json['shippingDistrictId'] as String,
       addressLine: json['addressLine'] as String,
       phone: json['phone'] as String,
-      isDefault: json['isDefault'] as bool,
       postalCode: json['postalCode'] as String,
     );
 
@@ -28,6 +27,5 @@ Map<String, dynamic> _$UserAddressDetailToJson(_UserAddressDetail instance) =>
       'shippingDistrictId': instance.shippingDistrictId,
       'addressLine': instance.addressLine,
       'phone': instance.phone,
-      'isDefault': instance.isDefault,
       'postalCode': instance.postalCode,
     };

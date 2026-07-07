@@ -7,11 +7,6 @@ abstract final class AppRoutes {
 
   static const cart = '/cart';
 
-  static const profile = '/account/profile';
-  static const addresses = '/account/addresses';
-  static const orders = '/account/orders';
-  static const security = '/account/security';
-
   static String productDetail(int id) {
     return '/product/$id';
   }

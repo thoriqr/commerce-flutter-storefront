@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_address_tile.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,9 @@ class AccountAddressList extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           FilledButton.icon(
-            onPressed: canAdd ? () {} : null,
+            onPressed: canAdd
+                ? () => AccountRoutes.pushNewAddress(context)
+                : null,
             icon: const Icon(Icons.add),
             label: const Text('Add Address'),
           ),

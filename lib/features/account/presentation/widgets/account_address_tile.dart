@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:flutter/material.dart';
 
@@ -52,8 +53,7 @@ class AccountAddressTile extends StatelessWidget {
               children: [
                 TextButton(
                   onPressed: () {
-                    // TODO:
-                    // Navigate to edit address.
+                    AccountRoutes.pushEditAddress(context, address.id);
                   },
                   child: const Text('Edit'),
                 ),
@@ -74,7 +74,7 @@ class AccountAddressTile extends StatelessWidget {
                   FilledButton.tonal(
                     onPressed: () {
                       // TODO:
-                      // Set as default address.
+                      // Set default address.
                     },
                     child: const Text('Set Default'),
                   ),

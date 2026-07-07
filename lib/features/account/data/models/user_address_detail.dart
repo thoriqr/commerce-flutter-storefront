@@ -13,7 +13,6 @@ abstract class UserAddressDetail with _$UserAddressDetail {
     required String shippingDistrictId,
     required String addressLine,
     required String phone,
-    required bool isDefault,
     required String postalCode,
   }) = _UserAddressDetail;
 

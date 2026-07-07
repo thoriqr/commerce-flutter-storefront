@@ -6,6 +6,7 @@ import 'package:commerce_flutter_storefront/features/account/presentation/pages/
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_profile_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_security_page.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/pages/upsert_address_page.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/pages/cart_page.dart';
@@ -89,6 +90,20 @@ final router = GoRouter(
     GoRoute(
       path: AccountRoutes.security,
       builder: (_, _) => const AccountSecurityPage(),
+    ),
+
+    GoRoute(
+      path: AccountRoutes.addressNew,
+      builder: (_, _) => const UpsertAddressPage(),
+    ),
+
+    GoRoute(
+      path: AccountRoutes.address,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+
+        return UpsertAddressPage(addressId: id);
+      },
     ),
   ],
 );
