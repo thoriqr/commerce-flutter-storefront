@@ -1,7 +1,5 @@
 import 'package:commerce_flutter_storefront/core/auth/token_manager_provider.dart';
-import 'package:commerce_flutter_storefront/core/cart/cart_manager_provider.dart';
 import 'package:commerce_flutter_storefront/core/network/interceptors/auth_interceptor.dart';
-import 'package:commerce_flutter_storefront/core/network/interceptors/cart_interceptor.dart';
 import 'package:commerce_flutter_storefront/core/network/interceptors/error_interceptor.dart';
 import 'package:commerce_flutter_storefront/core/network/interceptors/mobile_client_interceptor.dart';
 import 'package:dio/dio.dart';
@@ -21,7 +19,6 @@ Dio appDio(Ref ref) {
 
   dio.interceptors.addAll([
     MobileClientInterceptor(),
-    CartInterceptor(cartManager: ref.read(cartManagerProvider)),
     AuthInterceptor(dio: dio, tokenManager: ref.read(tokenManagerProvider)),
     ErrorInterceptor(),
   ]);

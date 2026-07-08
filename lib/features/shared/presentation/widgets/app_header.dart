@@ -32,12 +32,14 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cart = ref.watch(cartProvider);
-
-    final totalItems = switch (cart) {
-      AsyncData(:final value) => value.summary.totalItems,
-      _ => 0,
-    };
+    final totalItems = ref.watch(
+      cartProvider.select((cart) {
+        return switch (cart) {
+          AsyncData(:final value) => value.summary.totalItems,
+          _ => 0,
+        };
+      }),
+    );
 
     void handleBack(BuildContext context) {
       if (context.canPop()) {
