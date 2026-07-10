@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/di/account_repository_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -21,64 +22,22 @@ class AccountMutations extends _$AccountMutations {
     });
   }
 
-  Future<void> createAddress({
-    required String label,
-    required String recipientName,
-    required String shippingProvinceId,
-    required String shippingCityId,
-    required String shippingDistrictId,
-    required String addressLine,
-    required String phone,
-    required String postalCode,
-  }) async {
+  Future<void> createAddress(UpsertAddressRequest request) async {
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(() async {
-      await ref
-          .read(accountRepositoryProvider)
-          .createAddress(
-            label: label,
-            recipientName: recipientName,
-            shippingProvinceId: shippingProvinceId,
-            shippingCityId: shippingCityId,
-            shippingDistrictId: shippingDistrictId,
-            addressLine: addressLine,
-            phone: phone,
-            postalCode: postalCode,
-          );
+      await ref.read(accountRepositoryProvider).createAddress(request);
 
       ref.invalidate(userAddressesProvider);
       ref.invalidate(userProfileProvider);
     });
   }
 
-  Future<void> updateAddress(
-    int id, {
-    required String label,
-    required String recipientName,
-    required String shippingProvinceId,
-    required String shippingCityId,
-    required String shippingDistrictId,
-    required String addressLine,
-    required String phone,
-    required String postalCode,
-  }) async {
+  Future<void> updateAddress(int id, UpsertAddressRequest request) async {
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(() async {
-      await ref
-          .read(accountRepositoryProvider)
-          .updateAddress(
-            id,
-            label: label,
-            recipientName: recipientName,
-            shippingProvinceId: shippingProvinceId,
-            shippingCityId: shippingCityId,
-            shippingDistrictId: shippingDistrictId,
-            addressLine: addressLine,
-            phone: phone,
-            postalCode: postalCode,
-          );
+      await ref.read(accountRepositoryProvider).updateAddress(id, request);
 
       ref.invalidate(userAddressesProvider);
       ref.invalidate(userProfileProvider);

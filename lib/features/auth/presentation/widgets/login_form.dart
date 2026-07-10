@@ -7,6 +7,7 @@ import 'package:commerce_flutter_storefront/features/auth/presentation/mutations
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key, this.redirect});
@@ -17,13 +18,12 @@ class LoginForm extends ConsumerStatefulWidget {
   ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends ConsumerState<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm>
+    with SubmittingStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  bool _isSubmitting = false;
 
   @override
   void dispose() {
@@ -32,18 +32,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     super.dispose();
   }
 
-  Future<void> _login() async {
-    FocusScope.of(context).unfocus();
+  Future<void> _login() {
+    return runSubmitting(() async {
+      FocusScope.of(context).unfocus();
 
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+      if (!_formKey.currentState!.validate()) {
+        return;
+      }
 
-    setState(() {
-      _isSubmitting = true;
-    });
-
-    try {
       await ref
           .read(authMutationsProvider.notifier)
           .login(
@@ -63,20 +59,14 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       }
 
       context.pop();
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
-        });
-      }
-    }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authMutationsProvider);
 
-    final isLoading = _isSubmitting;
+    final isLoading = isSubmitting;
 
     final errorMessage = switch (auth) {
       AsyncError(:final error) when error is AppException => error.message,
@@ -84,14 +74,12 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       _ => null,
     };
 
-    // Hitung minHeight agar IntrinsicHeight + Spacer bisa bekerja
     final media = MediaQuery.of(context);
     final minHeight = media.size.height - media.padding.top - kToolbarHeight;
 
     return Form(
       key: _formKey,
       child: SingleChildScrollView(
-        // Pastikan keyboard tidak menutupi konten karena scrollable
         child: ConstrainedBox(
           constraints: BoxConstraints(minHeight: minHeight),
           child: IntrinsicHeight(

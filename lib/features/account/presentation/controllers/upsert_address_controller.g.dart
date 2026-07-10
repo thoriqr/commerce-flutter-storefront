@@ -42,7 +42,7 @@ final class UpsertAddressControllerProvider
 }
 
 String _$upsertAddressControllerHash() =>
-    r'd9e89c4dc916cd2f2c6f68c947dc4d569d37eb22';
+    r'29ffcf377fd79f4d04f5dac28ee5d6ecd04af30b';
 
 abstract class _$UpsertAddressController extends $Notifier<UpsertAddressState> {
   UpsertAddressState build();

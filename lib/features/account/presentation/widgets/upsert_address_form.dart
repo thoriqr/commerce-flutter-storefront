@@ -1,5 +1,10 @@
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/validation/validators.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/controllers/upsert_address_controller.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/account_mutations.dart';
+import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 import 'package:commerce_flutter_storefront/features/shipping/data/models/city.dart';
 import 'package:commerce_flutter_storefront/features/shipping/data/models/district.dart';
 import 'package:commerce_flutter_storefront/features/shipping/data/models/province.dart';
@@ -7,6 +12,7 @@ import 'package:commerce_flutter_storefront/features/shipping/presentation/provi
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:commerce_flutter_storefront/features/shipping/presentation/widgets/shipping_selector.dart';
+import 'package:go_router/go_router.dart';
 
 class UpsertAddressForm extends ConsumerStatefulWidget {
   const UpsertAddressForm({super.key, this.addressId, this.initialValue});
@@ -20,7 +26,8 @@ class UpsertAddressForm extends ConsumerStatefulWidget {
   ConsumerState<UpsertAddressForm> createState() => _UpsertAddressFormState();
 }
 
-class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
+class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm>
+    with SubmittingStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _labelController;
@@ -28,6 +35,12 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
   late final TextEditingController _phoneController;
   late final TextEditingController _addressController;
   late final TextEditingController _postalCodeController;
+
+  void _showSelectionError(String field) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Please select a $field.')));
+  }
 
   @override
   void initState() {
@@ -69,9 +82,75 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
     super.dispose();
   }
 
+  Future<void> _submit() {
+    return runSubmitting(() async {
+      FocusScope.of(context).unfocus();
+
+      if (!_formKey.currentState!.validate()) {
+        return;
+      }
+
+      final selection = ref.read(upsertAddressControllerProvider);
+
+      if (selection.province == null) {
+        _showSelectionError('province');
+        return;
+      }
+
+      if (selection.city == null) {
+        _showSelectionError('city');
+        return;
+      }
+
+      if (selection.district == null) {
+        _showSelectionError('district');
+        return;
+      }
+
+      final request = UpsertAddressRequest(
+        label: _labelController.text.trim(),
+        recipientName: _recipientController.text.trim(),
+        shippingProvinceId: selection.province!.id.toString(),
+        shippingCityId: selection.city!.id.toString(),
+        shippingDistrictId: selection.district!.id.toString(),
+        addressLine: _addressController.text.trim(),
+        phone: _phoneController.text.trim(),
+        postalCode: _postalCodeController.text.trim(),
+      );
+
+      final mutation = ref.read(accountMutationsProvider.notifier);
+
+      if (widget.isEdit) {
+        await mutation.updateAddress(widget.addressId!, request);
+      } else {
+        await mutation.createAddress(request);
+      }
+
+      if (!mounted) return;
+
+      context.pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ref.listen(accountMutationsProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          final message = error is AppException
+              ? error.message
+              : 'Something went wrong.';
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        },
+      );
+    });
+
     final selection = ref.watch(upsertAddressControllerProvider);
+
+    final isBusy = isSubmitting || selection.restoringSelection;
 
     final provincesAsync = ref.watch(provincesProvider);
 
@@ -100,6 +179,15 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
               labelText: 'Label',
               border: OutlineInputBorder(),
             ),
+            validator: (value) {
+              final text = value?.trim() ?? '';
+
+              if (text.isEmpty) {
+                return null;
+              }
+
+              return Validators.string(text, field: 'Label', max: 50);
+            },
           ),
 
           const SizedBox(height: 16),
@@ -110,6 +198,14 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
               labelText: 'Recipient Name',
               border: OutlineInputBorder(),
             ),
+            validator: (value) {
+              return Validators.string(
+                value,
+                field: 'Recipient name',
+                min: 1,
+                max: 120,
+              );
+            },
           ),
 
           const SizedBox(height: 16),
@@ -121,6 +217,14 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
               labelText: 'Phone',
               border: OutlineInputBorder(),
             ),
+            validator: (value) {
+              return Validators.number(
+                value,
+                field: 'Phone',
+                minLength: 8,
+                maxLength: 30,
+              );
+            },
           ),
 
           const SizedBox(height: 16),
@@ -187,6 +291,14 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
               labelText: 'Address',
               border: OutlineInputBorder(),
             ),
+            validator: (value) {
+              return Validators.string(
+                value,
+                field: 'Address',
+                min: 5,
+                max: 255,
+              );
+            },
           ),
 
           const SizedBox(height: 16),
@@ -198,13 +310,33 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
               labelText: 'Postal Code',
               border: OutlineInputBorder(),
             ),
+            validator: (value) {
+              final text = value?.trim() ?? '';
+
+              if (text.isEmpty) {
+                return null;
+              }
+
+              return Validators.number(
+                text,
+                field: 'Postal code',
+                minLength: 5,
+                maxLength: 5,
+              );
+            },
           ),
 
           const SizedBox(height: 32),
 
           FilledButton(
-            onPressed: () {},
-            child: Text(widget.isEdit ? 'Save Changes' : 'Save Address'),
+            onPressed: isBusy ? null : _submit,
+            child: isBusy
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Text(widget.isEdit ? 'Save Changes' : 'Save Address'),
           ),
         ],
       ),

@@ -31,11 +31,15 @@ class UpsertAddressController extends _$UpsertAddressController {
 
       final provinces = await ref.read(provincesProvider.future);
 
+      if (!ref.mounted) return;
+
       final province = provinces.firstWhere((e) => e.id == provinceId);
 
       state = state.copyWith(province: province);
 
       final cities = await ref.read(citiesProvider(province.id).future);
+
+      if (!ref.mounted) return;
 
       final city = cities.firstWhere((e) => e.id == cityId);
 
@@ -43,11 +47,15 @@ class UpsertAddressController extends _$UpsertAddressController {
 
       final districts = await ref.read(districtsProvider(city.id).future);
 
+      if (!ref.mounted) return;
+
       final district = districts.firstWhere((e) => e.id == districtId);
 
       state = state.copyWith(district: district);
     } finally {
-      state = state.copyWith(restoringSelection: false);
+      if (ref.mounted) {
+        state = state.copyWith(restoringSelection: false);
+      }
     }
   }
 

@@ -35,59 +35,13 @@ class AccountRepositoryImpl implements AccountRepository {
   }
 
   @override
-  Future<void> createAddress({
-    required String label,
-    required String recipientName,
-    required String shippingProvinceId,
-    required String shippingCityId,
-    required String shippingDistrictId,
-    required String addressLine,
-    required String phone,
-    required String postalCode,
-  }) {
-    return _api
-        .createAddress(
-          UpsertAddressRequest(
-            label: label,
-            recipientName: recipientName,
-            shippingProvinceId: shippingProvinceId,
-            shippingCityId: shippingCityId,
-            shippingDistrictId: shippingDistrictId,
-            addressLine: addressLine,
-            phone: phone,
-            postalCode: postalCode,
-          ),
-        )
-        .unwrap();
+  Future<void> createAddress(UpsertAddressRequest request) {
+    return _api.createAddress(request).unwrap();
   }
 
   @override
-  Future<void> updateAddress(
-    int id, {
-    required String label,
-    required String recipientName,
-    required String shippingProvinceId,
-    required String shippingCityId,
-    required String shippingDistrictId,
-    required String addressLine,
-    required String phone,
-    required String postalCode,
-  }) {
-    return _api
-        .updateAddress(
-          id,
-          UpsertAddressRequest(
-            label: label,
-            recipientName: recipientName,
-            shippingProvinceId: shippingProvinceId,
-            shippingCityId: shippingCityId,
-            shippingDistrictId: shippingDistrictId,
-            addressLine: addressLine,
-            phone: phone,
-            postalCode: postalCode,
-          ),
-        )
-        .unwrap();
+  Future<void> updateAddress(int id, UpsertAddressRequest request) {
+    return _api.updateAddress(id, request).unwrap();
   }
 
   @override
