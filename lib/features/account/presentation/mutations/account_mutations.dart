@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/di/account_repository_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,13 +11,11 @@ class AccountMutations extends _$AccountMutations {
   @override
   FutureOr<void> build() {}
 
-  Future<void> updateProfile({required String displayName}) async {
+  Future<void> updateProfile(UpsertProfileRequest request) async {
     state = const AsyncLoading();
 
     state = await AsyncValue.guard(() async {
-      await ref
-          .read(accountRepositoryProvider)
-          .updateUserProfile(displayName: displayName);
+      await ref.read(accountRepositoryProvider).updateUserProfile(request);
 
       ref.invalidate(userProfileProvider);
     });

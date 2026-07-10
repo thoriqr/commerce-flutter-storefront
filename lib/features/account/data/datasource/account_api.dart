@@ -16,7 +16,7 @@ abstract class AccountApi {
   @GET("/user/profile")
   Future<ApiResponse<UserProfile>> getUserProfile();
 
-  @POST("/user/profile")
+  @PUT("/user/profile")
   Future<ApiResponse<void>> updateUserProfile(
     @Body() UpsertProfileRequest request,
   );

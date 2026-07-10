@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
@@ -6,7 +7,7 @@ import 'package:commerce_flutter_storefront/features/account/data/models/user_pr
 abstract interface class AccountRepository {
   Future<UserProfile> getUserProfile();
 
-  Future<void> updateUserProfile({required String displayName});
+  Future<void> updateUserProfile(UpsertProfileRequest request);
 
   Future<UserAddresses> getUserAddresses();
 

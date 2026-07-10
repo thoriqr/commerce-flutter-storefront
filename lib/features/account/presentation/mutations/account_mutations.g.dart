@@ -33,7 +33,7 @@ final class AccountMutationsProvider
   AccountMutations create() => AccountMutations();
 }
 
-String _$accountMutationsHash() => r'6499afdac5c25b7173be156fda6443de7493c765';
+String _$accountMutationsHash() => r'd1292eac2e1cb767dcb1ecf83f2fd49ee7381843';
 
 abstract class _$AccountMutations extends $AsyncNotifier<void> {
   FutureOr<void> build();

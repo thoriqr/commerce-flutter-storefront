@@ -58,7 +58,7 @@ class _AccountApi implements AccountApi {
     final _headers = <String, dynamic>{};
     final _data = request;
     final _options = _setStreamType<ApiResponse<void>>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/user/profile',

@@ -1,7 +1,12 @@
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/account_mutations.dart';
+import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountProfileForm extends ConsumerStatefulWidget {
   const AccountProfileForm({super.key, required this.user});
@@ -12,12 +17,11 @@ class AccountProfileForm extends ConsumerStatefulWidget {
   ConsumerState<AccountProfileForm> createState() => _AccountProfileFormState();
 }
 
-class _AccountProfileFormState extends ConsumerState<AccountProfileForm> {
+class _AccountProfileFormState extends ConsumerState<AccountProfileForm>
+    with SubmittingStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _displayNameController;
-
-  bool _isSubmitting = false;
 
   @override
   void initState() {
@@ -35,42 +39,45 @@ class _AccountProfileFormState extends ConsumerState<AccountProfileForm> {
     super.dispose();
   }
 
-  Future<void> _submit() async {
-    FocusScope.of(context).unfocus();
+  Future<void> _submit() {
+    return runSubmitting(() async {
+      FocusScope.of(context).unfocus();
 
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+      if (!_formKey.currentState!.validate()) {
+        return;
+      }
 
-    setState(() {
-      _isSubmitting = true;
-    });
+      final request = UpsertProfileRequest(
+        displayName: _displayNameController.text.trim(),
+      );
 
-    try {
-      final displayName = _displayNameController.text.trim();
-
-      // TODO:
-      // await ref.read(accountMutationsProvider.notifier)
-      //     .updateDisplayName(displayName);
+      await ref.read(accountMutationsProvider.notifier).updateProfile(request);
 
       if (!mounted) {
         return;
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('TODO: Update display name')),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSubmitting = false;
-        });
-      }
-    }
+      context.pop();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(accountMutationsProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          final message = switch (error) {
+            AppException e => e.message,
+            _ => 'Something went wrong.',
+          };
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        },
+      );
+    });
+
     return Form(
       key: _formKey,
       child: ListView(
@@ -82,7 +89,7 @@ class _AccountProfileFormState extends ConsumerState<AccountProfileForm> {
 
           TextFormField(
             controller: _displayNameController,
-            enabled: !_isSubmitting,
+            enabled: !isSubmitting,
             textInputAction: TextInputAction.done,
             decoration: const InputDecoration(
               hintText: 'Enter your display name',
@@ -93,11 +100,11 @@ class _AccountProfileFormState extends ConsumerState<AccountProfileForm> {
                 value,
                 field: 'Display name',
                 min: 2,
-                max: 100,
+                max: 120,
               );
             },
             onFieldSubmitted: (_) {
-              if (!_isSubmitting) {
+              if (!isSubmitting) {
                 _submit();
               }
             },
@@ -113,8 +120,8 @@ class _AccountProfileFormState extends ConsumerState<AccountProfileForm> {
           const SizedBox(height: 32),
 
           FilledButton(
-            onPressed: _isSubmitting ? null : _submit,
-            child: _isSubmitting
+            onPressed: isSubmitting ? null : _submit,
+            child: isSubmitting
                 ? const SizedBox(
                     width: 18,
                     height: 18,

@@ -18,10 +18,8 @@ class AccountRepositoryImpl implements AccountRepository {
   }
 
   @override
-  Future<void> updateUserProfile({required String displayName}) {
-    return _api
-        .updateUserProfile(UpsertProfileRequest(displayName: displayName))
-        .unwrap();
+  Future<void> updateUserProfile(UpsertProfileRequest request) {
+    return _api.updateUserProfile(request).unwrap();
   }
 
   @override
