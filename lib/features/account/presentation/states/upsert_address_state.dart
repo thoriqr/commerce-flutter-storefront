@@ -12,7 +12,6 @@ abstract class UpsertAddressState with _$UpsertAddressState {
     City? city,
     District? district,
 
-    @Default(false) bool loadingCities,
-    @Default(false) bool loadingDistricts,
+    @Default(false) bool restoringSelection,
   }) = _UpsertAddressState;
 }

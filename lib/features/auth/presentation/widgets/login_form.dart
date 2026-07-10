@@ -29,7 +29,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
-
     super.dispose();
   }
 
@@ -56,9 +55,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       // leaving the login page to avoid a guest/authenticated flicker.
       await ref.read(userProfileProvider.future);
 
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       if (widget.redirect == LoginRedirect.cart) {
         context.go(AppRoutes.cart);
@@ -87,87 +84,99 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       _ => null,
     };
 
+    // Hitung minHeight agar IntrinsicHeight + Spacer bisa bekerja
+    final media = MediaQuery.of(context);
+    final minHeight = media.size.height - media.padding.top - kToolbarHeight;
+
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Spacer(),
+      child: SingleChildScrollView(
+        // Pastikan keyboard tidak menutupi konten karena scrollable
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: minHeight),
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Spacer(),
 
-          const Icon(Icons.lock_outline, size: 72),
+                const Icon(Icons.lock_outline, size: 72),
 
-          const SizedBox(height: 24),
+                const SizedBox(height: 24),
 
-          Text(
-            'Welcome Back',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
+                Text(
+                  'Welcome Back',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium,
+                ),
 
-          const SizedBox(height: 8),
+                const SizedBox(height: 8),
 
-          Text(
-            'Sign in to continue.',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+                Text(
+                  'Sign in to continue.',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
 
-          const SizedBox(height: 40),
+                const SizedBox(height: 40),
 
-          TextFormField(
-            controller: _emailController,
-            enabled: !isLoading,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(),
+                TextFormField(
+                  controller: _emailController,
+                  enabled: !isLoading,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: Validators.email,
+                ),
+
+                const SizedBox(height: 16),
+
+                TextFormField(
+                  controller: _passwordController,
+                  enabled: !isLoading,
+                  obscureText: true,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: const OutlineInputBorder(),
+                    errorText: errorMessage,
+                  ),
+                  validator: (value) {
+                    return Validators.string(
+                      value,
+                      field: 'Password',
+                      min: 8,
+                      max: 72,
+                    );
+                  },
+                  onFieldSubmitted: (_) {
+                    if (!isLoading) {
+                      _login();
+                    }
+                  },
+                ),
+
+                const SizedBox(height: 24),
+
+                FilledButton(
+                  onPressed: isLoading ? null : _login,
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Text('Login'),
+                ),
+
+                const Spacer(),
+              ],
             ),
-            validator: Validators.email,
           ),
-
-          const SizedBox(height: 16),
-
-          TextFormField(
-            controller: _passwordController,
-            enabled: !isLoading,
-            obscureText: true,
-            textInputAction: TextInputAction.done,
-            decoration: InputDecoration(
-              labelText: 'Password',
-              border: const OutlineInputBorder(),
-              errorText: errorMessage,
-            ),
-            validator: (value) {
-              return Validators.string(
-                value,
-                field: 'Password',
-                min: 8,
-                max: 72,
-              );
-            },
-            onFieldSubmitted: (_) {
-              if (!isLoading) {
-                _login();
-              }
-            },
-          ),
-
-          const SizedBox(height: 24),
-
-          FilledButton(
-            onPressed: isLoading ? null : _login,
-            child: isLoading
-                ? const SizedBox(
-                    width: 18,
-                    height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2),
-                  )
-                : const Text('Login'),
-          ),
-
-          const Spacer(),
-        ],
+        ),
       ),
     );
   }

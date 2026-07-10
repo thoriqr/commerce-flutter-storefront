@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UpsertAddressState {
 
- Province? get province; City? get city; District? get district; bool get loadingCities; bool get loadingDistricts;
+ Province? get province; City? get city; District? get district; bool get restoringSelection;
 /// Create a copy of UpsertAddressState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $UpsertAddressStateCopyWith<UpsertAddressState> get copyWith => _$UpsertAddressS
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpsertAddressState&&(identical(other.province, province) || other.province == province)&&(identical(other.city, city) || other.city == city)&&(identical(other.district, district) || other.district == district)&&(identical(other.loadingCities, loadingCities) || other.loadingCities == loadingCities)&&(identical(other.loadingDistricts, loadingDistricts) || other.loadingDistricts == loadingDistricts));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UpsertAddressState&&(identical(other.province, province) || other.province == province)&&(identical(other.city, city) || other.city == city)&&(identical(other.district, district) || other.district == district)&&(identical(other.restoringSelection, restoringSelection) || other.restoringSelection == restoringSelection));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,province,city,district,loadingCities,loadingDistricts);
+int get hashCode => Object.hash(runtimeType,province,city,district,restoringSelection);
 
 @override
 String toString() {
-  return 'UpsertAddressState(province: $province, city: $city, district: $district, loadingCities: $loadingCities, loadingDistricts: $loadingDistricts)';
+  return 'UpsertAddressState(province: $province, city: $city, district: $district, restoringSelection: $restoringSelection)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $UpsertAddressStateCopyWith<$Res>  {
   factory $UpsertAddressStateCopyWith(UpsertAddressState value, $Res Function(UpsertAddressState) _then) = _$UpsertAddressStateCopyWithImpl;
 @useResult
 $Res call({
- Province? province, City? city, District? district, bool loadingCities, bool loadingDistricts
+ Province? province, City? city, District? district, bool restoringSelection
 });
 
 
@@ -62,13 +62,12 @@ class _$UpsertAddressStateCopyWithImpl<$Res>
 
 /// Create a copy of UpsertAddressState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? province = freezed,Object? city = freezed,Object? district = freezed,Object? loadingCities = null,Object? loadingDistricts = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? province = freezed,Object? city = freezed,Object? district = freezed,Object? restoringSelection = null,}) {
   return _then(_self.copyWith(
 province: freezed == province ? _self.province : province // ignore: cast_nullable_to_non_nullable
 as Province?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as City?,district: freezed == district ? _self.district : district // ignore: cast_nullable_to_non_nullable
-as District?,loadingCities: null == loadingCities ? _self.loadingCities : loadingCities // ignore: cast_nullable_to_non_nullable
-as bool,loadingDistricts: null == loadingDistricts ? _self.loadingDistricts : loadingDistricts // ignore: cast_nullable_to_non_nullable
+as District?,restoringSelection: null == restoringSelection ? _self.restoringSelection : restoringSelection // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }
@@ -190,10 +189,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Province? province,  City? city,  District? district,  bool loadingCities,  bool loadingDistricts)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Province? province,  City? city,  District? district,  bool restoringSelection)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UpsertAddressState() when $default != null:
-return $default(_that.province,_that.city,_that.district,_that.loadingCities,_that.loadingDistricts);case _:
+return $default(_that.province,_that.city,_that.district,_that.restoringSelection);case _:
   return orElse();
 
 }
@@ -211,10 +210,10 @@ return $default(_that.province,_that.city,_that.district,_that.loadingCities,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Province? province,  City? city,  District? district,  bool loadingCities,  bool loadingDistricts)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Province? province,  City? city,  District? district,  bool restoringSelection)  $default,) {final _that = this;
 switch (_that) {
 case _UpsertAddressState():
-return $default(_that.province,_that.city,_that.district,_that.loadingCities,_that.loadingDistricts);case _:
+return $default(_that.province,_that.city,_that.district,_that.restoringSelection);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -231,10 +230,10 @@ return $default(_that.province,_that.city,_that.district,_that.loadingCities,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Province? province,  City? city,  District? district,  bool loadingCities,  bool loadingDistricts)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Province? province,  City? city,  District? district,  bool restoringSelection)?  $default,) {final _that = this;
 switch (_that) {
 case _UpsertAddressState() when $default != null:
-return $default(_that.province,_that.city,_that.district,_that.loadingCities,_that.loadingDistricts);case _:
+return $default(_that.province,_that.city,_that.district,_that.restoringSelection);case _:
   return null;
 
 }
@@ -246,14 +245,13 @@ return $default(_that.province,_that.city,_that.district,_that.loadingCities,_th
 
 
 class _UpsertAddressState implements UpsertAddressState {
-  const _UpsertAddressState({this.province, this.city, this.district, this.loadingCities = false, this.loadingDistricts = false});
+  const _UpsertAddressState({this.province, this.city, this.district, this.restoringSelection = false});
   
 
 @override final  Province? province;
 @override final  City? city;
 @override final  District? district;
-@override@JsonKey() final  bool loadingCities;
-@override@JsonKey() final  bool loadingDistricts;
+@override@JsonKey() final  bool restoringSelection;
 
 /// Create a copy of UpsertAddressState
 /// with the given fields replaced by the non-null parameter values.
@@ -265,16 +263,16 @@ _$UpsertAddressStateCopyWith<_UpsertAddressState> get copyWith => __$UpsertAddre
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpsertAddressState&&(identical(other.province, province) || other.province == province)&&(identical(other.city, city) || other.city == city)&&(identical(other.district, district) || other.district == district)&&(identical(other.loadingCities, loadingCities) || other.loadingCities == loadingCities)&&(identical(other.loadingDistricts, loadingDistricts) || other.loadingDistricts == loadingDistricts));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UpsertAddressState&&(identical(other.province, province) || other.province == province)&&(identical(other.city, city) || other.city == city)&&(identical(other.district, district) || other.district == district)&&(identical(other.restoringSelection, restoringSelection) || other.restoringSelection == restoringSelection));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,province,city,district,loadingCities,loadingDistricts);
+int get hashCode => Object.hash(runtimeType,province,city,district,restoringSelection);
 
 @override
 String toString() {
-  return 'UpsertAddressState(province: $province, city: $city, district: $district, loadingCities: $loadingCities, loadingDistricts: $loadingDistricts)';
+  return 'UpsertAddressState(province: $province, city: $city, district: $district, restoringSelection: $restoringSelection)';
 }
 
 
@@ -285,7 +283,7 @@ abstract mixin class _$UpsertAddressStateCopyWith<$Res> implements $UpsertAddres
   factory _$UpsertAddressStateCopyWith(_UpsertAddressState value, $Res Function(_UpsertAddressState) _then) = __$UpsertAddressStateCopyWithImpl;
 @override @useResult
 $Res call({
- Province? province, City? city, District? district, bool loadingCities, bool loadingDistricts
+ Province? province, City? city, District? district, bool restoringSelection
 });
 
 
@@ -302,13 +300,12 @@ class __$UpsertAddressStateCopyWithImpl<$Res>
 
 /// Create a copy of UpsertAddressState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? province = freezed,Object? city = freezed,Object? district = freezed,Object? loadingCities = null,Object? loadingDistricts = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? province = freezed,Object? city = freezed,Object? district = freezed,Object? restoringSelection = null,}) {
   return _then(_UpsertAddressState(
 province: freezed == province ? _self.province : province // ignore: cast_nullable_to_non_nullable
 as Province?,city: freezed == city ? _self.city : city // ignore: cast_nullable_to_non_nullable
 as City?,district: freezed == district ? _self.district : district // ignore: cast_nullable_to_non_nullable
-as District?,loadingCities: null == loadingCities ? _self.loadingCities : loadingCities // ignore: cast_nullable_to_non_nullable
-as bool,loadingDistricts: null == loadingDistricts ? _self.loadingDistricts : loadingDistricts // ignore: cast_nullable_to_non_nullable
+as District?,restoringSelection: null == restoringSelection ? _self.restoringSelection : restoringSelection // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

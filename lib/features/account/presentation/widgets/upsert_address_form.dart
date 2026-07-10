@@ -75,11 +75,13 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
 
     final provincesAsync = ref.watch(provincesProvider);
 
-    final citiesAsync = selection.province == null
+    final citiesAsync =
+        selection.restoringSelection || selection.province == null
         ? null
         : ref.watch(citiesProvider(selection.province!.id));
 
-    final districtsAsync = selection.city == null
+    final districtsAsync =
+        selection.restoringSelection || selection.city == null
         ? null
         : ref.watch(districtsProvider(selection.city!.id));
 
@@ -127,8 +129,8 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
             label: 'Province',
             items: provinces,
             selected: selection.province,
-            enabled: true,
-            loading: provincesAsync.isLoading,
+            enabled: !selection.restoringSelection,
+            loading: provincesAsync.isLoading || selection.restoringSelection,
             itemLabel: (e) => e.name,
             onSelected: (province) {
               ref
@@ -143,8 +145,11 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
             label: 'City',
             items: cities,
             selected: selection.city,
-            enabled: selection.province != null,
-            loading: selection.loadingCities,
+            enabled:
+                !selection.restoringSelection && selection.province != null,
+            loading:
+                (citiesAsync?.isLoading ?? false) ||
+                selection.restoringSelection,
             placeholder: 'Select a province first',
             itemLabel: (e) => e.name,
             onSelected: (city) {
@@ -160,8 +165,10 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm> {
             label: 'District',
             items: districts,
             selected: selection.district,
-            enabled: selection.city != null,
-            loading: selection.loadingDistricts,
+            enabled: !selection.restoringSelection && selection.city != null,
+            loading:
+                (districtsAsync?.isLoading ?? false) ||
+                selection.restoringSelection,
             placeholder: 'Select a city first',
             itemLabel: (e) => e.name,
             onSelected: (district) {

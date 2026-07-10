@@ -8,7 +8,6 @@ class SecureStorageImpl implements SecureStorage {
 
   static const _accessTokenKey = 'access_token';
   static const _refreshTokenKey = 'refresh_token';
-  static const _cartIdKey = 'cart_id';
 
   @override
   Future<void> saveAccessToken(String token) {
@@ -43,20 +42,5 @@ class SecureStorageImpl implements SecureStorage {
   @override
   Future<void> clear() {
     return _storage.deleteAll();
-  }
-
-  @override
-  Future<void> saveCartId(String cartId) {
-    return _storage.write(key: _cartIdKey, value: cartId);
-  }
-
-  @override
-  Future<String?> readCartId() {
-    return _storage.read(key: _cartIdKey);
-  }
-
-  @override
-  Future<void> deleteCartId() {
-    return _storage.delete(key: _cartIdKey);
   }
 }

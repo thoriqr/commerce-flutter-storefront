@@ -22,23 +22,33 @@ class UpsertAddressController extends _$UpsertAddressController {
       return;
     }
 
-    final provinceId = int.parse(address.shippingProvinceId);
-    final cityId = int.parse(address.shippingCityId);
-    final districtId = int.parse(address.shippingDistrictId);
+    state = state.copyWith(restoringSelection: true);
 
-    final provinces = await ref.read(provincesProvider.future);
+    try {
+      final provinceId = int.parse(address.shippingProvinceId);
+      final cityId = int.parse(address.shippingCityId);
+      final districtId = int.parse(address.shippingDistrictId);
 
-    final province = provinces.firstWhere((e) => e.id == provinceId);
+      final provinces = await ref.read(provincesProvider.future);
 
-    final cities = await ref.read(citiesProvider(province.id).future);
+      final province = provinces.firstWhere((e) => e.id == provinceId);
 
-    final city = cities.firstWhere((e) => e.id == cityId);
+      state = state.copyWith(province: province);
 
-    final districts = await ref.read(districtsProvider(city.id).future);
+      final cities = await ref.read(citiesProvider(province.id).future);
 
-    final district = districts.firstWhere((e) => e.id == districtId);
+      final city = cities.firstWhere((e) => e.id == cityId);
 
-    state = state.copyWith(province: province, city: city, district: district);
+      state = state.copyWith(city: city);
+
+      final districts = await ref.read(districtsProvider(city.id).future);
+
+      final district = districts.firstWhere((e) => e.id == districtId);
+
+      state = state.copyWith(district: district);
+    } finally {
+      state = state.copyWith(restoringSelection: false);
+    }
   }
 
   Future<void> selectProvince(Province province) async {
@@ -46,33 +56,15 @@ class UpsertAddressController extends _$UpsertAddressController {
       return;
     }
 
-    state = state.copyWith(
-      province: province,
-      city: null,
-      district: null,
-      loadingCities: true,
-      loadingDistricts: false,
-    );
-
-    try {
-      await ref.read(citiesProvider(province.id).future);
-    } finally {
-      state = state.copyWith(loadingCities: false);
-    }
+    state = state.copyWith(province: province, city: null, district: null);
   }
 
-  Future<void> selectCity(City city) async {
+  void selectCity(City city) {
     if (state.city?.id == city.id) {
       return;
     }
 
-    state = state.copyWith(city: city, district: null, loadingDistricts: true);
-
-    try {
-      await ref.read(districtsProvider(city.id).future);
-    } finally {
-      state = state.copyWith(loadingDistricts: false);
-    }
+    state = state.copyWith(city: city, district: null);
   }
 
   void selectDistrict(District district) {

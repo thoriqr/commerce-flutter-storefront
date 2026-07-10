@@ -14,12 +14,4 @@ abstract interface class SecureStorage {
   Future<void> deleteRefreshToken();
 
   Future<void> clear();
-
-  // ===== CART =====
-
-  Future<void> saveCartId(String cartId);
-
-  Future<String?> readCartId();
-
-  Future<void> deleteCartId();
 }
