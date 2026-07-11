@@ -2,6 +2,7 @@ import 'package:commerce_flutter_storefront/core/network/api_response_extension.
 import 'package:commerce_flutter_storefront/features/auth/data/datasource/auth_api.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/refresh_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/set_password_request.dart';
@@ -15,6 +16,11 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthTokens> login(LoginRequest request) {
     return _api.login(request).unwrap();
+  }
+
+  @override
+  Future<AuthTokens> googleLogin(GoogleLoginRequest request) {
+    return _api.googleLogin(request).unwrap();
   }
 
   @override

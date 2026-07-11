@@ -3,12 +3,15 @@ import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
+import 'package:commerce_flutter_storefront/features/auth/di/google_sign_in_provider.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key, this.redirect});
@@ -49,6 +52,46 @@ class _LoginFormState extends ConsumerState<LoginForm>
               password: _passwordController.text,
             ),
           );
+
+      // Wait until the latest profile has been loaded before
+      // leaving the login page to avoid a guest/authenticated flicker.
+      await ref.read(userProfileProvider.future);
+
+      if (!mounted) return;
+
+      if (widget.redirect == LoginRedirect.cart) {
+        context.go(AppRoutes.cart);
+        return;
+      }
+
+      context.pop();
+    });
+  }
+
+  Future<void> _googleLogin() {
+    return runSubmitting(() async {
+      final googleSignIn = ref.read(googleSignInProvider);
+
+      final account = await googleSignIn.signIn();
+
+      if (account == null) {
+        return;
+      }
+
+      final authentication = await account.authentication;
+
+      final idToken = authentication.idToken;
+
+      if (idToken == null) {
+        throw const AppException(
+          code: 'GOOGLE_SIGN_IN_FAILED',
+          message: 'Failed to authenticate with Google.',
+        );
+      }
+
+      await ref
+          .read(authMutationsProvider.notifier)
+          .googleLogin(GoogleLoginRequest(idToken: idToken));
 
       // Wait until the latest profile has been loaded before
       // leaving the login page to avoid a guest/authenticated flicker.
@@ -155,6 +198,22 @@ class _LoginFormState extends ConsumerState<LoginForm>
                 : const Text('Login'),
           ),
 
+          const SizedBox(height: 24),
+
+          Row(
+            children: [
+              const Expanded(child: Divider()),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text('OR', style: Theme.of(context).textTheme.bodySmall),
+              ),
+              const Expanded(child: Divider()),
+            ],
+          ),
+
+          const SizedBox(height: 24),
+
+          GoogleSignInButton(isLoading: isSubmitting, onPressed: _googleLogin),
           const SizedBox(height: 32),
         ],
       ),

@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/core/models/api_response.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/refresh_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
@@ -15,6 +16,11 @@ abstract class AuthApi {
 
   @POST("/auth/login")
   Future<ApiResponse<AuthTokens>> login(@Body() LoginRequest request);
+
+  @POST("/auth/google")
+  Future<ApiResponse<AuthTokens>> googleLogin(
+    @Body() GoogleLoginRequest request,
+  );
 
   @POST("/auth/refresh")
   Future<ApiResponse<AuthTokens>> refresh(@Body() RefreshRequest request);

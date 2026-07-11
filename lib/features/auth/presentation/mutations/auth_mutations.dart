@@ -2,10 +2,12 @@ import 'package:commerce_flutter_storefront/core/auth/token_manager_provider.dar
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/refresh_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/set_password_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_provider.dart';
+import 'package:commerce_flutter_storefront/features/auth/di/google_sign_in_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
@@ -42,6 +44,16 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
     });
   }
 
+  Future<void> googleLogin(GoogleLoginRequest request) {
+    return guard(() async {
+      final tokens = await ref
+          .read(authRepositoryProvider)
+          .googleLogin(request);
+
+      await _saveSession(tokens, invalidateCart: true);
+    });
+  }
+
   Future<void> changePassword(ChangePasswordRequest request) {
     return guard(() async {
       final tokens = await ref
@@ -64,6 +76,8 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
 
   Future<void> logout() async {
     final tokenManager = ref.read(tokenManagerProvider);
+    final googleSignIn = ref.read(googleSignInProvider);
+
     final refreshToken = await tokenManager.getRefreshToken();
 
     return guard(() async {
@@ -74,6 +88,11 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
               .logout(RefreshRequest(refreshToken: refreshToken));
         }
       } finally {
+        // Clear the local Google Sign-In session so the account
+        // chooser is shown the next time the user signs in.
+        await googleSignIn.signOut();
+
+        // Clear the local application session.
         await tokenManager.clear();
 
         ref.invalidate(isAuthenticatedProvider);
