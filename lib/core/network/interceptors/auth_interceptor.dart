@@ -39,7 +39,28 @@ class AuthInterceptor extends QueuedInterceptor {
       return;
     }
 
-    // Skip authentication endpoints.
+    // Skip selected authentication endpoints.
+    //
+    // TODO:
+    // Temporary workaround.
+    //
+    // The backend currently returns the same 401 error code (UNAUTHORIZED) for
+    // both expired access tokens and business authentication failures such as
+    // invalid credentials. Without dedicated error codes, the interceptor cannot
+    // distinguish whether it should refresh the access token or simply forward
+    // the error to the caller.
+    //
+    // As a temporary solution, authentication endpoints that may legitimately
+    // return 401 for business reasons are excluded from automatic refresh to
+    // prevent infinite refresh/retry loops.
+    //
+    // Trade-off:
+    // If the access token expires while calling one of these endpoints, the
+    // request will fail instead of being refreshed automatically.
+    //
+    // Remove this workaround once the backend exposes dedicated auth error codes
+    // (e.g. ACCESS_TOKEN_EXPIRED, INVALID_CREDENTIALS) and refresh based on the
+    // returned error code instead of the request path.
     if (AuthConstants.excludedPaths.contains(request.path)) {
       handler.next(err);
       return;

@@ -2,29 +2,27 @@ import 'package:commerce_flutter_storefront/features/account/data/models/upsert_
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/di/account_repository_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
+import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_mutations.g.dart';
 
 @riverpod
-class AccountMutations extends _$AccountMutations {
+class AccountMutations extends _$AccountMutations
+    with AsyncMutationMixin<void> {
   @override
   FutureOr<void> build() {}
 
-  Future<void> updateProfile(UpsertProfileRequest request) async {
-    state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
+  Future<void> updateProfile(UpsertProfileRequest request) {
+    return guard(() async {
       await ref.read(accountRepositoryProvider).updateUserProfile(request);
 
       ref.invalidate(userProfileProvider);
     });
   }
 
-  Future<void> createAddress(UpsertAddressRequest request) async {
-    state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
+  Future<void> createAddress(UpsertAddressRequest request) {
+    return guard(() async {
       await ref.read(accountRepositoryProvider).createAddress(request);
 
       ref.invalidate(userAddressesProvider);
@@ -32,10 +30,8 @@ class AccountMutations extends _$AccountMutations {
     });
   }
 
-  Future<void> updateAddress(int id, UpsertAddressRequest request) async {
-    state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
+  Future<void> updateAddress(int id, UpsertAddressRequest request) {
+    return guard(() async {
       await ref.read(accountRepositoryProvider).updateAddress(id, request);
 
       ref.invalidate(userAddressesProvider);
@@ -43,10 +39,8 @@ class AccountMutations extends _$AccountMutations {
     });
   }
 
-  Future<void> deleteAddress(int id) async {
-    state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
+  Future<void> deleteAddress(int id) {
+    return guard(() async {
       await ref.read(accountRepositoryProvider).deleteAddress(id);
 
       ref.invalidate(userAddressesProvider);
@@ -54,10 +48,8 @@ class AccountMutations extends _$AccountMutations {
     });
   }
 
-  Future<void> setDefaultAddress(int id) async {
-    state = const AsyncLoading();
-
-    state = await AsyncValue.guard(() async {
+  Future<void> setDefaultAddress(int id) {
+    return guard(() async {
       await ref.read(accountRepositoryProvider).setDefaultAddress(id);
 
       ref.invalidate(userAddressesProvider);

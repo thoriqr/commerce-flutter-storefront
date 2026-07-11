@@ -3,6 +3,7 @@ import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -43,8 +44,10 @@ class _LoginFormState extends ConsumerState<LoginForm>
       await ref
           .read(authMutationsProvider.notifier)
           .login(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
+            LoginRequest(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+            ),
           );
 
       // Wait until the latest profile has been loaded before
@@ -66,105 +69,94 @@ class _LoginFormState extends ConsumerState<LoginForm>
   Widget build(BuildContext context) {
     final auth = ref.watch(authMutationsProvider);
 
-    final isLoading = isSubmitting;
-
     final errorMessage = switch (auth) {
       AsyncError(:final error) when error is AppException => error.message,
       AsyncError() => 'Something went wrong.',
       _ => null,
     };
 
-    final media = MediaQuery.of(context);
-    final minHeight = media.size.height - media.padding.top - kToolbarHeight;
-
     return Form(
       key: _formKey,
-      child: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: minHeight),
-          child: IntrinsicHeight(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
+      child: ListView(
+        padding: const EdgeInsets.all(24),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        children: [
+          const SizedBox(height: 48),
 
-                const Icon(Icons.lock_outline, size: 72),
+          const Icon(Icons.lock_outline, size: 72),
 
-                const SizedBox(height: 24),
+          const SizedBox(height: 24),
 
-                Text(
-                  'Welcome Back',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-
-                const SizedBox(height: 8),
-
-                Text(
-                  'Sign in to continue.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-
-                const SizedBox(height: 40),
-
-                TextFormField(
-                  controller: _emailController,
-                  enabled: !isLoading,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                  ),
-                  validator: Validators.email,
-                ),
-
-                const SizedBox(height: 16),
-
-                TextFormField(
-                  controller: _passwordController,
-                  enabled: !isLoading,
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: const OutlineInputBorder(),
-                    errorText: errorMessage,
-                  ),
-                  validator: (value) {
-                    return Validators.string(
-                      value,
-                      field: 'Password',
-                      min: 8,
-                      max: 72,
-                    );
-                  },
-                  onFieldSubmitted: (_) {
-                    if (!isLoading) {
-                      _login();
-                    }
-                  },
-                ),
-
-                const SizedBox(height: 24),
-
-                FilledButton(
-                  onPressed: isLoading ? null : _login,
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 18,
-                          height: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Text('Login'),
-                ),
-
-                const Spacer(),
-              ],
-            ),
+          Text(
+            'Welcome Back',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.headlineMedium,
           ),
-        ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            'Sign in to continue.',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+
+          const SizedBox(height: 40),
+
+          TextFormField(
+            controller: _emailController,
+            enabled: !isSubmitting,
+            keyboardType: TextInputType.emailAddress,
+            textInputAction: TextInputAction.next,
+            decoration: const InputDecoration(
+              labelText: 'Email',
+              border: OutlineInputBorder(),
+            ),
+            validator: Validators.email,
+          ),
+
+          const SizedBox(height: 16),
+
+          TextFormField(
+            controller: _passwordController,
+            enabled: !isSubmitting,
+            obscureText: true,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              labelText: 'Password',
+              border: const OutlineInputBorder(),
+              errorText: errorMessage,
+            ),
+            validator: (value) {
+              return Validators.string(
+                value,
+                field: 'Password',
+                min: 8,
+                max: 72,
+              );
+            },
+            onFieldSubmitted: (_) {
+              if (!isSubmitting) {
+                _login();
+              }
+            },
+          ),
+
+          const SizedBox(height: 24),
+
+          FilledButton(
+            onPressed: isSubmitting ? null : _login,
+            child: isSubmitting
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Login'),
+          ),
+
+          const SizedBox(height: 32),
+        ],
       ),
     );
   }

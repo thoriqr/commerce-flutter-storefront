@@ -1,53 +1,79 @@
 import 'package:commerce_flutter_storefront/core/auth/token_manager_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/refresh_request.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/set_password_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
+import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_mutations.g.dart';
 
 @riverpod
-class AuthMutations extends _$AuthMutations {
+class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
   @override
   FutureOr<void> build() {}
 
-  Future<void> login({required String email, required String password}) async {
-    state = const AsyncLoading();
-
+  Future<void> _saveSession(
+    AuthTokens tokens, {
+    bool invalidateCart = false,
+  }) async {
     final tokenManager = ref.read(tokenManagerProvider);
 
-    state = await AsyncValue.guard(() async {
+    await tokenManager.save(tokens);
+
+    ref.invalidate(isAuthenticatedProvider);
+    ref.invalidate(userProfileProvider);
+
+    if (invalidateCart) {
+      ref.invalidate(cartProvider);
+    }
+  }
+
+  Future<void> login(LoginRequest request) {
+    return guard(() async {
+      final tokens = await ref.read(authRepositoryProvider).login(request);
+
+      await _saveSession(tokens, invalidateCart: true);
+    });
+  }
+
+  Future<void> changePassword(ChangePasswordRequest request) {
+    return guard(() async {
       final tokens = await ref
           .read(authRepositoryProvider)
-          .login(email: email, password: password);
+          .changePassword(request);
 
-      await tokenManager.save(tokens);
+      await _saveSession(tokens);
+    });
+  }
 
-      ref.invalidate(isAuthenticatedProvider);
+  Future<void> setPassword(SetPasswordRequest request) {
+    return guard(() async {
+      final tokens = await ref
+          .read(authRepositoryProvider)
+          .setPassword(request);
 
-      ref.invalidate(userProfileProvider);
-      ref.invalidate(cartProvider);
+      await _saveSession(tokens);
     });
   }
 
   Future<void> logout() async {
-    state = const AsyncLoading();
-
     final tokenManager = ref.read(tokenManagerProvider);
-
     final refreshToken = await tokenManager.getRefreshToken();
 
-    state = await AsyncValue.guard(() async {
+    return guard(() async {
       try {
         if (refreshToken != null && refreshToken.isNotEmpty) {
           await ref
               .read(authRepositoryProvider)
-              .logout(refreshToken: refreshToken);
+              .logout(RefreshRequest(refreshToken: refreshToken));
         }
       } finally {
-        // Always clear local credentials, even if the logout
-        // request fails or the refresh token has already expired.
         await tokenManager.clear();
 
         ref.invalidate(isAuthenticatedProvider);
