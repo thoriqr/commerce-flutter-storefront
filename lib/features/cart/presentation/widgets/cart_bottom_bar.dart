@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
@@ -89,7 +90,7 @@ class CartBottomBar extends ConsumerWidget {
                       if (!isAuthenticated) {
                         AuthRoutes.pushLogin(
                           context,
-                          redirect: LoginRedirect.cart,
+                          redirect: LoginRedirect(AppRoutes.cart),
                         );
                         return;
                       }

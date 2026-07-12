@@ -1,3 +1,7 @@
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/cart_mutations.dart';
 import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
@@ -62,8 +66,14 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
   @override
   Widget build(BuildContext context) {
     final mutation = ref.watch(cartMutationsProvider);
+    final auth = ref.watch(isAuthenticatedProvider);
 
     final isPending = widget.variantId == uninitializedVariantId;
+
+    final isAuthenticated = switch (auth) {
+      AsyncData(:final value) => value,
+      _ => false,
+    };
 
     final variantAsync = isPending
         ? null
@@ -152,8 +162,18 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
                     ),
                     onPressed: loading || !canAddToCart
                         ? null
-                        : () async {
-                            await ref
+                        : () {
+                            if (!isAuthenticated) {
+                              AuthRoutes.pushLogin(
+                                context,
+                                redirect: LoginRedirect(
+                                  AppRoutes.productDetail(widget.productId),
+                                ),
+                              );
+                              return;
+                            }
+
+                            ref
                                 .read(cartMutationsProvider.notifier)
                                 .addItem(
                                   variantId: widget.variantId,

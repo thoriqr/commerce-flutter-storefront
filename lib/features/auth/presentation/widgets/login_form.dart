@@ -1,5 +1,4 @@
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
-import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
@@ -14,9 +13,10 @@ import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_st
 import 'package:commerce_flutter_storefront/features/auth/di/google_sign_in_provider.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key, this.redirect});
+  const LoginForm({super.key, this.redirect, this.isEmbedded = false});
 
   final LoginRedirect? redirect;
+  final bool isEmbedded;
 
   @override
   ConsumerState<LoginForm> createState() => _LoginFormState();
@@ -26,6 +26,10 @@ class _LoginFormState extends ConsumerState<LoginForm>
     with SubmittingStateMixin {
   final _formKey = GlobalKey<FormState>();
 
+  bool _isGoogleSigningIn = false;
+
+  bool get _isBusy => isSubmitting || _isGoogleSigningIn;
+
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -34,6 +38,47 @@ class _LoginFormState extends ConsumerState<LoginForm>
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _runGoogleSubmitting(Future<void> Function() action) async {
+    if (_isBusy) {
+      return;
+    }
+
+    setState(() {
+      _isGoogleSigningIn = true;
+    });
+
+    try {
+      await action();
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isGoogleSigningIn = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _finishLogin() async {
+    // Wait until the latest profile has been loaded before
+    // leaving the login page to avoid a guest/authenticated flicker.
+    await ref.read(userProfileProvider.future);
+
+    if (!mounted) return;
+
+    final redirect = widget.redirect;
+
+    if (redirect != null) {
+      context.go(redirect.location);
+      return;
+    }
+
+    if (widget.isEmbedded) {
+      return;
+    }
+
+    context.pop();
   }
 
   Future<void> _login() {
@@ -53,23 +98,12 @@ class _LoginFormState extends ConsumerState<LoginForm>
             ),
           );
 
-      // Wait until the latest profile has been loaded before
-      // leaving the login page to avoid a guest/authenticated flicker.
-      await ref.read(userProfileProvider.future);
-
-      if (!mounted) return;
-
-      if (widget.redirect == LoginRedirect.cart) {
-        context.go(AppRoutes.cart);
-        return;
-      }
-
-      context.pop();
+      await _finishLogin();
     });
   }
 
   Future<void> _googleLogin() {
-    return runSubmitting(() async {
+    return _runGoogleSubmitting(() async {
       final googleSignIn = ref.read(googleSignInProvider);
 
       final account = await googleSignIn.signIn();
@@ -93,18 +127,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
           .read(authMutationsProvider.notifier)
           .googleLogin(GoogleLoginRequest(idToken: idToken));
 
-      // Wait until the latest profile has been loaded before
-      // leaving the login page to avoid a guest/authenticated flicker.
-      await ref.read(userProfileProvider.future);
-
-      if (!mounted) return;
-
-      if (widget.redirect == LoginRedirect.cart) {
-        context.go(AppRoutes.cart);
-        return;
-      }
-
-      context.pop();
+      await _finishLogin();
     });
   }
 
@@ -148,7 +171,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
 
           TextFormField(
             controller: _emailController,
-            enabled: !isSubmitting,
+            enabled: !_isBusy,
             keyboardType: TextInputType.emailAddress,
             textInputAction: TextInputAction.next,
             decoration: const InputDecoration(
@@ -162,7 +185,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
 
           TextFormField(
             controller: _passwordController,
-            enabled: !isSubmitting,
+            enabled: !_isBusy,
             obscureText: true,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
@@ -188,7 +211,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
           const SizedBox(height: 24),
 
           FilledButton(
-            onPressed: isSubmitting ? null : _login,
+            onPressed: _isBusy ? null : _login,
             child: isSubmitting
                 ? const SizedBox(
                     width: 18,
@@ -213,7 +236,10 @@ class _LoginFormState extends ConsumerState<LoginForm>
 
           const SizedBox(height: 24),
 
-          GoogleSignInButton(isLoading: isSubmitting, onPressed: _googleLogin),
+          GoogleSignInButton(
+            isLoading: _isGoogleSigningIn,
+            onPressed: _isBusy ? null : _googleLogin,
+          ),
           const SizedBox(height: 32),
         ],
       ),
