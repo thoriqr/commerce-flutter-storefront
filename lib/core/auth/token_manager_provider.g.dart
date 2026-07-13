@@ -21,7 +21,7 @@ final class TokenManagerProvider
         argument: null,
         retry: null,
         name: r'tokenManagerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -48,4 +48,4 @@ final class TokenManagerProvider
   }
 }
 
-String _$tokenManagerHash() => r'39e82f4eb7e7d103465df70e9bcd967466e63907';
+String _$tokenManagerHash() => r'074f4d49e23228e7ce8fbe0ef0563a2df35db071';

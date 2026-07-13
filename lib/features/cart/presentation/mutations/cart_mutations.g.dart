@@ -33,7 +33,7 @@ final class CartMutationsProvider
   CartMutations create() => CartMutations();
 }
 
-String _$cartMutationsHash() => r'80fd3fe4d2a08f4bdf4211206039d61eaf4b646d';
+String _$cartMutationsHash() => r'0b778c3d3e5be14b96abc04b9668e9cd00b85381';
 
 abstract class _$CartMutations extends $AsyncNotifier<void> {
   FutureOr<void> build();

@@ -20,7 +20,7 @@ final class AppDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
         argument: null,
         retry: null,
         name: r'appDioProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -47,4 +47,4 @@ final class AppDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$appDioHash() => r'75313a09ca142e7feee3a5c2b0d5f7b2e0e3f550';
+String _$appDioHash() => r'b9b8455de0efa801600f49db67dcb9f85aa0692f';

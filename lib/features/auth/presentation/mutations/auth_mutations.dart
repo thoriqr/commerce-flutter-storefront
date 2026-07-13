@@ -1,4 +1,4 @@
-import 'package:commerce_flutter_storefront/core/auth/token_manager_provider.dart';
+import 'package:commerce_flutter_storefront/core/auth/session_manager_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
@@ -8,7 +8,6 @@ import 'package:commerce_flutter_storefront/features/auth/data/models/refresh_re
 import 'package:commerce_flutter_storefront/features/auth/data/models/set_password_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/di/google_sign_in_provider.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,22 +15,21 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_mutations.g.dart';
 
 @riverpod
-class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
+class AuthMutations extends _$AuthMutations with AsyncMutationMixin {
   @override
   FutureOr<void> build() {}
 
-  Future<void> _saveSession(
+  Future<void> _updateAuthenticatedSession(
     AuthTokens tokens, {
     bool invalidateCart = false,
   }) async {
-    final tokenManager = ref.read(tokenManagerProvider);
+    await ref.read(sessionManagerProvider).save(tokens);
 
-    await tokenManager.save(tokens);
-
-    ref.invalidate(isAuthenticatedProvider);
+    // Refresh authenticated user data.
     ref.invalidate(userProfileProvider);
 
     if (invalidateCart) {
+      // Refresh the authenticated user's cart.
       ref.invalidate(cartProvider);
     }
   }
@@ -40,7 +38,7 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
     return guard(() async {
       final tokens = await ref.read(authRepositoryProvider).login(request);
 
-      await _saveSession(tokens, invalidateCart: true);
+      await _updateAuthenticatedSession(tokens, invalidateCart: true);
     });
   }
 
@@ -50,7 +48,7 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
           .read(authRepositoryProvider)
           .googleLogin(request);
 
-      await _saveSession(tokens, invalidateCart: true);
+      await _updateAuthenticatedSession(tokens, invalidateCart: true);
     });
   }
 
@@ -60,7 +58,7 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
           .read(authRepositoryProvider)
           .changePassword(request);
 
-      await _saveSession(tokens);
+      await _updateAuthenticatedSession(tokens);
     });
   }
 
@@ -70,15 +68,15 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
           .read(authRepositoryProvider)
           .setPassword(request);
 
-      await _saveSession(tokens);
+      await _updateAuthenticatedSession(tokens);
     });
   }
 
   Future<void> logout() async {
-    final tokenManager = ref.read(tokenManagerProvider);
+    final sessionManager = ref.read(sessionManagerProvider);
     final googleSignIn = ref.read(googleSignInProvider);
 
-    final refreshToken = await tokenManager.getRefreshToken();
+    final refreshToken = await sessionManager.getRefreshToken();
 
     return guard(() async {
       try {
@@ -93,9 +91,9 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin<void> {
         await googleSignIn.signOut();
 
         // Clear the local application session.
-        await tokenManager.clear();
+        await sessionManager.clear();
 
-        ref.invalidate(isAuthenticatedProvider);
+        // Refresh authenticated resources.
         ref.invalidate(userProfileProvider);
         ref.invalidate(cartProvider);
       }

@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'refresh_dio_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Dio refreshDio(Ref ref) {
   final dio = Dio(
     BaseOptions(

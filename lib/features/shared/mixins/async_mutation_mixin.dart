@@ -1,15 +1,19 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-mixin AsyncMutationMixin<T> on AnyNotifier<AsyncValue<T>, T> {
-  Future<void> guard(Future<T> Function() action) async {
+mixin AsyncMutationMixin on AnyNotifier<AsyncValue<void>, void> {
+  Future<R> guard<R>(Future<R> Function() action) async {
     state = const AsyncLoading();
 
-    state = await AsyncValue.guard(action);
+    final result = await AsyncValue.guard(action);
 
-    final error = state.error;
+    state = result.whenData((_) {});
+
+    final error = result.error;
 
     if (error != null) {
       throw error;
     }
+
+    return result.requireValue;
   }
 }

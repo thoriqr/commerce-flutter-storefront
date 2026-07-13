@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'token_manager_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 TokenManager tokenManager(Ref ref) {
   return TokenManagerImpl(
     ref.watch(secureStorageProvider),

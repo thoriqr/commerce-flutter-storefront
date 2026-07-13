@@ -8,8 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'account_mutations.g.dart';
 
 @riverpod
-class AccountMutations extends _$AccountMutations
-    with AsyncMutationMixin<void> {
+class AccountMutations extends _$AccountMutations with AsyncMutationMixin {
   @override
   FutureOr<void> build() {}
 

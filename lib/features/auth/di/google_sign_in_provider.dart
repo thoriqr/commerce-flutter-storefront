@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'google_sign_in_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 GoogleSignIn googleSignIn(Ref ref) {
   return GoogleSignIn(serverClientId: GoogleAuthConstants.webClientId);
 }

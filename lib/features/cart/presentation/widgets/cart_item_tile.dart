@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/core/utils/image_utils.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/cart.dart';
@@ -15,6 +16,21 @@ class CartItemTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(cartMutationsProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          final message = switch (error) {
+            AppException e => e.message,
+            _ => 'Something went wrong.',
+          };
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        },
+      );
+    });
+
     final optionText = item.options
         .map((e) => '${e.dimension}: ${e.value}')
         .join(' • ');

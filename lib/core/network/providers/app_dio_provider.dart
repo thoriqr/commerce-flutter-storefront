@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_dio_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 Dio appDio(Ref ref) {
   final dio = Dio(
     BaseOptions(
