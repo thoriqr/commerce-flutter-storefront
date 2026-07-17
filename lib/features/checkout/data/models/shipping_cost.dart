@@ -21,7 +21,7 @@ abstract class ShippingService with _$ShippingService {
     required String code,
     required String service,
     required String description,
-    required String cost,
+    required int cost,
     required String etd,
   }) = _ShippingService;
 

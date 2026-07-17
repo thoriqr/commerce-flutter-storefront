@@ -122,3 +122,78 @@ final class WarehouseOriginProvider
 }
 
 String _$warehouseOriginHash() => r'6e36a379c36d7aa3210b1fd70c5d398681f6f7cc';
+
+@ProviderFor(shippingCost)
+final shippingCostProvider = ShippingCostFamily._();
+
+final class ShippingCostProvider
+    extends
+        $FunctionalProvider<
+          AsyncValue<ShippingCost>,
+          ShippingCost,
+          FutureOr<ShippingCost>
+        >
+    with $FutureModifier<ShippingCost>, $FutureProvider<ShippingCost> {
+  ShippingCostProvider._({
+    required ShippingCostFamily super.from,
+    required (int, String) super.argument,
+  }) : super(
+         retry: null,
+         name: r'shippingCostProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$shippingCostHash();
+
+  @override
+  String toString() {
+    return r'shippingCostProvider'
+        ''
+        '$argument';
+  }
+
+  @$internal
+  @override
+  $FutureProviderElement<ShippingCost> $createElement(
+    $ProviderPointer pointer,
+  ) => $FutureProviderElement(pointer);
+
+  @override
+  FutureOr<ShippingCost> create(Ref ref) {
+    final argument = this.argument as (int, String);
+    return shippingCost(ref, argument.$1, argument.$2);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is ShippingCostProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
+}
+
+String _$shippingCostHash() => r'66f042d808e650466aaf78ed89cb51b3e246c5b7';
+
+final class ShippingCostFamily extends $Family
+    with $FunctionalFamilyOverride<FutureOr<ShippingCost>, (int, String)> {
+  ShippingCostFamily._()
+    : super(
+        retry: null,
+        name: r'shippingCostProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  ShippingCostProvider call(int sessionId, String courier) =>
+      ShippingCostProvider._(argument: (sessionId, courier), from: this);
+
+  @override
+  String toString() => r'shippingCostProvider';
+}

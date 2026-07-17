@@ -26,7 +26,7 @@ _ShippingService _$ShippingServiceFromJson(Map<String, dynamic> json) =>
       code: json['code'] as String,
       service: json['service'] as String,
       description: json['description'] as String,
-      cost: json['cost'] as String,
+      cost: (json['cost'] as num).toInt(),
       etd: json['etd'] as String,
     );
 

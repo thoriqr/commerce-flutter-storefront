@@ -287,7 +287,7 @@ as List<ShippingService>,
 /// @nodoc
 mixin _$ShippingService {
 
- String get name; String get code; String get service; String get description; String get cost; String get etd;
+ String get name; String get code; String get service; String get description; int get cost; String get etd;
 /// Create a copy of ShippingService
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -320,7 +320,7 @@ abstract mixin class $ShippingServiceCopyWith<$Res>  {
   factory $ShippingServiceCopyWith(ShippingService value, $Res Function(ShippingService) _then) = _$ShippingServiceCopyWithImpl;
 @useResult
 $Res call({
- String name, String code, String service, String description, String cost, String etd
+ String name, String code, String service, String description, int cost, String etd
 });
 
 
@@ -344,7 +344,7 @@ as String,code: null == code ? _self.code : code // ignore: cast_nullable_to_non
 as String,service: null == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,cost: null == cost ? _self.cost : cost // ignore: cast_nullable_to_non_nullable
-as String,etd: null == etd ? _self.etd : etd // ignore: cast_nullable_to_non_nullable
+as int,etd: null == etd ? _self.etd : etd // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -430,7 +430,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String code,  String service,  String description,  String cost,  String etd)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String name,  String code,  String service,  String description,  int cost,  String etd)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ShippingService() when $default != null:
 return $default(_that.name,_that.code,_that.service,_that.description,_that.cost,_that.etd);case _:
@@ -451,7 +451,7 @@ return $default(_that.name,_that.code,_that.service,_that.description,_that.cost
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String code,  String service,  String description,  String cost,  String etd)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String name,  String code,  String service,  String description,  int cost,  String etd)  $default,) {final _that = this;
 switch (_that) {
 case _ShippingService():
 return $default(_that.name,_that.code,_that.service,_that.description,_that.cost,_that.etd);case _:
@@ -471,7 +471,7 @@ return $default(_that.name,_that.code,_that.service,_that.description,_that.cost
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String code,  String service,  String description,  String cost,  String etd)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String name,  String code,  String service,  String description,  int cost,  String etd)?  $default,) {final _that = this;
 switch (_that) {
 case _ShippingService() when $default != null:
 return $default(_that.name,_that.code,_that.service,_that.description,_that.cost,_that.etd);case _:
@@ -493,7 +493,7 @@ class _ShippingService implements ShippingService {
 @override final  String code;
 @override final  String service;
 @override final  String description;
-@override final  String cost;
+@override final  int cost;
 @override final  String etd;
 
 /// Create a copy of ShippingService
@@ -529,7 +529,7 @@ abstract mixin class _$ShippingServiceCopyWith<$Res> implements $ShippingService
   factory _$ShippingServiceCopyWith(_ShippingService value, $Res Function(_ShippingService) _then) = __$ShippingServiceCopyWithImpl;
 @override @useResult
 $Res call({
- String name, String code, String service, String description, String cost, String etd
+ String name, String code, String service, String description, int cost, String etd
 });
 
 
@@ -553,7 +553,7 @@ as String,code: null == code ? _self.code : code // ignore: cast_nullable_to_non
 as String,service: null == service ? _self.service : service // ignore: cast_nullable_to_non_nullable
 as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
 as String,cost: null == cost ? _self.cost : cost // ignore: cast_nullable_to_non_nullable
-as String,etd: null == etd ? _self.etd : etd // ignore: cast_nullable_to_non_nullable
+as int,etd: null == etd ? _self.etd : etd // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }

@@ -2,8 +2,6 @@ import 'package:commerce_flutter_storefront/features/checkout/data/models/confir
 import 'package:commerce_flutter_storefront/features/checkout/data/models/create_checkout_response.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/set_checkout_address_request.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/set_shipping_request.dart';
-import 'package:commerce_flutter_storefront/features/checkout/data/models/shipping_cost.dart';
-import 'package:commerce_flutter_storefront/features/checkout/data/models/shipping_courier_request.dart';
 import 'package:commerce_flutter_storefront/features/checkout/di/checkout_repository_provider.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/providers/checkout_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
@@ -21,19 +19,6 @@ class CheckoutMutations extends _$CheckoutMutations with AsyncMutationMixin {
       final response = await ref
           .read(checkoutRepositoryProvider)
           .createCheckoutSession();
-
-      return response;
-    });
-  }
-
-  Future<ShippingCost> getShippingCost(
-    int sessionId,
-    ShippingCourierRequest request,
-  ) {
-    return guard(() async {
-      final response = await ref
-          .read(checkoutRepositoryProvider)
-          .getShippingCost(sessionId, request);
 
       return response;
     });
