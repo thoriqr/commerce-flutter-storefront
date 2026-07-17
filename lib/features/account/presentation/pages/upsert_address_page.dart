@@ -26,7 +26,7 @@ class UpsertAddressPage extends ConsumerWidget {
       );
     }
 
-    final addressAsync = ref.watch(userAddressProvider(addressId!));
+    final address = ref.watch(userAddressProvider(addressId!));
 
     return Scaffold(
       appBar: AppHeader(
@@ -34,20 +34,22 @@ class UpsertAddressPage extends ConsumerWidget {
         showCartButton: false,
         onSearch: (_) {},
       ),
-      body: addressAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+      body: switch (address) {
+        AsyncLoading() => const Center(child: CircularProgressIndicator()),
 
-        data: (address) => UpsertAddressForm(
+        AsyncError(:final error) => AccountErrorView(
+          error: error,
+          onRetry: () {
+            ref.invalidate(userAddressProvider(addressId!));
+          },
+        ),
+
+        AsyncData(:final value) => UpsertAddressForm(
           addressId: addressId,
-          initialValue: address,
+          initialValue: value,
           onCreated: onCreated,
         ),
-
-        error: (error, _) => AccountErrorView(
-          error: error,
-          onRetry: () => ref.invalidate(userAddressProvider(addressId!)),
-        ),
-      ),
+      },
     );
   }
 }

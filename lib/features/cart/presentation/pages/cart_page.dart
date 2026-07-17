@@ -17,6 +17,34 @@ class CartPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cart = ref.watch(cartProvider);
 
+    final body = switch (cart) {
+      AsyncLoading() => Skeletonizer(
+        enabled: true,
+        child: CartContent(
+          cart: CartMock.item(),
+          onRefresh: () {
+            return ref.refresh(cartProvider.future);
+          },
+        ),
+      ),
+
+      AsyncError(:final error) =>
+        error is AppException && error.code == ErrorCodes.unauthorized
+            ? const CartGuestView()
+            : CartErrorView(
+                onRetry: () {
+                  ref.invalidate(cartProvider);
+                },
+              ),
+
+      AsyncData(:final value) => CartContent(
+        cart: value,
+        onRefresh: () {
+          return ref.refresh(cartProvider.future);
+        },
+      ),
+    };
+
     return Scaffold(
       appBar: AppHeader(
         title: 'Shopping Cart',
@@ -25,28 +53,7 @@ class CartPage extends ConsumerWidget {
         showMenuButton: true,
         onSearch: (_) {},
       ),
-      body: cart.when(
-        loading: () => Skeletonizer(
-          enabled: true,
-          child: CartContent(
-            cart: CartMock.item(),
-            onRefresh: () => ref.refresh(cartProvider.future),
-          ),
-        ),
-
-        data: (cart) => CartContent(
-          cart: cart,
-          onRefresh: () => ref.refresh(cartProvider.future),
-        ),
-
-        error: (error, _) {
-          if (error is AppException && error.code == ErrorCodes.unauthorized) {
-            return const CartGuestView();
-          }
-
-          return CartErrorView(onRetry: () => ref.invalidate(cartProvider));
-        },
-      ),
+      body: body,
     );
   }
 }

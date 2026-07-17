@@ -4,6 +4,7 @@ import 'package:commerce_flutter_storefront/features/checkout/presentation/widge
 import 'package:commerce_flutter_storefront/features/checkout/presentation/widgets/checkout_item_tile.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/widgets/checkout_shipping_card.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/widgets/checkout_summary_card.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/widgets/checkout_warehouse_card.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutContent extends StatelessWidget {
@@ -30,6 +31,10 @@ class CheckoutContent extends StatelessWidget {
 
           const SizedBox(height: 16),
 
+          const CheckoutWarehouseCard(),
+
+          const SizedBox(height: 16),
+
           CheckoutShippingCard(checkout: checkout),
 
           const SizedBox(height: 16),
@@ -42,8 +47,6 @@ class CheckoutContent extends StatelessWidget {
           const SizedBox(height: 16),
 
           CheckoutSummaryCard(checkout: checkout),
-
-          const SizedBox(height: 100),
         ],
       ),
     );

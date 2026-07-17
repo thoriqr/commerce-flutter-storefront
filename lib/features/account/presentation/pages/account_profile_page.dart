@@ -17,40 +17,29 @@ class AccountProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(userProfileProvider);
 
-    return profile.when(
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+    final body = switch (profile) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
 
-      data: (user) {
-        return Scaffold(
-          appBar: AppHeader(
-            title: 'Profile',
-            showCartButton: false,
-            onSearch: (_) {},
-          ),
-          body: AccountProfileForm(user: user),
-        );
-      },
+      AsyncError(:final error) =>
+        error is AppException && error.code == ErrorCodes.unauthorized
+            ? const LoginPage()
+            : AccountErrorView(
+                error: error,
+                onRetry: () {
+                  ref.invalidate(userProfileProvider);
+                },
+              ),
 
-      error: (error, _) {
-        if (error is AppException && error.code == ErrorCodes.unauthorized) {
-          return const LoginPage();
-        }
+      AsyncData(:final value) => AccountProfileForm(user: value),
+    };
 
-        return Scaffold(
-          appBar: AppHeader(
-            title: 'Profile',
-            showCartButton: false,
-            onSearch: (_) {},
-          ),
-          body: AccountErrorView(
-            error: error,
-            onRetry: () {
-              ref.invalidate(userProfileProvider);
-            },
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppHeader(
+        title: 'Profile',
+        showCartButton: false,
+        onSearch: (_) {},
+      ),
+      body: body,
     );
   }
 }

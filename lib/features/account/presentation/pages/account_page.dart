@@ -16,30 +16,25 @@ class AccountPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(userProfileProvider);
 
-    return profile.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+    return switch (profile) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
 
-      data: (user) {
-        return AccountAuthenticatedPage(
-          user: user,
-          onRefresh: () {
-            return ref.refresh(userProfileProvider.future);
-          },
-        );
-      },
+      AsyncError(:final error) =>
+        error is AppException && error.code == ErrorCodes.unauthorized
+            ? const LoginPage(showAppBar: false, isEmbedded: true)
+            : AccountErrorView(
+                error: error,
+                onRetry: () {
+                  ref.invalidate(userProfileProvider);
+                },
+              ),
 
-      error: (error, _) {
-        if (error is AppException && error.code == ErrorCodes.unauthorized) {
-          return const LoginPage(showAppBar: false, isEmbedded: true);
-        }
-
-        return AccountErrorView(
-          error: error,
-          onRetry: () {
-            ref.invalidate(userProfileProvider);
-          },
-        );
-      },
-    );
+      AsyncData(:final value) => AccountAuthenticatedPage(
+        user: value,
+        onRefresh: () {
+          return ref.refresh(userProfileProvider.future);
+        },
+      ),
+    };
   }
 }

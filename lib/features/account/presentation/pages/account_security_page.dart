@@ -16,42 +16,36 @@ class AccountSecurityPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(userProfileProvider);
 
-    return profile.when(
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+    final body = switch (profile) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
 
-      data: (user) {
-        return Scaffold(
-          appBar: AppHeader(
-            title: user.hasPassword ? 'Change Password' : 'Create Password',
-            showCartButton: false,
-            onSearch: (_) {},
-          ),
-          body: user.hasPassword
-              ? const ChangePasswordForm()
-              : const SetPasswordForm(),
-        );
-      },
+      AsyncError(:final error) =>
+        error is AppException && error.code == ErrorCodes.unauthorized
+            ? const LoginPage()
+            : AccountErrorView(
+                error: error,
+                onRetry: () {
+                  ref.invalidate(userProfileProvider);
+                },
+              ),
 
-      error: (error, _) {
-        if (error is AppException && error.code == ErrorCodes.unauthorized) {
-          return const LoginPage();
-        }
+      AsyncData(:final value) =>
+        value.hasPassword
+            ? const ChangePasswordForm()
+            : const SetPasswordForm(),
+    };
 
-        return Scaffold(
-          appBar: AppHeader(
-            title: 'Security',
-            showCartButton: false,
-            onSearch: (_) {},
-          ),
-          body: AccountErrorView(
-            error: error,
-            onRetry: () {
-              ref.invalidate(userProfileProvider);
-            },
-          ),
-        );
-      },
+    return Scaffold(
+      appBar: AppHeader(
+        title: switch (profile) {
+          AsyncData(:final value) =>
+            value.hasPassword ? 'Change Password' : 'Create Password',
+          _ => 'Security',
+        },
+        showCartButton: false,
+        onSearch: (_) {},
+      ),
+      body: body,
     );
   }
 }
