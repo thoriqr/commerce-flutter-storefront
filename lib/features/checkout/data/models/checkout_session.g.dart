@@ -57,7 +57,7 @@ const _$CheckoutBlockReasonEnumMap = {
 
 _CheckoutUserAddress _$CheckoutUserAddressFromJson(Map<String, dynamic> json) =>
     _CheckoutUserAddress(
-      id: (json['id'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt(),
       recipientName: json['recipientName'] as String,
       phone: json['phone'] as String,
       addressLine: json['addressLine'] as String,

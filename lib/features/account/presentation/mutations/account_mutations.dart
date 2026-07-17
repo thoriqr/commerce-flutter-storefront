@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/account/data/models/create_address_response.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/di/account_repository_provider.dart';
@@ -20,12 +21,16 @@ class AccountMutations extends _$AccountMutations with AsyncMutationMixin {
     });
   }
 
-  Future<void> createAddress(UpsertAddressRequest request) {
+  Future<CreateAddressResponse> createAddress(UpsertAddressRequest request) {
     return guard(() async {
-      await ref.read(accountRepositoryProvider).createAddress(request);
+      final response = await ref
+          .read(accountRepositoryProvider)
+          .createAddress(request);
 
       ref.invalidate(userAddressesProvider);
       ref.invalidate(userProfileProvider);
+
+      return response;
     });
   }
 

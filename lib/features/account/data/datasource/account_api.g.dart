@@ -139,12 +139,14 @@ class _AccountApi implements AccountApi {
   }
 
   @override
-  Future<ApiResponse<void>> createAddress(UpsertAddressRequest request) async {
+  Future<ApiResponse<CreateAddressResponse>> createAddress(
+    UpsertAddressRequest request,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
-    final _options = _setStreamType<ApiResponse<void>>(
+    final _options = _setStreamType<ApiResponse<CreateAddressResponse>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -155,9 +157,12 @@ class _AccountApi implements AccountApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<void> _value;
+    late ApiResponse<CreateAddressResponse> _value;
     try {
-      _value = ApiResponse<void>.fromJson(_result.data!, (json) => () {}());
+      _value = ApiResponse<CreateAddressResponse>.fromJson(
+        _result.data!,
+        (json) => CreateAddressResponse.fromJson(json as Map<String, dynamic>),
+      );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

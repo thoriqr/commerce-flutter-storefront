@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/models/api_response.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/create_address_response.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
@@ -28,7 +29,9 @@ abstract class AccountApi {
   Future<ApiResponse<UserAddressDetail>> getUserAddress(@Path("id") int id);
 
   @POST("/user/addresses")
-  Future<ApiResponse<void>> createAddress(@Body() UpsertAddressRequest request);
+  Future<ApiResponse<CreateAddressResponse>> createAddress(
+    @Body() UpsertAddressRequest request,
+  );
 
   @PUT("/user/addresses/{id}")
   Future<ApiResponse<void>> updateAddress(

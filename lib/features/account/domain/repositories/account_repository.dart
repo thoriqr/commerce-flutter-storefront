@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/account/data/models/create_address_response.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
@@ -13,7 +14,7 @@ abstract interface class AccountRepository {
 
   Future<UserAddressDetail> getUserAddress(int id);
 
-  Future<void> createAddress(UpsertAddressRequest request);
+  Future<CreateAddressResponse> createAddress(UpsertAddressRequest request);
 
   Future<void> updateAddress(int id, UpsertAddressRequest request);
 

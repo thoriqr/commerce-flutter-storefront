@@ -51,7 +51,7 @@ abstract class CheckoutSession with _$CheckoutSession {
 @freezed
 abstract class CheckoutUserAddress with _$CheckoutUserAddress {
   const factory CheckoutUserAddress({
-    required int id,
+    required int? id,
     required String recipientName,
     required String phone,
     required String addressLine,

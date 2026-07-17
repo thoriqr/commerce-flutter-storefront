@@ -347,7 +347,7 @@ $CheckoutUserAddressCopyWith<$Res>? get address {
 /// @nodoc
 mixin _$CheckoutUserAddress {
 
- int get id; String get recipientName; String get phone; String get addressLine; String get provinceName; String get cityName; String get districtName; String get postalCode;
+ int? get id; String get recipientName; String get phone; String get addressLine; String get provinceName; String get cityName; String get districtName; String get postalCode;
 /// Create a copy of CheckoutUserAddress
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -380,7 +380,7 @@ abstract mixin class $CheckoutUserAddressCopyWith<$Res>  {
   factory $CheckoutUserAddressCopyWith(CheckoutUserAddress value, $Res Function(CheckoutUserAddress) _then) = _$CheckoutUserAddressCopyWithImpl;
 @useResult
 $Res call({
- int id, String recipientName, String phone, String addressLine, String provinceName, String cityName, String districtName, String postalCode
+ int? id, String recipientName, String phone, String addressLine, String provinceName, String cityName, String districtName, String postalCode
 });
 
 
@@ -397,10 +397,10 @@ class _$CheckoutUserAddressCopyWithImpl<$Res>
 
 /// Create a copy of CheckoutUserAddress
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? recipientName = null,Object? phone = null,Object? addressLine = null,Object? provinceName = null,Object? cityName = null,Object? districtName = null,Object? postalCode = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? recipientName = null,Object? phone = null,Object? addressLine = null,Object? provinceName = null,Object? cityName = null,Object? districtName = null,Object? postalCode = null,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String,addressLine: null == addressLine ? _self.addressLine : addressLine // ignore: cast_nullable_to_non_nullable
 as String,provinceName: null == provinceName ? _self.provinceName : provinceName // ignore: cast_nullable_to_non_nullable
@@ -492,7 +492,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String recipientName,  String phone,  String addressLine,  String provinceName,  String cityName,  String districtName,  String postalCode)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String recipientName,  String phone,  String addressLine,  String provinceName,  String cityName,  String districtName,  String postalCode)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _CheckoutUserAddress() when $default != null:
 return $default(_that.id,_that.recipientName,_that.phone,_that.addressLine,_that.provinceName,_that.cityName,_that.districtName,_that.postalCode);case _:
@@ -513,7 +513,7 @@ return $default(_that.id,_that.recipientName,_that.phone,_that.addressLine,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String recipientName,  String phone,  String addressLine,  String provinceName,  String cityName,  String districtName,  String postalCode)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String recipientName,  String phone,  String addressLine,  String provinceName,  String cityName,  String districtName,  String postalCode)  $default,) {final _that = this;
 switch (_that) {
 case _CheckoutUserAddress():
 return $default(_that.id,_that.recipientName,_that.phone,_that.addressLine,_that.provinceName,_that.cityName,_that.districtName,_that.postalCode);case _:
@@ -533,7 +533,7 @@ return $default(_that.id,_that.recipientName,_that.phone,_that.addressLine,_that
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String recipientName,  String phone,  String addressLine,  String provinceName,  String cityName,  String districtName,  String postalCode)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String recipientName,  String phone,  String addressLine,  String provinceName,  String cityName,  String districtName,  String postalCode)?  $default,) {final _that = this;
 switch (_that) {
 case _CheckoutUserAddress() when $default != null:
 return $default(_that.id,_that.recipientName,_that.phone,_that.addressLine,_that.provinceName,_that.cityName,_that.districtName,_that.postalCode);case _:
@@ -551,7 +551,7 @@ class _CheckoutUserAddress implements CheckoutUserAddress {
   const _CheckoutUserAddress({required this.id, required this.recipientName, required this.phone, required this.addressLine, required this.provinceName, required this.cityName, required this.districtName, required this.postalCode});
   factory _CheckoutUserAddress.fromJson(Map<String, dynamic> json) => _$CheckoutUserAddressFromJson(json);
 
-@override final  int id;
+@override final  int? id;
 @override final  String recipientName;
 @override final  String phone;
 @override final  String addressLine;
@@ -593,7 +593,7 @@ abstract mixin class _$CheckoutUserAddressCopyWith<$Res> implements $CheckoutUse
   factory _$CheckoutUserAddressCopyWith(_CheckoutUserAddress value, $Res Function(_CheckoutUserAddress) _then) = __$CheckoutUserAddressCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String recipientName, String phone, String addressLine, String provinceName, String cityName, String districtName, String postalCode
+ int? id, String recipientName, String phone, String addressLine, String provinceName, String cityName, String districtName, String postalCode
 });
 
 
@@ -610,10 +610,10 @@ class __$CheckoutUserAddressCopyWithImpl<$Res>
 
 /// Create a copy of CheckoutUserAddress
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? recipientName = null,Object? phone = null,Object? addressLine = null,Object? provinceName = null,Object? cityName = null,Object? districtName = null,Object? postalCode = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? recipientName = null,Object? phone = null,Object? addressLine = null,Object? provinceName = null,Object? cityName = null,Object? districtName = null,Object? postalCode = null,}) {
   return _then(_CheckoutUserAddress(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as int,recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as int?,recipientName: null == recipientName ? _self.recipientName : recipientName // ignore: cast_nullable_to_non_nullable
 as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String,addressLine: null == addressLine ? _self.addressLine : addressLine // ignore: cast_nullable_to_non_nullable
 as String,provinceName: null == provinceName ? _self.provinceName : provinceName // ignore: cast_nullable_to_non_nullable

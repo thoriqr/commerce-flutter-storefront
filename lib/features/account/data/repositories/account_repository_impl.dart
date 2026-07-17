@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/core/network/api_response_extension.dart';
 import 'package:commerce_flutter_storefront/features/account/data/datasource/account_api.dart';
+import 'package:commerce_flutter_storefront/features/account/data/models/create_address_response.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
@@ -33,7 +34,7 @@ class AccountRepositoryImpl implements AccountRepository {
   }
 
   @override
-  Future<void> createAddress(UpsertAddressRequest request) {
+  Future<CreateAddressResponse> createAddress(UpsertAddressRequest request) {
     return _api.createAddress(request).unwrap();
   }
 

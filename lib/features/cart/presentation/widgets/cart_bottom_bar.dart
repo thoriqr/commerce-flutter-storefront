@@ -1,11 +1,14 @@
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/cart.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/checkout_mutations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class CartBottomBar extends ConsumerWidget {
   const CartBottomBar({super.key, required this.cart, required this.enabled});
@@ -15,9 +18,26 @@ class CartBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(checkoutMutationsProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          final message = switch (error) {
+            AppException e => e.message,
+            _ => 'Something went wrong.',
+          };
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        },
+      );
+    });
+
     final theme = Theme.of(context);
 
     final auth = ref.watch(isAuthenticatedProvider);
+
+    final checkoutMutation = ref.watch(checkoutMutationsProvider);
 
     final isAuthenticated = switch (auth) {
       AsyncData(:final value) => value,
@@ -84,9 +104,10 @@ class CartBottomBar extends ConsumerWidget {
             const SizedBox(height: 16),
 
             FilledButton(
-              onPressed: !enabled || !cart.canCheckout
+              onPressed:
+                  !enabled || !cart.canCheckout || checkoutMutation.isLoading
                   ? null
-                  : () {
+                  : () async {
                       if (!isAuthenticated) {
                         AuthRoutes.pushLogin(
                           context,
@@ -95,13 +116,28 @@ class CartBottomBar extends ConsumerWidget {
                         return;
                       }
 
-                      // TODO:
-                      // Navigate to checkout page.
+                      final response = await ref
+                          .read(checkoutMutationsProvider.notifier)
+                          .createCheckoutSession();
+
+                      if (!context.mounted) {
+                        return;
+                      }
+
+                      context.push(
+                        AppRoutes.checkoutSession(response.sessionId),
+                      );
                     },
               style: FilledButton.styleFrom(
                 minimumSize: const Size.fromHeight(52),
               ),
-              child: Text('Checkout (${cart.summary.totalItems})'),
+              child: checkoutMutation.isLoading
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text('Checkout (${cart.summary.totalItems})'),
             ),
           ],
         ),

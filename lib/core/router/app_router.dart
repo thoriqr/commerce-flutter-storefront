@@ -11,6 +11,7 @@ import 'package:commerce_flutter_storefront/features/auth/constants/login_redire
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/pages/cart_page.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/pages/category_tree_page.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:commerce_flutter_storefront/features/home/presentation/pages/home_page.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/pages/product_detail_page.dart';
@@ -94,15 +95,27 @@ final router = GoRouter(
 
     GoRoute(
       path: AccountRoutes.addressNew,
-      builder: (_, _) => const UpsertAddressPage(),
+      builder: (context, state) {
+        return UpsertAddressPage(
+          onCreated: state.extra as Future<void> Function(int addressId)?,
+        );
+      },
     ),
-
     GoRoute(
       path: AccountRoutes.address,
       builder: (context, state) {
         final id = int.parse(state.pathParameters['id']!);
 
         return UpsertAddressPage(addressId: id);
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutes.checkout,
+      builder: (context, state) {
+        final sessionId = int.parse(state.pathParameters['sessionId']!);
+
+        return CheckoutPage(sessionId: sessionId);
       },
     ),
   ],

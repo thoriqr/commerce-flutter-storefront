@@ -15,10 +15,16 @@ import 'package:commerce_flutter_storefront/features/shipping/presentation/widge
 import 'package:go_router/go_router.dart';
 
 class UpsertAddressForm extends ConsumerStatefulWidget {
-  const UpsertAddressForm({super.key, this.addressId, this.initialValue});
+  const UpsertAddressForm({
+    super.key,
+    this.addressId,
+    this.initialValue,
+    this.onCreated,
+  });
 
   final int? addressId;
   final UserAddressDetail? initialValue;
+  final Future<void> Function(int addressId)? onCreated;
 
   bool get isEdit => addressId != null;
 
@@ -120,15 +126,21 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm>
 
       final mutation = ref.read(accountMutationsProvider.notifier);
 
+      int? createdAddressId;
+
       if (widget.isEdit) {
         await mutation.updateAddress(widget.addressId!, request);
       } else {
-        await mutation.createAddress(request);
+        final response = await mutation.createAddress(request);
+
+        createdAddressId = response.addressId;
+
+        await widget.onCreated?.call(createdAddressId);
       }
 
       if (!mounted) return;
 
-      context.pop();
+      context.pop(createdAddressId);
     });
   }
 

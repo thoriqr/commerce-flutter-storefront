@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class UpsertAddressPage extends ConsumerWidget {
-  const UpsertAddressPage({super.key, this.addressId});
+  const UpsertAddressPage({super.key, this.addressId, this.onCreated});
 
   final int? addressId;
+  final Future<void> Function(int addressId)? onCreated;
 
   bool get isEdit => addressId != null;
 
@@ -21,7 +22,7 @@ class UpsertAddressPage extends ConsumerWidget {
           showCartButton: false,
           onSearch: (_) {},
         ),
-        body: const UpsertAddressForm(),
+        body: UpsertAddressForm(onCreated: onCreated),
       );
     }
 
@@ -36,8 +37,11 @@ class UpsertAddressPage extends ConsumerWidget {
       body: addressAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
 
-        data: (address) =>
-            UpsertAddressForm(addressId: addressId, initialValue: address),
+        data: (address) => UpsertAddressForm(
+          addressId: addressId,
+          initialValue: address,
+          onCreated: onCreated,
+        ),
 
         error: (error, _) => AccountErrorView(
           error: error,
