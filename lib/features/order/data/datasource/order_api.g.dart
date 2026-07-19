@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'product_api.dart';
+part of 'order_api.dart';
 
 // dart format off
 
@@ -10,8 +10,8 @@ part of 'product_api.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main,avoid_redundant_argument_values
 
-class _ProductApi implements ProductApi {
-  _ProductApi(this._dio, {this.baseUrl, this.errorLogger});
+class _OrderApi implements OrderApi {
+  _OrderApi(this._dio, {this.baseUrl, this.errorLogger});
 
   final Dio _dio;
 
@@ -20,39 +20,27 @@ class _ProductApi implements ProductApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ApiResponseWithMeta<List<ProductSummary>, CursorMeta>>
-  getProductsBySearch(String query, Map<String, dynamic> queryParams) async {
+  Future<ApiResponse<OrderDetail>> getOrderDetail(String orderCode) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'q': query};
-    queryParameters.addAll(queryParams);
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<ApiResponseWithMeta<List<ProductSummary>, CursorMeta>>(
-          Options(method: 'GET', headers: _headers, extra: _extra)
-              .compose(
-                _dio.options,
-                '/store/products/by-search',
-                queryParameters: queryParameters,
-                data: _data,
-              )
-              .copyWith(
-                baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
-              ),
-        );
+    final _options = _setStreamType<ApiResponse<OrderDetail>>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/user/orders/${orderCode}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseWithMeta<List<ProductSummary>, CursorMeta> _value;
+    late ApiResponse<OrderDetail> _value;
     try {
-      _value = ApiResponseWithMeta<List<ProductSummary>, CursorMeta>.fromJson(
+      _value = ApiResponse<OrderDetail>.fromJson(
         _result.data!,
-        (json) => json is List<dynamic>
-            ? json
-                  .map<ProductSummary>(
-                    (i) => ProductSummary.fromJson(i as Map<String, dynamic>),
-                  )
-                  .toList()
-            : List.empty(),
-        (json) => CursorMeta.fromJson(json as Map<String, dynamic>),
+        (json) => OrderDetail.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
@@ -62,22 +50,20 @@ class _ProductApi implements ProductApi {
   }
 
   @override
-  Future<ApiResponseWithMeta<List<ProductSummary>, CursorMeta>>
-  getProductsByCategory(
-    String slugPath,
+  Future<ApiResponseWithMeta<List<Order>, PaginationMeta>> getOrders(
     Map<String, dynamic> queryParams,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'slugPath': slugPath};
+    final queryParameters = <String, dynamic>{};
     queryParameters.addAll(queryParams);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options =
-        _setStreamType<ApiResponseWithMeta<List<ProductSummary>, CursorMeta>>(
+        _setStreamType<ApiResponseWithMeta<List<Order>, PaginationMeta>>(
           Options(method: 'GET', headers: _headers, extra: _extra)
               .compose(
                 _dio.options,
-                '/store/products/by-category',
+                '/user/orders',
                 queryParameters: queryParameters,
                 data: _data,
               )
@@ -86,18 +72,16 @@ class _ProductApi implements ProductApi {
               ),
         );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseWithMeta<List<ProductSummary>, CursorMeta> _value;
+    late ApiResponseWithMeta<List<Order>, PaginationMeta> _value;
     try {
-      _value = ApiResponseWithMeta<List<ProductSummary>, CursorMeta>.fromJson(
+      _value = ApiResponseWithMeta<List<Order>, PaginationMeta>.fromJson(
         _result.data!,
         (json) => json is List<dynamic>
             ? json
-                  .map<ProductSummary>(
-                    (i) => ProductSummary.fromJson(i as Map<String, dynamic>),
-                  )
+                  .map<Order>((i) => Order.fromJson(i as Map<String, dynamic>))
                   .toList()
             : List.empty(),
-        (json) => CursorMeta.fromJson(json as Map<String, dynamic>),
+        (json) => PaginationMeta.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
@@ -107,70 +91,25 @@ class _ProductApi implements ProductApi {
   }
 
   @override
-  Future<ApiResponseWithMeta<List<ProductSummary>, CursorMeta>>
-  getProductsByCollection(String slug, Map<String, dynamic> queryParams) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'slug': slug};
-    queryParameters.addAll(queryParams);
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<ApiResponseWithMeta<List<ProductSummary>, CursorMeta>>(
-          Options(method: 'GET', headers: _headers, extra: _extra)
-              .compose(
-                _dio.options,
-                '/store/products/by-collection',
-                queryParameters: queryParameters,
-                data: _data,
-              )
-              .copyWith(
-                baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
-              ),
-        );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponseWithMeta<List<ProductSummary>, CursorMeta> _value;
-    try {
-      _value = ApiResponseWithMeta<List<ProductSummary>, CursorMeta>.fromJson(
-        _result.data!,
-        (json) => json is List<dynamic>
-            ? json
-                  .map<ProductSummary>(
-                    (i) => ProductSummary.fromJson(i as Map<String, dynamic>),
-                  )
-                  .toList()
-            : List.empty(),
-        (json) => CursorMeta.fromJson(json as Map<String, dynamic>),
-      );
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, response: _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<ApiResponse<ProductDetail>> getProductDetail(int id) async {
+  Future<ApiResponse<void>> cancelOrder(String orderCode) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ApiResponse<ProductDetail>>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
+    final _options = _setStreamType<ApiResponse<void>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/store/products/${id}',
+            '/user/orders/${orderCode}/cancel',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<ProductDetail> _value;
+    late ApiResponse<void> _value;
     try {
-      _value = ApiResponse<ProductDetail>.fromJson(
-        _result.data!,
-        (json) => ProductDetail.fromJson(json as Map<String, dynamic>),
-      );
+      _value = ApiResponse<void>.fromJson(_result.data!, (json) => () {}());
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -179,30 +118,56 @@ class _ProductApi implements ProductApi {
   }
 
   @override
-  Future<ApiResponse<ProductVariantDetail>> getProductVariantDetail(
-    int productId,
-    int variantId,
+  Future<ApiResponse<void>> confirmDelivered(String orderCode) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<ApiResponse<void>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/user/orders/${orderCode}/deliver',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ApiResponse<void> _value;
+    try {
+      _value = ApiResponse<void>.fromJson(_result.data!, (json) => () {}());
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ApiResponse<SnapTokenResponse>> createSnapToken(
+    String orderCode,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ApiResponse<ProductVariantDetail>>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
+    final _options = _setStreamType<ApiResponse<SnapTokenResponse>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/store/products/${productId}/variants/${variantId}',
+            '/user/orders/${orderCode}/snap-token',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<ProductVariantDetail> _value;
+    late ApiResponse<SnapTokenResponse> _value;
     try {
-      _value = ApiResponse<ProductVariantDetail>.fromJson(
+      _value = ApiResponse<SnapTokenResponse>.fromJson(
         _result.data!,
-        (json) => ProductVariantDetail.fromJson(json as Map<String, dynamic>),
+        (json) => SnapTokenResponse.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);

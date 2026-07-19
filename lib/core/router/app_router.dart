@@ -13,6 +13,7 @@ import 'package:commerce_flutter_storefront/features/cart/presentation/pages/car
 import 'package:commerce_flutter_storefront/features/category/presentation/pages/category_tree_page.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:commerce_flutter_storefront/features/home/presentation/pages/home_page.dart';
+import 'package:commerce_flutter_storefront/features/order/presentation/pages/order_detail_page.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/pages/product_detail_page.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/pages/product_listing_page.dart';
@@ -116,6 +117,15 @@ final router = GoRouter(
         final sessionId = int.parse(state.pathParameters['sessionId']!);
 
         return CheckoutPage(sessionId: sessionId);
+      },
+    ),
+
+    GoRoute(
+      path: AppRoutes.order,
+      builder: (context, state) {
+        final orderCode = state.pathParameters['orderCode']!;
+
+        return OrderDetailPage(orderCode: orderCode);
       },
     ),
   ],

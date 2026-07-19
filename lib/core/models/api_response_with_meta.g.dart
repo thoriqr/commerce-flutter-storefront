@@ -6,20 +6,22 @@ part of 'api_response_with_meta.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_ApiResponseWithMeta<T> _$ApiResponseWithMetaFromJson<T>(
+_ApiResponseWithMeta<T, M> _$ApiResponseWithMetaFromJson<T, M>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
-) => _ApiResponseWithMeta<T>(
+  M Function(Object? json) fromJsonM,
+) => _ApiResponseWithMeta<T, M>(
   success: json['success'] as bool,
   data: fromJsonT(json['data']),
-  meta: CursorMeta.fromJson(json['meta'] as Map<String, dynamic>),
+  meta: fromJsonM(json['meta']),
 );
 
-Map<String, dynamic> _$ApiResponseWithMetaToJson<T>(
-  _ApiResponseWithMeta<T> instance,
+Map<String, dynamic> _$ApiResponseWithMetaToJson<T, M>(
+  _ApiResponseWithMeta<T, M> instance,
   Object? Function(T value) toJsonT,
+  Object? Function(M value) toJsonM,
 ) => <String, dynamic>{
   'success': instance.success,
   'data': toJsonT(instance.data),
-  'meta': instance.meta,
+  'meta': toJsonM(instance.meta),
 };

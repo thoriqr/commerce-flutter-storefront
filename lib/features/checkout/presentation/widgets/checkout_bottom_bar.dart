@@ -1,8 +1,13 @@
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/checkout_session.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/checkout_mutations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
-class CheckoutBottomBar extends StatelessWidget {
+class CheckoutBottomBar extends ConsumerWidget {
   const CheckoutBottomBar({super.key, required this.checkout});
 
   final CheckoutSession checkout;
@@ -27,7 +32,24 @@ class CheckoutBottomBar extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(checkoutMutationsProvider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          final message = switch (error) {
+            AppException e => e.message,
+            _ => 'Something went wrong.',
+          };
+
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(message)));
+        },
+      );
+    });
+
+    final mutation = ref.watch(checkoutMutationsProvider);
+
     final theme = Theme.of(context);
 
     return SafeArea(
@@ -63,16 +85,26 @@ class CheckoutBottomBar extends StatelessWidget {
           const SizedBox(height: 16),
 
           FilledButton(
-            onPressed: checkout.canPlaceOrder
-                ? () {
-                    // TODO:
-                    // Confirm checkout.
-                  }
-                : null,
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(52),
-            ),
-            child: const Text('Place Order'),
+            onPressed: !checkout.canPlaceOrder || mutation.isLoading
+                ? null
+                : () async {
+                    final response = await ref
+                        .read(checkoutMutationsProvider.notifier)
+                        .confirmCheckout(checkout.sessionId);
+
+                    if (!context.mounted) {
+                      return;
+                    }
+
+                    context.go(AppRoutes.orderDetail(response.orderCode));
+                  },
+            child: mutation.isLoading
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Text('Place Order'),
           ),
         ],
       ),

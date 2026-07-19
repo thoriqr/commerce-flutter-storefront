@@ -24,8 +24,9 @@ extension ApiResponseFutureX<T> on Future<ApiResponse<T>> {
   }
 }
 
-extension ApiResponseWithMetaFutureX<T> on Future<ApiResponseWithMeta<T>> {
-  Future<ApiResponseWithMeta<T>> unwrap() async {
+extension ApiResponseWithMetaFutureX<T, M>
+    on Future<ApiResponseWithMeta<T, M>> {
+  Future<ApiResponseWithMeta<T, M>> unwrap() async {
     try {
       return await this;
     } on DioException catch (e) {

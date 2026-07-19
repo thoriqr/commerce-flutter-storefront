@@ -7,6 +7,7 @@ abstract final class AppRoutes {
 
   static const cart = "/cart";
   static const checkout = "/checkout/:sessionId";
+  static const order = "/order/:orderCode";
 
   static String productDetail(int id) {
     return "/product/$id";
@@ -14,5 +15,9 @@ abstract final class AppRoutes {
 
   static String checkoutSession(int sessionId) {
     return "/checkout/$sessionId";
+  }
+
+  static String orderDetail(String orderCode) {
+    return "/order/$orderCode";
   }
 }
