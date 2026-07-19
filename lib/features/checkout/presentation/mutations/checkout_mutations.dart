@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/confirm_checkout_response.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/create_checkout_response.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/set_checkout_address_request.dart';
@@ -55,6 +56,10 @@ class CheckoutMutations extends _$CheckoutMutations with AsyncMutationMixin {
       final response = await ref
           .read(checkoutRepositoryProvider)
           .confirmCheckout(sessionId);
+
+      ref.invalidate(cartProvider);
+
+      ref.invalidate(checkoutSessionProvider(sessionId));
 
       return response;
     });

@@ -33,7 +33,7 @@ final class CheckoutMutationsProvider
   CheckoutMutations create() => CheckoutMutations();
 }
 
-String _$checkoutMutationsHash() => r'52c83e202027df6fbe410086d870292d9a0358bb';
+String _$checkoutMutationsHash() => r'3378ee992bfad86c1ea540b00896d73d8b0f170f';
 
 abstract class _$CheckoutMutations extends $AsyncNotifier<void> {
   FutureOr<void> build();
