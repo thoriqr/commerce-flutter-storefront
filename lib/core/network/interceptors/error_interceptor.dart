@@ -1,30 +1,23 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/network/api_error_parser.dart';
 import 'package:dio/dio.dart';
-
-import '../../models/api_error.dart';
 
 class ErrorInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    final data = err.response?.data;
+    final error = parseApiError(err);
 
-    if (data is Map<String, dynamic>) {
-      final errorJson = data['error'];
-
-      if (errorJson is Map<String, dynamic>) {
-        final apiError = ApiError.fromJson(errorJson);
-
-        handler.reject(
-          DioException(
-            requestOptions: err.requestOptions,
-            error: AppException(code: apiError.code, message: apiError.message),
-          ),
-        );
-
-        return;
-      }
+    if (error == null) {
+      handler.next(err);
+      return;
     }
 
-    handler.next(err);
+    handler.reject(
+      DioException(
+        requestOptions: err.requestOptions,
+        response: err.response,
+        type: err.type,
+        error: error,
+      ),
+    );
   }
 }

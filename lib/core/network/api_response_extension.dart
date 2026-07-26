@@ -9,8 +9,8 @@ AppException mapException(DioException e) {
   }
 
   return AppException(
-    code: 'UNKNOWN_ERROR',
-    message: e.message ?? 'Something went wrong',
+    code: "UNKNOWN_ERROR",
+    message: e.message ?? "Something went wrong",
   );
 }
 

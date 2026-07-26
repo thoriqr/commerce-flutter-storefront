@@ -5,6 +5,7 @@ import 'package:commerce_flutter_storefront/features/account/presentation/pages/
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_error_view.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/widgets/session_expired_view.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +23,8 @@ class AccountPage extends ConsumerWidget {
       AsyncError(:final error) =>
         error is AppException && error.code == ErrorCodes.unauthorized
             ? const LoginPage(showAppBar: false, isEmbedded: true)
+            : error is AppException && error.code == ErrorCodes.sessionExpired
+            ? const SessionExpiredView()
             : AccountErrorView(
                 error: error,
                 onRetry: () {

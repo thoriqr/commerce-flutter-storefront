@@ -1,26 +1,27 @@
-import 'package:commerce_flutter_storefront/core/auth/token_manager.dart';
+import 'package:commerce_flutter_storefront/core/auth/session_manager.dart';
+import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/network/api_error_parser.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/auth_constants.dart';
 import 'package:dio/dio.dart';
 
 class AuthInterceptor extends QueuedInterceptor {
-  AuthInterceptor({required this.dio, required this.tokenManager});
+  AuthInterceptor({required this.dio, required this.sessionManager});
 
-  static const _retryKey = 'is_retry';
+  static const _retryKey = "is_retry";
 
   final Dio dio;
-  final TokenManager tokenManager;
+  final SessionManager sessionManager;
 
   @override
   Future<void> onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    // Attach the current access token.
-    final accessToken = await tokenManager.getAccessToken();
+    final accessToken = await sessionManager.getAccessToken();
 
     if (accessToken != null && accessToken.isNotEmpty) {
-      options.headers['Authorization'] = 'Bearer $accessToken';
+      options.headers["Authorization"] = "Bearer $accessToken";
     }
 
     handler.next(options);
@@ -32,74 +33,65 @@ class AuthInterceptor extends QueuedInterceptor {
     ErrorInterceptorHandler handler,
   ) async {
     final request = err.requestOptions;
+    final error = parseApiError(err);
 
-    // Only handle unauthorized responses.
-    if (err.response?.statusCode != 401) {
+    if (error == null) {
       handler.next(err);
       return;
     }
 
-    // Skip selected authentication endpoints.
-    //
-    // TODO:
-    // Temporary workaround.
-    //
-    // The backend currently returns the same 401 error code (UNAUTHORIZED) for
-    // both expired access tokens and business authentication failures such as
-    // invalid credentials. Without dedicated error codes, the interceptor cannot
-    // distinguish whether it should refresh the access token or simply forward
-    // the error to the caller.
-    //
-    // As a temporary solution, authentication endpoints that may legitimately
-    // return 401 for business reasons are excluded from automatic refresh to
-    // prevent infinite refresh/retry loops.
-    //
-    // Trade-off:
-    // If the access token expires while calling one of these endpoints, the
-    // request will fail instead of being refreshed automatically.
-    //
-    // Remove this workaround once the backend exposes dedicated auth error codes
-    // (e.g. ACCESS_TOKEN_EXPIRED, INVALID_CREDENTIALS) and refresh based on the
-    // returned error code instead of the request path.
-    if (AuthConstants.excludedPaths.contains(request.path)) {
+    // An invalid access token cannot be safely recovered.
+    if (error.code == ErrorCodes.invalidAccessToken) {
+      await sessionManager.clear();
+
       handler.next(err);
       return;
     }
 
-    // Prevent infinite retry loops.
+    // Only an expired access token should trigger token refresh.
+    if (error.code != ErrorCodes.accessTokenExpired) {
+      handler.next(err);
+      return;
+    }
+
+    // Defensive guard.
+    // Refresh requests use refreshDio and normally never reach this interceptor.
+    if (request.path == AuthConstants.refreshPath) {
+      handler.next(err);
+      return;
+    }
+
+    // Prevent the original request from being retried more than once.
     if (request.extra[_retryKey] == true) {
       handler.next(err);
       return;
     }
 
-    // Guests cannot refresh because they do not have a refresh token.
-    final refreshToken = await tokenManager.getRefreshToken();
-
-    if (refreshToken == null || refreshToken.isEmpty) {
-      handler.next(err);
-      return;
-    }
-
     try {
-      // Refresh tokens.
-      final tokens = await tokenManager.refresh();
+      final tokens = await sessionManager.refresh();
 
-      // Retry the original request.
       final response = await _retry(request, tokens.accessToken);
 
       handler.resolve(response);
-    } on AppException {
-      // Refresh failed because the session is no longer valid.
-      handler.next(err);
-    } on DioException {
-      // Network failure while refreshing.
-      handler.next(err);
+    } on AppException catch (refreshError) {
+      // Terminal refresh errors are translated by SessionManager into
+      // SESSION_EXPIRED after the local session has been cleared.
+      handler.reject(
+        DioException(
+          requestOptions: request,
+          error: refreshError,
+          type: DioExceptionType.badResponse,
+        ),
+      );
+    } on DioException catch (refreshError) {
+      // Preserve network and transport failures from the refresh request.
+      handler.next(refreshError);
     }
   }
 
   Future<Response<dynamic>> _retry(RequestOptions request, String accessToken) {
     final headers = Map<String, dynamic>.from(request.headers)
-      ..['Authorization'] = 'Bearer $accessToken';
+      ..["Authorization"] = "Bearer $accessToken";
 
     final extra = Map<String, dynamic>.from(request.extra)..[_retryKey] = true;
 

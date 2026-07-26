@@ -19,8 +19,8 @@ class RefreshRepositoryImpl implements RefreshRepository {
 
     if (refreshToken == null || refreshToken.isEmpty) {
       throw const AppException(
-        code: ErrorCodes.unauthorized,
-        message: 'Refresh token not found',
+        code: ErrorCodes.refreshTokenMissing,
+        message: "Refresh token not found",
       );
     }
 

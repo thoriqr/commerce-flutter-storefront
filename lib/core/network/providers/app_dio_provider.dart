@@ -1,4 +1,4 @@
-import 'package:commerce_flutter_storefront/core/auth/token_manager_provider.dart';
+import 'package:commerce_flutter_storefront/core/auth/session_manager_provider.dart';
 import 'package:commerce_flutter_storefront/core/network/interceptors/auth_interceptor.dart';
 import 'package:commerce_flutter_storefront/core/network/interceptors/error_interceptor.dart';
 import 'package:commerce_flutter_storefront/core/network/interceptors/mobile_client_interceptor.dart';
@@ -19,7 +19,7 @@ Dio appDio(Ref ref) {
 
   dio.interceptors.addAll([
     MobileClientInterceptor(),
-    AuthInterceptor(dio: dio, tokenManager: ref.read(tokenManagerProvider)),
+    AuthInterceptor(dio: dio, sessionManager: ref.read(sessionManagerProvider)),
     ErrorInterceptor(),
   ]);
   return dio;

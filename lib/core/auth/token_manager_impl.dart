@@ -1,6 +1,4 @@
 import 'package:commerce_flutter_storefront/core/auth/token_manager.dart';
-import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/storage/secure_storage.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/domain/repositories/refresh_repository.dart';
@@ -43,43 +41,32 @@ class TokenManagerImpl implements TokenManager {
 
   @override
   Future<AuthTokens> refresh() {
-    // Reuse the current refresh request if one is already running.
     final current = _refreshFuture;
 
     if (current != null) {
       return current;
     }
 
-    final future = _performRefresh();
+    late final Future<AuthTokens> future;
 
-    _refreshFuture = future;
-
-    // Reset the refresh state once the request completes.
-    future.whenComplete(() {
+    future = _performRefresh().whenComplete(() {
       if (identical(_refreshFuture, future)) {
         _refreshFuture = null;
       }
     });
 
+    _refreshFuture = future;
+
     return future;
   }
 
   Future<AuthTokens> _performRefresh() async {
-    try {
-      // Request a new access/refresh token pair.
-      final tokens = await _refreshRepository.refresh();
+    // Request a new access/refresh token pair.
+    final tokens = await _refreshRepository.refresh();
 
-      // Persist the latest tokens.
-      await save(tokens);
+    // Persist the latest tokens.
+    await save(tokens);
 
-      return tokens;
-    } on AppException catch (e) {
-      // Clear local credentials if the refresh token is no longer valid.
-      if (e.code == ErrorCodes.unauthorized) {
-        await clear();
-      }
-
-      rethrow;
-    }
+    return tokens;
   }
 }
