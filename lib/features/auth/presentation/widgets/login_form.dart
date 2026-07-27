@@ -1,4 +1,6 @@
+import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
@@ -133,11 +135,20 @@ class _LoginFormState extends ConsumerState<LoginForm>
 
   @override
   Widget build(BuildContext context) {
+    ref.listenMutationError(
+      authMutationsProvider,
+      context,
+      additionalIgnoredCodes: const {ErrorCodes.invalidCredentials},
+    );
+
     final auth = ref.watch(authMutationsProvider);
 
     final errorMessage = switch (auth) {
-      AsyncError(:final error) when error is AppException => error.message,
-      AsyncError() => 'Something went wrong.',
+      AsyncError(:final error)
+          when error is AppException &&
+              error.code == ErrorCodes.invalidCredentials =>
+        error.message,
+
       _ => null,
     };
 

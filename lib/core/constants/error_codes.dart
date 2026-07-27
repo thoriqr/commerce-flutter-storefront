@@ -5,6 +5,9 @@ abstract final class ErrorCodes {
   static const notFound = "NOT_FOUND";
   static const unauthorized = "UNAUTHORIZED";
 
+  // Auth
+  static const invalidCredentials = "INVALID_CREDENTIALS";
+
   // Access token
   static const accessTokenExpired = "ACCESS_TOKEN_EXPIRED";
   static const invalidAccessToken = "INVALID_ACCESS_TOKEN";

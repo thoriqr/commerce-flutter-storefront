@@ -1,4 +1,4 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
@@ -55,20 +55,7 @@ class _ChangePasswordFormState extends ConsumerState<ChangePasswordForm>
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(authMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, _) {
-          final message = switch (error) {
-            AppException e => e.message,
-            _ => 'Something went wrong.',
-          };
-
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
-        },
-      );
-    });
+    ref.listenMutationError(authMutationsProvider, context);
 
     return Form(
       key: _formKey,
