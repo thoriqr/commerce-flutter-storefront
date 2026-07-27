@@ -1,5 +1,7 @@
+import 'package:commerce_flutter_storefront/core/auth/session_notice_provider.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
+import 'package:commerce_flutter_storefront/features/auth/di/google_sign_in_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,8 +24,8 @@ class SessionManagerImpl implements SessionManager {
   };
 
   @override
-  Future<bool> isAuthenticated() {
-    return _tokenManager.isAuthenticated();
+  Future<bool> hasLocalSession() {
+    return _tokenManager.hasLocalSession();
   }
 
   @override
@@ -47,6 +49,14 @@ class SessionManagerImpl implements SessionManager {
 
       await clear();
 
+      try {
+        await _ref.read(googleSignInProvider).signOut();
+      } catch (_) {
+        // Best-effort Google session cleanup.
+      }
+
+      _ref.read(sessionNoticeProvider.notifier).sessionExpired();
+
       throw const AppException(
         code: ErrorCodes.sessionExpired,
         message: "Your session has expired. Please sign in again.",
@@ -58,13 +68,13 @@ class SessionManagerImpl implements SessionManager {
   Future<void> save(AuthTokens tokens) async {
     await _tokenManager.save(tokens);
 
-    _ref.invalidate(isAuthenticatedProvider);
+    _ref.invalidate(hasLocalSessionProvider);
   }
 
   @override
   Future<void> clear() async {
     await _tokenManager.clear();
 
-    _ref.invalidate(isAuthenticatedProvider);
+    _ref.invalidate(hasLocalSessionProvider);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 
 abstract interface class SessionManager {
-  Future<bool> isAuthenticated();
+  Future<bool> hasLocalSession();
 
   Future<String?> getAccessToken();
 

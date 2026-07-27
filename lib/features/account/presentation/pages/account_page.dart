@@ -5,13 +5,37 @@ import 'package:commerce_flutter_storefront/features/account/presentation/pages/
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_error_view.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/widgets/session_expired_view.dart';
-
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(hasLocalSessionProvider);
+
+    return switch (session) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+
+      AsyncError(:final error) => AccountErrorView(
+        error: error,
+        onRetry: () {
+          ref.invalidate(hasLocalSessionProvider);
+        },
+      ),
+
+      AsyncData(:final value) =>
+        value
+            ? const _AuthenticatedAccount()
+            : const LoginPage(showAppBar: false, isEmbedded: true),
+    };
+  }
+}
+
+class _AuthenticatedAccount extends ConsumerWidget {
+  const _AuthenticatedAccount();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,8 +47,6 @@ class AccountPage extends ConsumerWidget {
       AsyncError(:final error) =>
         error is AppException && error.code == ErrorCodes.unauthorized
             ? const LoginPage(showAppBar: false, isEmbedded: true)
-            : error is AppException && error.code == ErrorCodes.sessionExpired
-            ? const SessionExpiredView()
             : AccountErrorView(
                 error: error,
                 onRetry: () {

@@ -66,7 +66,7 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
   @override
   Widget build(BuildContext context) {
     final mutation = ref.watch(cartMutationsProvider);
-    final auth = ref.watch(isAuthenticatedProvider);
+    final auth = ref.watch(hasLocalSessionProvider);
 
     final isPending = widget.variantId == uninitializedVariantId;
 

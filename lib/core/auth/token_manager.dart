@@ -11,5 +11,5 @@ abstract interface class TokenManager {
 
   Future<void> clear();
 
-  Future<bool> isAuthenticated();
+  Future<bool> hasLocalSession();
 }

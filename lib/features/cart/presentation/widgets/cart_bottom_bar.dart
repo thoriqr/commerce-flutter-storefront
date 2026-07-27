@@ -35,7 +35,7 @@ class CartBottomBar extends ConsumerWidget {
 
     final theme = Theme.of(context);
 
-    final auth = ref.watch(isAuthenticatedProvider);
+    final auth = ref.watch(hasLocalSessionProvider);
 
     final checkoutMutation = ref.watch(checkoutMutationsProvider);
 

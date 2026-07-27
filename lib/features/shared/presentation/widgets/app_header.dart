@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_navigation_menu.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
   const AppHeader({
     super.key,
     required this.onSearch,
-    this.initialValue = '',
+    this.initialValue = "",
     this.title,
     this.showBackButton = true,
     this.showCartButton = true,
@@ -32,14 +33,23 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final totalItems = ref.watch(
-      cartProvider.select((cart) {
-        return switch (cart) {
-          AsyncData(:final value) => value.summary.totalItems,
-          _ => 0,
-        };
-      }),
-    );
+    final session = ref.watch(hasLocalSessionProvider);
+
+    final hasLocalSession = switch (session) {
+      AsyncData(:final value) => value,
+      _ => false,
+    };
+
+    final totalItems = hasLocalSession && showCartButton
+        ? ref.watch(
+            cartProvider.select((cart) {
+              return switch (cart) {
+                AsyncData(:final value) => value.summary.totalItems,
+                _ => 0,
+              };
+            }),
+          )
+        : 0;
 
     void handleBack(BuildContext context) {
       if (context.canPop()) {
@@ -98,7 +108,7 @@ class AppHeader extends ConsumerWidget implements PreferredSizeWidget {
                     showGeneralDialog(
                       context: context,
                       barrierDismissible: true,
-                      barrierLabel: 'Navigation',
+                      barrierLabel: "Navigation",
                       transitionDuration: const Duration(milliseconds: 180),
                       pageBuilder: (_, _, _) {
                         return Material(

@@ -86,12 +86,16 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin {
               .logout(RefreshRequest(refreshToken: refreshToken));
         }
       } finally {
-        // Clear the local Google Sign-In session so the account
-        // chooser is shown the next time the user signs in.
-        await googleSignIn.signOut();
-
-        // Clear the local application session.
+        // Always clear the local application session.
         await sessionManager.clear();
+
+        // Best-effort Google session cleanup so the account chooser
+        // is shown the next time the user signs in.
+        try {
+          await googleSignIn.signOut();
+        } catch (_) {
+          // Local application logout must not depend on Google cleanup.
+        }
 
         // Refresh authenticated resources.
         ref.invalidate(userProfileProvider);

@@ -9,25 +9,25 @@ part of 'auth_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(isAuthenticated)
-final isAuthenticatedProvider = IsAuthenticatedProvider._();
+@ProviderFor(hasLocalSession)
+final hasLocalSessionProvider = HasLocalSessionProvider._();
 
-final class IsAuthenticatedProvider
+final class HasLocalSessionProvider
     extends $FunctionalProvider<AsyncValue<bool>, bool, FutureOr<bool>>
     with $FutureModifier<bool>, $FutureProvider<bool> {
-  IsAuthenticatedProvider._()
+  HasLocalSessionProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'isAuthenticatedProvider',
+        name: r'hasLocalSessionProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$isAuthenticatedHash();
+  String debugGetCreateSourceHash() => _$hasLocalSessionHash();
 
   @$internal
   @override
@@ -36,8 +36,8 @@ final class IsAuthenticatedProvider
 
   @override
   FutureOr<bool> create(Ref ref) {
-    return isAuthenticated(ref);
+    return hasLocalSession(ref);
   }
 }
 
-String _$isAuthenticatedHash() => r'd17c319445723556e478d7f76b6cc7332eae1ba8';
+String _$hasLocalSessionHash() => r'116526e9facc1bd3dcb93c6dc60ec9dc0951a69a';

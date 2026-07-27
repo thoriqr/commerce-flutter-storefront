@@ -12,7 +12,7 @@ class TokenManagerImpl implements TokenManager {
   Future<AuthTokens>? _refreshFuture;
 
   @override
-  Future<bool> isAuthenticated() async {
+  Future<bool> hasLocalSession() async {
     final accessToken = await getAccessToken();
 
     return accessToken != null && accessToken.isNotEmpty;

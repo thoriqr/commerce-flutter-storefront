@@ -9,7 +9,7 @@ class AppNavigationMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(isAuthenticatedProvider);
+    final auth = ref.watch(hasLocalSessionProvider);
 
     final items = switch (auth) {
       AsyncData(:final value) => [

@@ -1,5 +1,6 @@
 import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/widgets/cart_content.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/widgets/cart_guest_view.dart';
@@ -15,9 +16,42 @@ class CartPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final auth = ref.watch(hasLocalSessionProvider);
+
+    final body = switch (auth) {
+      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+
+      AsyncError() => CartErrorView(
+        onRetry: () {
+          ref.invalidate(hasLocalSessionProvider);
+        },
+      ),
+
+      AsyncData(:final value) =>
+        value ? const _AuthenticatedCart() : const CartGuestView(),
+    };
+
+    return Scaffold(
+      appBar: AppHeader(
+        title: "Shopping Cart",
+        showBackButton: true,
+        showCartButton: false,
+        showMenuButton: true,
+        onSearch: (_) {},
+      ),
+      body: body,
+    );
+  }
+}
+
+class _AuthenticatedCart extends ConsumerWidget {
+  const _AuthenticatedCart();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final cart = ref.watch(cartProvider);
 
-    final body = switch (cart) {
+    return switch (cart) {
       AsyncLoading() => Skeletonizer(
         enabled: true,
         child: CartContent(
@@ -44,16 +78,5 @@ class CartPage extends ConsumerWidget {
         },
       ),
     };
-
-    return Scaffold(
-      appBar: AppHeader(
-        title: 'Shopping Cart',
-        showBackButton: true,
-        showCartButton: false,
-        showMenuButton: true,
-        onSearch: (_) {},
-      ),
-      body: body,
-    );
   }
 }
