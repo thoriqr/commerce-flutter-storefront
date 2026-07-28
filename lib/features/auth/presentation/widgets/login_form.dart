@@ -1,6 +1,7 @@
 import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
@@ -62,14 +63,25 @@ class _LoginFormState extends ConsumerState<LoginForm>
     }
   }
 
-  Future<void> _finishLogin() async {
-    // Wait until the latest profile has been loaded before
-    // leaving the login page to avoid a guest/authenticated flicker.
-    await ref.read(userProfileProvider.future);
-
+  Future<void> _finishLogin(LoginMutationResult result) async {
     if (!mounted) return;
 
     final redirect = widget.redirect;
+
+    // The previous authenticated context belongs to another user.
+    // Do not restore it.
+    if (redirect != null &&
+        redirect.requiresSameUser &&
+        !result.canRestorePreviousContext) {
+      context.go(AppRoutes.home);
+      return;
+    }
+
+    // Wait for the authenticated profile only when we're going to
+    // continue the current login flow.
+    await ref.read(userProfileProvider.future);
+
+    if (!mounted) return;
 
     if (redirect != null) {
       context.go(redirect.location);
@@ -91,7 +103,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
         return;
       }
 
-      await ref
+      final result = await ref
           .read(authMutationsProvider.notifier)
           .login(
             LoginRequest(
@@ -100,7 +112,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
             ),
           );
 
-      await _finishLogin();
+      await _finishLogin(result);
     });
   }
 
@@ -125,11 +137,11 @@ class _LoginFormState extends ConsumerState<LoginForm>
         );
       }
 
-      await ref
+      final result = await ref
           .read(authMutationsProvider.notifier)
           .googleLogin(GoogleLoginRequest(idToken: idToken));
 
-      await _finishLogin();
+      await _finishLogin(result);
     });
   }
 

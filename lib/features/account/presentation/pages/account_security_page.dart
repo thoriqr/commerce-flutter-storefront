@@ -39,7 +39,11 @@ class AccountSecurityPage extends ConsumerWidget {
       ),
 
       AsyncData(value: false) => LoginPage(
-        redirect: LoginRedirect(GoRouterState.of(context).uri.toString()),
+        redirect: LoginRedirect(
+          GoRouterState.of(context).uri.toString(),
+          requiresSameUser: true,
+        ),
+        isEmbedded: true,
       ),
 
       AsyncData(value: true) => const _AuthenticatedAccountSecurity(),
@@ -62,7 +66,9 @@ class _AuthenticatedAccountSecurity extends ConsumerWidget {
             ? LoginPage(
                 redirect: LoginRedirect(
                   GoRouterState.of(context).uri.toString(),
+                  requiresSameUser: true,
                 ),
+                isEmbedded: true,
               )
             : AccountErrorView(
                 error: error,

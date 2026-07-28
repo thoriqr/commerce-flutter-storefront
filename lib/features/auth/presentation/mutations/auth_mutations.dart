@@ -1,5 +1,7 @@
 import 'package:commerce_flutter_storefront/core/auth/session_manager_provider.dart';
+import 'package:commerce_flutter_storefront/core/storage/app_preferences_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/auth_login_result.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
@@ -13,6 +15,12 @@ import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutatio
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_mutations.g.dart';
+
+class LoginMutationResult {
+  const LoginMutationResult({required this.canRestorePreviousContext});
+
+  final bool canRestorePreviousContext;
+}
 
 @riverpod
 class AuthMutations extends _$AuthMutations with AsyncMutationMixin {
@@ -34,21 +42,46 @@ class AuthMutations extends _$AuthMutations with AsyncMutationMixin {
     }
   }
 
-  Future<void> login(LoginRequest request) {
-    return guard(() async {
-      final tokens = await ref.read(authRepositoryProvider).login(request);
+  Future<LoginMutationResult> _updateLoginSession(
+    AuthLoginResult result,
+  ) async {
+    final preferences = ref.read(appPreferencesProvider);
 
-      await _updateAuthenticatedSession(tokens, invalidateCart: true);
+    final lastUserId = await preferences.getLastUserId();
+
+    final canRestorePreviousContext =
+        lastUserId != null && lastUserId == result.userId;
+
+    await _updateAuthenticatedSession(
+      AuthTokens(
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      ),
+      invalidateCart: true,
+    );
+
+    await preferences.setLastUserId(result.userId);
+
+    return LoginMutationResult(
+      canRestorePreviousContext: canRestorePreviousContext,
+    );
+  }
+
+  Future<LoginMutationResult> login(LoginRequest request) {
+    return guard(() async {
+      final result = await ref.read(authRepositoryProvider).login(request);
+
+      return _updateLoginSession(result);
     });
   }
 
-  Future<void> googleLogin(GoogleLoginRequest request) {
+  Future<LoginMutationResult> googleLogin(GoogleLoginRequest request) {
     return guard(() async {
-      final tokens = await ref
+      final result = await ref
           .read(authRepositoryProvider)
           .googleLogin(request);
 
-      await _updateAuthenticatedSession(tokens, invalidateCart: true);
+      return _updateLoginSession(result);
     });
   }
 

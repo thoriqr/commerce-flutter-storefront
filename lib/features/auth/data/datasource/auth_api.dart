@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/models/api_response.dart';
+import 'package:commerce_flutter_storefront/features/auth/data/models/auth_login_result.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/auth_tokens.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
@@ -15,10 +16,10 @@ abstract class AuthApi {
   factory AuthApi(Dio dio) = _AuthApi;
 
   @POST("/auth/login")
-  Future<ApiResponse<AuthTokens>> login(@Body() LoginRequest request);
+  Future<ApiResponse<AuthLoginResult>> login(@Body() LoginRequest request);
 
   @POST("/auth/google")
-  Future<ApiResponse<AuthTokens>> googleLogin(
+  Future<ApiResponse<AuthLoginResult>> googleLogin(
     @Body() GoogleLoginRequest request,
   );
 

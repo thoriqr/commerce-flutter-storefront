@@ -20,12 +20,12 @@ class _AuthApi implements AuthApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<ApiResponse<AuthTokens>> login(LoginRequest request) async {
+  Future<ApiResponse<AuthLoginResult>> login(LoginRequest request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
-    final _options = _setStreamType<ApiResponse<AuthTokens>>(
+    final _options = _setStreamType<ApiResponse<AuthLoginResult>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -36,11 +36,11 @@ class _AuthApi implements AuthApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<AuthTokens> _value;
+    late ApiResponse<AuthLoginResult> _value;
     try {
-      _value = ApiResponse<AuthTokens>.fromJson(
+      _value = ApiResponse<AuthLoginResult>.fromJson(
         _result.data!,
-        (json) => AuthTokens.fromJson(json as Map<String, dynamic>),
+        (json) => AuthLoginResult.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
@@ -50,14 +50,14 @@ class _AuthApi implements AuthApi {
   }
 
   @override
-  Future<ApiResponse<AuthTokens>> googleLogin(
+  Future<ApiResponse<AuthLoginResult>> googleLogin(
     GoogleLoginRequest request,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
-    final _options = _setStreamType<ApiResponse<AuthTokens>>(
+    final _options = _setStreamType<ApiResponse<AuthLoginResult>>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -68,11 +68,11 @@ class _AuthApi implements AuthApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ApiResponse<AuthTokens> _value;
+    late ApiResponse<AuthLoginResult> _value;
     try {
-      _value = ApiResponse<AuthTokens>.fromJson(
+      _value = ApiResponse<AuthLoginResult>.fromJson(
         _result.data!,
-        (json) => AuthTokens.fromJson(json as Map<String, dynamic>),
+        (json) => AuthLoginResult.fromJson(json as Map<String, dynamic>),
       );
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
