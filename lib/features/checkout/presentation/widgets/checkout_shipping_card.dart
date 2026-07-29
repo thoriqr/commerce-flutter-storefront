@@ -2,7 +2,7 @@ import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/checkout_session.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/set_shipping_request.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/shipping_cost.dart';
-import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/checkout_mutations.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/set_checkout_shipping_mutation.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/widgets/checkout_shipping_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,7 +34,7 @@ class CheckoutShippingCard extends ConsumerWidget {
     }
 
     await ref
-        .read(checkoutMutationsProvider.notifier)
+        .read(setCheckoutShippingMutationProvider.notifier)
         .setShippingCheckoutSession(
           checkout.sessionId,
           SetShippingRequest(
@@ -47,6 +47,8 @@ class CheckoutShippingCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    final mutation = ref.watch(setCheckoutShippingMutationProvider);
 
     return Card(
       child: Padding(
@@ -65,10 +67,20 @@ class CheckoutShippingCard extends ConsumerWidget {
                       const Spacer(),
 
                       TextButton(
-                        onPressed: () {
-                          _showShippingPicker(context, ref);
-                        },
-                        child: const Text('Change'),
+                        onPressed: mutation.isLoading
+                            ? null
+                            : () {
+                                _showShippingPicker(context, ref);
+                              },
+                        child: mutation.isLoading
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text('Change'),
                       ),
                     ],
                   ),
@@ -76,7 +88,8 @@ class CheckoutShippingCard extends ConsumerWidget {
                   const SizedBox(height: 8),
 
                   Text(
-                    '${checkout.courierName} - ${checkout.courierService}',
+                    '${checkout.courierName} - '
+                    '${checkout.courierService}',
                     style: theme.textTheme.titleSmall,
                   ),
 
@@ -110,10 +123,18 @@ class CheckoutShippingCard extends ConsumerWidget {
                   const SizedBox(height: 16),
 
                   OutlinedButton(
-                    onPressed: () {
-                      _showShippingPicker(context, ref);
-                    },
-                    child: const Text('Select Shipping'),
+                    onPressed: mutation.isLoading
+                        ? null
+                        : () {
+                            _showShippingPicker(context, ref);
+                          },
+                    child: mutation.isLoading
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Select Shipping'),
                   ),
                 ],
               ),

@@ -20,6 +20,9 @@ class ProtectedView extends ConsumerStatefulWidget {
 }
 
 class _ProtectedViewState extends ConsumerState<ProtectedView> {
+  static const _debugDelay = Duration(seconds: 3);
+
+  bool _isFinishing = false;
   bool _isDiscardingContext = false;
 
   bool _canReveal(AuthTransition transition, AsyncValue<bool> session) {
@@ -40,8 +43,8 @@ class _ProtectedViewState extends ConsumerState<ProtectedView> {
         transition.canRestorePreviousContext == true;
   }
 
-  void _finishIfReady() {
-    if (!mounted) {
+  Future<void> _finishIfReady() async {
+    if (!mounted || _isFinishing || _isDiscardingContext) {
       return;
     }
 
@@ -52,7 +55,58 @@ class _ProtectedViewState extends ConsumerState<ProtectedView> {
       return;
     }
 
-    ref.read(authTransitionStateProvider.notifier).finish();
+    _isFinishing = true;
+
+    // TEMP: diagnostic delay to verify that the boundary remains visible
+    // until the authenticated session is safe to reveal.
+    await Future<void>.delayed(_debugDelay);
+
+    if (!mounted) {
+      return;
+    }
+
+    final latestTransition = ref.read(authTransitionStateProvider);
+    final latestSession = ref.read(hasLocalSessionProvider);
+
+    // State may have changed while the diagnostic delay was running.
+    if (_canReveal(latestTransition, latestSession)) {
+      ref.read(authTransitionStateProvider.notifier).finish();
+    }
+
+    _isFinishing = false;
+  }
+
+  Future<void> _discardPreviousContext() async {
+    if (!mounted || _isDiscardingContext) {
+      return;
+    }
+
+    _isDiscardingContext = true;
+
+    // TEMP: diagnostic delay to verify that the previous user's
+    // protected context stays covered during account switching.
+    await Future<void>.delayed(_debugDelay);
+
+    if (!mounted) {
+      return;
+    }
+
+    final transition = ref.read(authTransitionStateProvider);
+
+    // The transition may have changed while waiting.
+    if (transition.phase != AuthTransitionPhase.resolving ||
+        transition.canRestorePreviousContext != false) {
+      _isDiscardingContext = false;
+      return;
+    }
+
+    // This route belongs to the previous user. Keep the transition
+    // resolving while it exits. The destination boundary takes over.
+    if (context.canPop()) {
+      context.pop();
+    } else {
+      context.go(AppRoutes.home);
+    }
   }
 
   String _transitionMessage(AuthTransition transition) {
@@ -75,20 +129,7 @@ class _ProtectedViewState extends ConsumerState<ProtectedView> {
       }
 
       if (widget.requiresSameUser && next.canRestorePreviousContext == false) {
-        if (_isDiscardingContext) {
-          return;
-        }
-
-        _isDiscardingContext = true;
-
-        // This route belongs to the previous user. Keep the transition
-        // resolving while it exits. The destination boundary takes over.
-        if (context.canPop()) {
-          context.pop();
-        } else {
-          context.go(AppRoutes.home);
-        }
-
+        _discardPreviousContext();
         return;
       }
 
@@ -97,7 +138,7 @@ class _ProtectedViewState extends ConsumerState<ProtectedView> {
 
     ref.listen(hasLocalSessionProvider, (previous, next) {
       // Session and auth transition can settle in either order.
-      // Re-check the transition whenever session state changes.
+      // Re-check whenever the local session state changes.
       _finishIfReady();
     });
 
@@ -129,7 +170,9 @@ class _AuthTransitionView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const LinearProgressIndicator(),
+
                 const SizedBox(height: 16),
+
                 Text(
                   message,
                   textAlign: TextAlign.center,

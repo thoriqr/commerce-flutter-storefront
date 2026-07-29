@@ -19,7 +19,6 @@ class CheckoutShippingPicker extends ConsumerStatefulWidget {
 class _CheckoutShippingPickerState
     extends ConsumerState<CheckoutShippingPicker> {
   ShippingCourier selectedCourier = ShippingCourier.jne;
-
   ShippingService? selectedService;
 
   bool isValidService(ShippingService service) {
@@ -149,9 +148,114 @@ class _CheckoutShippingPickerState
     );
   }
 
+  Widget _buildServices(BuildContext context, ShippingCost shippingCost) {
+    final services = shippingCost.services.where(isValidService).toList();
+
+    if (services.isEmpty) {
+      return _buildEmpty(context);
+    }
+
+    return RadioGroup<ShippingService>(
+      groupValue: selectedService,
+      onChanged: (value) {
+        if (value == null) {
+          return;
+        }
+
+        setState(() {
+          selectedService = value;
+        });
+      },
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: services.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
+        itemBuilder: (_, index) {
+          final service = services[index];
+
+          return Card(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () {
+                setState(() {
+                  selectedService = service;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Radio<ShippingService>(
+                      value: service,
+                      // ignore: deprecated_member_use
+                      groupValue: selectedService,
+                      // ignore: deprecated_member_use
+                      onChanged: (value) {
+                        if (value == null) {
+                          return;
+                        }
+
+                        setState(() {
+                          selectedService = value;
+                        });
+                      },
+                    ),
+
+                    const SizedBox(width: 8),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  '${service.code.toUpperCase()} '
+                                  '${service.service}',
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.titleMedium,
+                                ),
+                              ),
+
+                              Text(
+                                CurrencyUtils.formatRupiah(service.cost),
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 8),
+
+                          Text(
+                            service.description,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+
+                          const SizedBox(height: 4),
+
+                          Text(
+                            'Estimated delivery: ${service.etd}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final shippingAsync = ref.watch(
+    final shipping = ref.watch(
       shippingCostProvider(widget.sessionId, selectedCourier.value),
     );
 
@@ -196,6 +300,9 @@ class _CheckoutShippingPickerState
                         onSelected: (_) {
                           setState(() {
                             selectedCourier = courier;
+
+                            // A service belongs to the currently selected
+                            // courier, so clear it when the courier changes.
                             selectedService = null;
                           });
                         },
@@ -208,125 +315,12 @@ class _CheckoutShippingPickerState
             const SizedBox(height: 16),
 
             Expanded(
-              child: switch (shippingAsync) {
+              child: switch (shipping) {
                 AsyncLoading() => _buildLoading(),
 
                 AsyncError() => _buildError(context),
 
-                AsyncData(:final value) => () {
-                  final services = value.services
-                      .where(isValidService)
-                      .toList();
-
-                  if (services.isEmpty) {
-                    return _buildEmpty(context);
-                  }
-
-                  return RadioGroup<ShippingService>(
-                    groupValue: selectedService,
-                    onChanged: (value) {
-                      if (value == null) {
-                        return;
-                      }
-
-                      setState(() {
-                        selectedService = value;
-                      });
-                    },
-                    child: ListView.separated(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: services.length,
-                      separatorBuilder: (_, _) => const SizedBox(height: 12),
-                      itemBuilder: (_, index) {
-                        final service = services[index];
-
-                        return Card(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(12),
-                            onTap: () {
-                              setState(() {
-                                selectedService = service;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Radio<ShippingService>(
-                                    value: service,
-                                    // ignore: deprecated_member_use
-                                    groupValue: selectedService,
-                                    // ignore: deprecated_member_use
-                                    onChanged: (value) {
-                                      if (value == null) {
-                                        return;
-                                      }
-
-                                      setState(() {
-                                        selectedService = value;
-                                      });
-                                    },
-                                  ),
-
-                                  const SizedBox(width: 8),
-
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                '${service.code.toUpperCase()} ${service.service}',
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.titleMedium,
-                                              ),
-                                            ),
-
-                                            Text(
-                                              CurrencyUtils.formatRupiah(
-                                                service.cost,
-                                              ),
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.titleSmall,
-                                            ),
-                                          ],
-                                        ),
-
-                                        const SizedBox(height: 8),
-
-                                        Text(
-                                          service.description,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.bodyMedium,
-                                        ),
-
-                                        const SizedBox(height: 4),
-
-                                        Text(
-                                          'Estimated delivery: ${service.etd}',
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.bodySmall,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }(),
+                AsyncData(:final value) => _buildServices(context, value),
               },
             ),
 
@@ -335,14 +329,10 @@ class _CheckoutShippingPickerState
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: switch (shippingAsync) {
-                    AsyncData(:final value) =>
-                      selectedService != null &&
-                              value.services.where(isValidService).isNotEmpty
-                          ? () {
-                              Navigator.pop(context, selectedService);
-                            }
-                          : null,
+                  onPressed: switch (shipping) {
+                    AsyncData() when selectedService != null => () {
+                      Navigator.pop(context, selectedService);
+                    },
 
                     _ => null,
                   },

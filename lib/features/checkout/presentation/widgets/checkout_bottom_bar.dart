@@ -1,8 +1,8 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/checkout_session.dart';
-import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/checkout_mutations.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/confirm_checkout_mutation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -33,22 +33,9 @@ class CheckoutBottomBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(checkoutMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, _) {
-          final message = switch (error) {
-            AppException e => e.message,
-            _ => 'Something went wrong.',
-          };
+    ref.listenMutationError(confirmCheckoutMutationProvider, context);
 
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
-        },
-      );
-    });
-
-    final mutation = ref.watch(checkoutMutationsProvider);
+    final mutation = ref.watch(confirmCheckoutMutationProvider);
 
     final theme = Theme.of(context);
 
@@ -89,7 +76,7 @@ class CheckoutBottomBar extends ConsumerWidget {
                 ? null
                 : () async {
                     final response = await ref
-                        .read(checkoutMutationsProvider.notifier)
+                        .read(confirmCheckoutMutationProvider.notifier)
                         .confirmCheckout(checkout.sessionId);
 
                     if (!context.mounted) {

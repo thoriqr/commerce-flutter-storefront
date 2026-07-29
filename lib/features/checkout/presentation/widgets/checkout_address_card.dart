@@ -1,7 +1,7 @@
 import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/checkout_session.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/set_checkout_address_request.dart';
-import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/checkout_mutations.dart';
+import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/set_checkout_address_mutation.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/widgets/checkout_address_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,6 +20,8 @@ class CheckoutAddressCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    final mutation = ref.watch(setCheckoutAddressMutationProvider);
 
     return Card(
       child: Padding(
@@ -40,20 +42,33 @@ class CheckoutAddressCard extends ConsumerWidget {
                   const SizedBox(height: 16),
 
                   OutlinedButton(
-                    onPressed: () {
-                      context.push(
-                        AccountRoutes.addressNew,
-                        extra: (int addressId) async {
-                          await ref
-                              .read(checkoutMutationsProvider.notifier)
-                              .setAddressCheckoutSession(
-                                sessionId,
-                                SetCheckoutAddressRequest(addressId: addressId),
-                              );
-                        },
-                      );
-                    },
-                    child: const Text('Create Address'),
+                    onPressed: mutation.isLoading
+                        ? null
+                        : () {
+                            context.push(
+                              AccountRoutes.addressNew,
+                              extra: (int addressId) async {
+                                await ref
+                                    .read(
+                                      setCheckoutAddressMutationProvider
+                                          .notifier,
+                                    )
+                                    .setAddressCheckoutSession(
+                                      sessionId,
+                                      SetCheckoutAddressRequest(
+                                        addressId: addressId,
+                                      ),
+                                    );
+                              },
+                            );
+                          },
+                    child: mutation.isLoading
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Create Address'),
                   ),
                 ],
               )
@@ -70,27 +85,43 @@ class CheckoutAddressCard extends ConsumerWidget {
                       const Spacer(),
 
                       TextButton(
-                        onPressed: () async {
-                          final addressId = await showModalBottomSheet<int>(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (_) {
-                              return const CheckoutAddressPicker();
-                            },
-                          );
+                        onPressed: mutation.isLoading
+                            ? null
+                            : () async {
+                                final addressId =
+                                    await showModalBottomSheet<int>(
+                                      context: context,
+                                      isScrollControlled: true,
+                                      builder: (_) {
+                                        return const CheckoutAddressPicker();
+                                      },
+                                    );
 
-                          if (addressId == null || !context.mounted) {
-                            return;
-                          }
+                                if (addressId == null || !context.mounted) {
+                                  return;
+                                }
 
-                          await ref
-                              .read(checkoutMutationsProvider.notifier)
-                              .setAddressCheckoutSession(
-                                sessionId,
-                                SetCheckoutAddressRequest(addressId: addressId),
-                              );
-                        },
-                        child: const Text('Change'),
+                                await ref
+                                    .read(
+                                      setCheckoutAddressMutationProvider
+                                          .notifier,
+                                    )
+                                    .setAddressCheckoutSession(
+                                      sessionId,
+                                      SetCheckoutAddressRequest(
+                                        addressId: addressId,
+                                      ),
+                                    );
+                              },
+                        child: mutation.isLoading
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Text('Change'),
                       ),
                     ],
                   ),
