@@ -1,8 +1,9 @@
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
-import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/cart_mutations.dart';
+import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/add_item_mutation.dart';
 import 'package:commerce_flutter_storefront/features/product/constants/product_constants.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_detail.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/product_provider.dart';
@@ -65,12 +66,14 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
 
   @override
   Widget build(BuildContext context) {
-    final mutation = ref.watch(cartMutationsProvider);
-    final auth = ref.watch(hasLocalSessionProvider);
+    ref.listenMutationError(addItemMutationProvider, context);
+
+    final mutation = ref.watch(addItemMutationProvider);
+    final session = ref.watch(hasLocalSessionProvider);
 
     final isPending = widget.variantId == uninitializedVariantId;
 
-    final isAuthenticated = switch (auth) {
+    final isAuthenticated = switch (session) {
       AsyncData(:final value) => value,
       _ => false,
     };
@@ -162,7 +165,7 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
                     ),
                     onPressed: loading || !canAddToCart
                         ? null
-                        : () {
+                        : () async {
                             if (!isAuthenticated) {
                               AuthRoutes.pushLogin(
                                 context,
@@ -173,8 +176,8 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
                               return;
                             }
 
-                            ref
-                                .read(cartMutationsProvider.notifier)
+                            await ref
+                                .read(addItemMutationProvider.notifier)
                                 .addItem(
                                   variantId: widget.variantId,
                                   quantity: _quantity,

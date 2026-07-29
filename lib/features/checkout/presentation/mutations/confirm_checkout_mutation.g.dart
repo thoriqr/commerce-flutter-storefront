@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'cart_mutations.dart';
+part of 'confirm_checkout_mutation.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,33 +9,34 @@ part of 'cart_mutations.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(CartMutations)
-final cartMutationsProvider = CartMutationsProvider._();
+@ProviderFor(ConfirmCheckoutMutation)
+final confirmCheckoutMutationProvider = ConfirmCheckoutMutationProvider._();
 
-final class CartMutationsProvider
-    extends $AsyncNotifierProvider<CartMutations, void> {
-  CartMutationsProvider._()
+final class ConfirmCheckoutMutationProvider
+    extends $AsyncNotifierProvider<ConfirmCheckoutMutation, void> {
+  ConfirmCheckoutMutationProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'cartMutationsProvider',
+        name: r'confirmCheckoutMutationProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$cartMutationsHash();
+  String debugGetCreateSourceHash() => _$confirmCheckoutMutationHash();
 
   @$internal
   @override
-  CartMutations create() => CartMutations();
+  ConfirmCheckoutMutation create() => ConfirmCheckoutMutation();
 }
 
-String _$cartMutationsHash() => r'0b778c3d3e5be14b96abc04b9668e9cd00b85381';
+String _$confirmCheckoutMutationHash() =>
+    r'0b663bf250a072a02e48dc51c07b5a0421e8f3b0';
 
-abstract class _$CartMutations extends $AsyncNotifier<void> {
+abstract class _$ConfirmCheckoutMutation extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

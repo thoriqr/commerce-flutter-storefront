@@ -1,8 +1,8 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/core/utils/image_utils.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/models/cart.dart';
-import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/cart_mutations.dart';
+import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/delete_item_mutation.dart';
+import 'package:commerce_flutter_storefront/features/cart/presentation/mutations/update_item_mutation.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/widgets/cart_warning_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,21 +16,6 @@ class CartItemTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(cartMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, _) {
-          final message = switch (error) {
-            AppException e => e.message,
-            _ => 'Something went wrong.',
-          };
-
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
-        },
-      );
-    });
-
     final optionText = item.options
         .map((e) => '${e.dimension}: ${e.value}')
         .join(' • ');
@@ -116,7 +101,7 @@ class CartItemTile extends ConsumerWidget {
                   onPressed: enabled
                       ? () {
                           ref
-                              .read(cartMutationsProvider.notifier)
+                              .read(deleteItemMutationProvider.notifier)
                               .deleteItem(variantId: item.variantId);
                         }
                       : null,
@@ -136,7 +121,7 @@ class CartItemTile extends ConsumerWidget {
                       ? null
                       : () {
                           ref
-                              .read(cartMutationsProvider.notifier)
+                              .read(updateItemMutationProvider.notifier)
                               .updateItem(
                                 variantId: item.variantId,
                                 quantity: item.quantity - 1,
@@ -163,7 +148,7 @@ class CartItemTile extends ConsumerWidget {
                       ? null
                       : () {
                           ref
-                              .read(cartMutationsProvider.notifier)
+                              .read(updateItemMutationProvider.notifier)
                               .updateItem(
                                 variantId: item.variantId,
                                 quantity: item.quantity + 1,

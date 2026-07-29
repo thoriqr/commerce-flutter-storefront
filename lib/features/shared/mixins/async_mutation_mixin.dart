@@ -18,4 +18,14 @@ mixin AsyncMutationMixin on AnyNotifier<AsyncValue<void>, void> {
 
     return result.requireValue;
   }
+
+  Future<void> run(Future<void> Function() action) async {
+    state = const AsyncLoading();
+
+    final result = await AsyncValue.guard(action);
+
+    if (ref.mounted) {
+      state = result;
+    }
+  }
 }
