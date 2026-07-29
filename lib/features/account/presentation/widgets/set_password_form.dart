@@ -1,7 +1,7 @@
 import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/set_password_request.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/set_password_mutation.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,7 +37,7 @@ class _SetPasswordFormState extends ConsumerState<SetPasswordForm>
       }
 
       await ref
-          .read(authMutationsProvider.notifier)
+          .read(setPasswordMutationProvider.notifier)
           .setPassword(SetPasswordRequest(password: _passwordController.text));
 
       if (!mounted) return;
@@ -48,7 +48,7 @@ class _SetPasswordFormState extends ConsumerState<SetPasswordForm>
 
   @override
   Widget build(BuildContext context) {
-    ref.listenMutationError(authMutationsProvider, context);
+    ref.listenMutationError(setPasswordMutationProvider, context);
 
     return Form(
       key: _formKey,

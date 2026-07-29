@@ -6,7 +6,9 @@ mixin AsyncMutationMixin on AnyNotifier<AsyncValue<void>, void> {
 
     final result = await AsyncValue.guard(action);
 
-    state = result.whenData((_) {});
+    if (ref.mounted) {
+      state = result.whenData((_) {});
+    }
 
     final error = result.error;
 

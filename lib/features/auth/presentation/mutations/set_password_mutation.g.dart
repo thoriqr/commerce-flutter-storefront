@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'auth_mutations.dart';
+part of 'set_password_mutation.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,33 +9,34 @@ part of 'auth_mutations.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(AuthMutations)
-final authMutationsProvider = AuthMutationsProvider._();
+@ProviderFor(SetPasswordMutation)
+final setPasswordMutationProvider = SetPasswordMutationProvider._();
 
-final class AuthMutationsProvider
-    extends $AsyncNotifierProvider<AuthMutations, void> {
-  AuthMutationsProvider._()
+final class SetPasswordMutationProvider
+    extends $AsyncNotifierProvider<SetPasswordMutation, void> {
+  SetPasswordMutationProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'authMutationsProvider',
+        name: r'setPasswordMutationProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$authMutationsHash();
+  String debugGetCreateSourceHash() => _$setPasswordMutationHash();
 
   @$internal
   @override
-  AuthMutations create() => AuthMutations();
+  SetPasswordMutation create() => SetPasswordMutation();
 }
 
-String _$authMutationsHash() => r'42dd6102085d03ea9f0dcc868773038b5474dfb2';
+String _$setPasswordMutationHash() =>
+    r'761866697871ba95bae96db651ad3f2d224e32b6';
 
-abstract class _$AuthMutations extends $AsyncNotifier<void> {
+abstract class _$SetPasswordMutation extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

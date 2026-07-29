@@ -8,12 +8,25 @@ import 'package:commerce_flutter_storefront/features/auth/constants/login_redire
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/protected_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class AccountSecurityPage extends ConsumerWidget {
+class AccountSecurityPage extends StatelessWidget {
   const AccountSecurityPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const ProtectedView(
+      requiresSameUser: true,
+      child: _AccountSecurityContent(),
+    );
+  }
+}
+
+class _AccountSecurityContent extends ConsumerWidget {
+  const _AccountSecurityContent();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

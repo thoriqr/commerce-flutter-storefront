@@ -1,7 +1,7 @@
 import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/change_password_request.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/change_password_mutation.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +39,7 @@ class _ChangePasswordFormState extends ConsumerState<ChangePasswordForm>
       }
 
       await ref
-          .read(authMutationsProvider.notifier)
+          .read(changePasswordMutationProvider.notifier)
           .changePassword(
             ChangePasswordRequest(
               currentPassword: _currentPasswordController.text,
@@ -55,7 +55,7 @@ class _ChangePasswordFormState extends ConsumerState<ChangePasswordForm>
 
   @override
   Widget build(BuildContext context) {
-    ref.listenMutationError(authMutationsProvider, context);
+    ref.listenMutationError(changePasswordMutationProvider, context);
 
     return Form(
       key: _formKey,

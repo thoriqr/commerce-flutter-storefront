@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:flutter/material.dart';
 
 mixin SubmittingStateMixin<T extends StatefulWidget> on State<T> {
@@ -14,6 +15,9 @@ mixin SubmittingStateMixin<T extends StatefulWidget> on State<T> {
 
     try {
       await action();
+    } on AppException {
+      // Application errors are presented by the mutation listener.
+      // Session expiration is handled globally by SessionNoticeListener.
     } finally {
       if (mounted) {
         setState(() {

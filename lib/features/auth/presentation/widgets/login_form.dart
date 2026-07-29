@@ -1,13 +1,11 @@
 import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
-import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
-import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/auth_mutations.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/mutations/login_mutation.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/widgets/google_sign_in_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,25 +61,19 @@ class _LoginFormState extends ConsumerState<LoginForm>
     }
   }
 
-  Future<void> _finishLogin(LoginMutationResult result) async {
-    if (!mounted) return;
-
-    final redirect = widget.redirect;
-
-    // The previous authenticated context belongs to another user.
-    // Do not restore it.
-    if (redirect != null &&
-        redirect.requiresSameUser &&
-        !result.canRestorePreviousContext) {
-      context.go(AppRoutes.home);
+  void _finishLogin(LoginMutationResult result) {
+    if (!mounted) {
       return;
     }
 
-    // Wait for the authenticated profile only when we're going to
-    // continue the current login flow.
-    await ref.read(userProfileProvider.future);
+    final redirect = widget.redirect;
 
-    if (!mounted) return;
+    // ProtectedView owns this resolution.
+    if (redirect != null &&
+        redirect.requiresSameUser &&
+        !result.canRestorePreviousContext) {
+      return;
+    }
 
     if (redirect != null) {
       context.go(redirect.location);
@@ -104,7 +96,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
       }
 
       final result = await ref
-          .read(authMutationsProvider.notifier)
+          .read(loginMutationProvider.notifier)
           .login(
             LoginRequest(
               email: _emailController.text.trim(),
@@ -112,7 +104,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
             ),
           );
 
-      await _finishLogin(result);
+      _finishLogin(result);
     });
   }
 
@@ -138,22 +130,22 @@ class _LoginFormState extends ConsumerState<LoginForm>
       }
 
       final result = await ref
-          .read(authMutationsProvider.notifier)
+          .read(loginMutationProvider.notifier)
           .googleLogin(GoogleLoginRequest(idToken: idToken));
 
-      await _finishLogin(result);
+      _finishLogin(result);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listenMutationError(
-      authMutationsProvider,
+      loginMutationProvider,
       context,
       additionalIgnoredCodes: const {ErrorCodes.invalidCredentials},
     );
 
-    final auth = ref.watch(authMutationsProvider);
+    final auth = ref.watch(loginMutationProvider);
 
     final errorMessage = switch (auth) {
       AsyncError(:final error)

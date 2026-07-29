@@ -5,7 +5,7 @@ import 'package:commerce_flutter_storefront/core/network/api_error_parser.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/auth_constants.dart';
 import 'package:dio/dio.dart';
 
-class AuthInterceptor extends QueuedInterceptor {
+class AuthInterceptor extends Interceptor {
   AuthInterceptor({required this.dio, required this.sessionManager});
 
   static const _retryKey = "is_retry";
