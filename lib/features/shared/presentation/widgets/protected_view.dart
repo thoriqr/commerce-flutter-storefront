@@ -20,93 +20,68 @@ class ProtectedView extends ConsumerStatefulWidget {
 }
 
 class _ProtectedViewState extends ConsumerState<ProtectedView> {
-  static const _debugDelay = Duration(seconds: 3);
-
-  bool _isFinishing = false;
   bool _isDiscardingContext = false;
 
-  bool _canReveal(AuthTransition transition, AsyncValue<bool> session) {
-    if (transition.phase != AuthTransitionPhase.resolving) {
-      return false;
-    }
+  void _log(String message) {
+    debugPrint(
+      '[ProtectedView#${identityHashCode(this)}] '
+      'sameUser=${widget.requiresSameUser} | $message',
+    );
+  }
 
+  bool _canReveal(AuthTransition transition, AsyncValue<bool> session) {
     final hasSession = switch (session) {
       AsyncData(:final value) => value,
       _ => false,
     };
 
-    if (!hasSession) {
-      return false;
-    }
+    final result =
+        !_isDiscardingContext &&
+        transition.phase == AuthTransitionPhase.resolving &&
+        hasSession &&
+        (!widget.requiresSameUser ||
+            transition.canRestorePreviousContext == true);
 
-    return !widget.requiresSameUser ||
-        transition.canRestorePreviousContext == true;
+    _log(
+      '_canReveal '
+      'phase=${transition.phase} '
+      'hasSession=$hasSession '
+      'canRestore=${transition.canRestorePreviousContext} '
+      'discarding=$_isDiscardingContext '
+      '=> $result',
+    );
+
+    return result;
   }
 
-  Future<void> _finishIfReady() async {
-    if (!mounted || _isFinishing || _isDiscardingContext) {
+  void _finishIfReady(String source) {
+    if (!mounted) {
+      _log('_finishIfReady source=$source -> SKIP: unmounted');
+      return;
+    }
+
+    if (_isDiscardingContext) {
+      _log('_finishIfReady source=$source -> SKIP: discarding context');
       return;
     }
 
     final transition = ref.read(authTransitionStateProvider);
     final session = ref.read(hasLocalSessionProvider);
 
+    _log(
+      '_finishIfReady source=$source '
+      'phase=${transition.phase} '
+      'session=$session',
+    );
+
     if (!_canReveal(transition, session)) {
+      _log('_finishIfReady source=$source -> NOT READY');
       return;
     }
 
-    _isFinishing = true;
+    _log('_finishIfReady source=$source -> FINISH');
 
-    // TEMP: diagnostic delay to verify that the boundary remains visible
-    // until the authenticated session is safe to reveal.
-    await Future<void>.delayed(_debugDelay);
-
-    if (!mounted) {
-      return;
-    }
-
-    final latestTransition = ref.read(authTransitionStateProvider);
-    final latestSession = ref.read(hasLocalSessionProvider);
-
-    // State may have changed while the diagnostic delay was running.
-    if (_canReveal(latestTransition, latestSession)) {
-      ref.read(authTransitionStateProvider.notifier).finish();
-    }
-
-    _isFinishing = false;
-  }
-
-  Future<void> _discardPreviousContext() async {
-    if (!mounted || _isDiscardingContext) {
-      return;
-    }
-
-    _isDiscardingContext = true;
-
-    // TEMP: diagnostic delay to verify that the previous user's
-    // protected context stays covered during account switching.
-    await Future<void>.delayed(_debugDelay);
-
-    if (!mounted) {
-      return;
-    }
-
-    final transition = ref.read(authTransitionStateProvider);
-
-    // The transition may have changed while waiting.
-    if (transition.phase != AuthTransitionPhase.resolving ||
-        transition.canRestorePreviousContext != false) {
-      _isDiscardingContext = false;
-      return;
-    }
-
-    // This route belongs to the previous user. Keep the transition
-    // resolving while it exits. The destination boundary takes over.
-    if (context.canPop()) {
-      context.pop();
-    } else {
-      context.go(AppRoutes.home);
-    }
+    ref.read(authTransitionStateProvider.notifier).finish();
   }
 
   String _transitionMessage(AuthTransition transition) {
@@ -114,39 +89,100 @@ class _ProtectedViewState extends ConsumerState<ProtectedView> {
         widget.requiresSameUser &&
         transition.canRestorePreviousContext == false;
 
-    if (isSwitchingAccount) {
-      return 'Switching accounts...';
-    }
+    return isSwitchingAccount
+        ? 'Switching accounts...'
+        : 'Loading your account...';
+  }
 
-    return 'Getting things ready...';
+  @override
+  void initState() {
+    super.initState();
+
+    _log('MOUNT');
+  }
+
+  @override
+  void dispose() {
+    _log('DISPOSE');
+
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     ref.listen(authTransitionStateProvider, (previous, next) {
+      _log(
+        'TRANSITION LISTENER '
+        '${previous?.phase} -> ${next.phase} '
+        'canRestore=${next.canRestorePreviousContext}',
+      );
+
       if (next.phase != AuthTransitionPhase.resolving) {
+        _log('TRANSITION LISTENER -> ignore non-resolving');
         return;
       }
 
       if (widget.requiresSameUser && next.canRestorePreviousContext == false) {
-        _discardPreviousContext();
+        if (_isDiscardingContext) {
+          _log('DISCARD -> already in progress');
+          return;
+        }
+
+        _isDiscardingContext = true;
+
+        _log('DISCARD -> different user');
+        _log('DISCARD -> child permanently covered until dispose');
+
+        if (context.canPop()) {
+          _log('DISCARD -> context.pop()');
+          context.pop();
+        } else {
+          _log('DISCARD -> context.go(home)');
+          context.go(AppRoutes.home);
+        }
+
         return;
       }
 
-      _finishIfReady();
+      _finishIfReady('transition-listener');
     });
 
     ref.listen(hasLocalSessionProvider, (previous, next) {
-      // Session and auth transition can settle in either order.
-      // Re-check whenever the local session state changes.
-      _finishIfReady();
+      _log(
+        'SESSION LISTENER '
+        '$previous -> $next',
+      );
+
+      _finishIfReady('session-listener');
     });
 
     final transition = ref.watch(authTransitionStateProvider);
 
-    if (transition.phase == AuthTransitionPhase.resolving) {
-      return _AuthTransitionView(message: _transitionMessage(transition));
+    _log(
+      'BUILD '
+      'phase=${transition.phase} '
+      'canRestore=${transition.canRestorePreviousContext} '
+      'discarding=$_isDiscardingContext',
+    );
+
+    // Once this boundary is known to belong to the previous user,
+    // never reveal its child again. Another ProtectedView may finish
+    // the global transition while this route is still being removed.
+    if (_isDiscardingContext) {
+      _log('KEEP COVERED -> discarding previous user context');
+
+      return const _AuthTransitionView(message: 'Switching accounts...');
     }
+
+    if (transition.phase == AuthTransitionPhase.resolving) {
+      final message = _transitionMessage(transition);
+
+      _log('SHOW TRANSITION VIEW "$message"');
+
+      return _AuthTransitionView(message: message);
+    }
+
+    _log('REVEAL CHILD');
 
     return widget.child;
   }

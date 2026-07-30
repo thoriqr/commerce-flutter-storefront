@@ -5,14 +5,26 @@ import 'package:commerce_flutter_storefront/features/product/presentation/provid
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_bottom_bar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_detail_content.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
+import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/protected_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:commerce_flutter_storefront/features/product/data/mocks/product_detail_mock.dart';
 
-class ProductDetailPage extends ConsumerWidget {
+class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage({super.key, required this.id});
+
+  final int id;
+
+  @override
+  Widget build(BuildContext context) {
+    return ProtectedView(child: _ProductDetailContent(id: id));
+  }
+}
+
+class _ProductDetailContent extends ConsumerWidget {
+  const _ProductDetailContent({required this.id});
 
   final int id;
 

@@ -3,28 +3,13 @@ import 'package:commerce_flutter_storefront/features/order/presentation/provider
 import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'order_mutations.g.dart';
+part 'create_snap_token_mutation.g.dart';
 
 @riverpod
-class OrderMutations extends _$OrderMutations with AsyncMutationMixin {
+class CreateSnapTokenMutation extends _$CreateSnapTokenMutation
+    with AsyncMutationMixin {
   @override
   FutureOr<void> build() {}
-
-  Future<void> confirmDelivered(String orderCode) {
-    return guard(() async {
-      await ref.read(orderRepositoryProvider).confirmDelivered(orderCode);
-
-      ref.invalidate(ordersProvider);
-    });
-  }
-
-  Future<void> cancelOrder(String orderCode) {
-    return guard(() async {
-      await ref.read(orderRepositoryProvider).cancelOrder(orderCode);
-
-      ref.invalidate(ordersProvider);
-    });
-  }
 
   Future<void> createSnapToken(String orderCode) {
     return guard(() async {

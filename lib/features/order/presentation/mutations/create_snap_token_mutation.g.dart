@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'order_mutations.dart';
+part of 'create_snap_token_mutation.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,33 +9,34 @@ part of 'order_mutations.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(OrderMutations)
-final orderMutationsProvider = OrderMutationsProvider._();
+@ProviderFor(CreateSnapTokenMutation)
+final createSnapTokenMutationProvider = CreateSnapTokenMutationProvider._();
 
-final class OrderMutationsProvider
-    extends $AsyncNotifierProvider<OrderMutations, void> {
-  OrderMutationsProvider._()
+final class CreateSnapTokenMutationProvider
+    extends $AsyncNotifierProvider<CreateSnapTokenMutation, void> {
+  CreateSnapTokenMutationProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'orderMutationsProvider',
+        name: r'createSnapTokenMutationProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$orderMutationsHash();
+  String debugGetCreateSourceHash() => _$createSnapTokenMutationHash();
 
   @$internal
   @override
-  OrderMutations create() => OrderMutations();
+  CreateSnapTokenMutation create() => CreateSnapTokenMutation();
 }
 
-String _$orderMutationsHash() => r'eb5b15236fc94463e992c8347643cf8a5d6b1a05';
+String _$createSnapTokenMutationHash() =>
+    r'c919b6c8b2b7b4533302afd8ac5317397e005372';
 
-abstract class _$OrderMutations extends $AsyncNotifier<void> {
+abstract class _$CreateSnapTokenMutation extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

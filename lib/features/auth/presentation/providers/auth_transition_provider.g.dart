@@ -42,7 +42,7 @@ final class AuthTransitionStateProvider
 }
 
 String _$authTransitionStateHash() =>
-    r'13a9dea67ce02c04b3cf85aae7d389df05b37fea';
+    r'2bfefa689c39bb8c39a88e0117b654c978bfc194';
 
 abstract class _$AuthTransitionState extends $Notifier<AuthTransition> {
   AuthTransition build();
