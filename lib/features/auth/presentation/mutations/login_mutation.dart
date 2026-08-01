@@ -9,15 +9,10 @@ import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_pro
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_transition_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_mutation.g.dart';
-
-class LoginMutationResult {
-  const LoginMutationResult({required this.canRestorePreviousContext});
-
-  final bool canRestorePreviousContext;
-}
 
 @Riverpod(keepAlive: true)
 class LoginMutation extends _$LoginMutation with AsyncMutationMixin {
@@ -37,19 +32,24 @@ class LoginMutation extends _$LoginMutation with AsyncMutationMixin {
     }
   }
 
-  Future<LoginMutationResult> _updateLoginSession(
-    AuthLoginResult result,
-  ) async {
+  Future<void> _updateLoginSession(AuthLoginResult result) async {
     final preferences = ref.read(appPreferencesProvider);
 
     final lastUserId = await preferences.getLastUserId();
 
-    final canRestorePreviousContext =
-        lastUserId != null && lastUserId == result.userId;
+    debugPrint(
+      '[LoginMutation] '
+      'lastUserId=$lastUserId '
+      'currentUserId=${result.userId}',
+    );
+
+    final canRestore = lastUserId != null && lastUserId == result.userId;
+
+    debugPrint('[LoginMutation] canRestore=$canRestore');
 
     ref
         .read(authTransitionStateProvider.notifier)
-        .startResolving(canRestorePreviousContext: canRestorePreviousContext);
+        .start(canRestorePreviousContext: canRestore);
 
     await _updateAuthenticatedSession(
       AuthTokens(
@@ -60,45 +60,23 @@ class LoginMutation extends _$LoginMutation with AsyncMutationMixin {
     );
 
     await preferences.setLastUserId(result.userId);
-
-    return LoginMutationResult(
-      canRestorePreviousContext: canRestorePreviousContext,
-    );
   }
 
-  Future<LoginMutationResult> login(LoginRequest request) {
+  Future<void> login(LoginRequest request) {
     return guard(() async {
-      final transition = ref.read(authTransitionStateProvider.notifier);
+      final result = await ref.read(authRepositoryProvider).login(request);
 
-      transition.startAuthenticating();
-
-      try {
-        final result = await ref.read(authRepositoryProvider).login(request);
-
-        return await _updateLoginSession(result);
-      } catch (_) {
-        transition.finish();
-        rethrow;
-      }
+      await _updateLoginSession(result);
     });
   }
 
-  Future<LoginMutationResult> googleLogin(GoogleLoginRequest request) {
+  Future<void> googleLogin(GoogleLoginRequest request) {
     return guard(() async {
-      final transition = ref.read(authTransitionStateProvider.notifier);
+      final result = await ref
+          .read(authRepositoryProvider)
+          .googleLogin(request);
 
-      transition.startAuthenticating();
-
-      try {
-        final result = await ref
-            .read(authRepositoryProvider)
-            .googleLogin(request);
-
-        return await _updateLoginSession(result);
-      } catch (_) {
-        transition.finish();
-        rethrow;
-      }
+      await _updateLoginSession(result);
     });
   }
 }

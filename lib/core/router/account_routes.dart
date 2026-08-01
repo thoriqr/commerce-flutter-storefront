@@ -14,11 +14,15 @@ abstract final class AccountRoutes {
 
   static const security = '/account/security';
 
+  static String addressLocation(int id) {
+    return '/account/address/$id';
+  }
+
   static void pushNewAddress(BuildContext context) {
     context.push(addressNew);
   }
 
   static void pushEditAddress(BuildContext context, int id) {
-    context.push('/account/address/$id');
+    context.push(addressLocation(id));
   }
 }

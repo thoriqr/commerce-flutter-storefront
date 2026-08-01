@@ -4,42 +4,39 @@ import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_authenticated_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_error_view.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_guest_view.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
-import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/protected_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends ConsumerWidget {
   const AccountPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ProtectedView(child: _AccountContent());
-  }
-}
-
-class _AccountContent extends ConsumerWidget {
-  const _AccountContent();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(hasLocalSessionProvider);
 
     return switch (session) {
-      AsyncLoading() => const Center(child: CircularProgressIndicator()),
-
-      AsyncError(:final error) => AccountErrorView(
-        error: error,
-        onRetry: () {
-          ref.invalidate(hasLocalSessionProvider);
-        },
+      AsyncLoading() => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
       ),
 
-      AsyncData(:final value) =>
-        value
-            ? const _AuthenticatedAccount()
-            : const LoginPage(showAppBar: false, isEmbedded: true),
+      AsyncError(:final error) => Scaffold(
+        body: AccountErrorView(
+          error: error,
+          onRetry: () {
+            ref.invalidate(hasLocalSessionProvider);
+          },
+        ),
+      ),
+
+      AsyncData(value: false) => const Scaffold(
+        body: AccountGuestView(redirect: LoginRedirect(AppRoutes.account)),
+      ),
+
+      AsyncData(value: true) => const _AuthenticatedAccount(),
     };
   }
 }
@@ -52,17 +49,22 @@ class _AuthenticatedAccount extends ConsumerWidget {
     final profile = ref.watch(userProfileProvider);
 
     return switch (profile) {
-      AsyncLoading() => const Center(child: CircularProgressIndicator()),
+      AsyncLoading() => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
 
-      AsyncError(:final error) =>
-        error is AppException && error.code == ErrorCodes.unauthorized
-            ? const LoginPage(showAppBar: false, isEmbedded: true)
-            : AccountErrorView(
-                error: error,
-                onRetry: () {
-                  ref.invalidate(userProfileProvider);
-                },
-              ),
+      AsyncError(:final error)
+          when error is AppException && error.code == ErrorCodes.unauthorized =>
+        const Scaffold(body: AccountGuestView()),
+
+      AsyncError(:final error) => Scaffold(
+        body: AccountErrorView(
+          error: error,
+          onRetry: () {
+            ref.invalidate(userProfileProvider);
+          },
+        ),
+      ),
 
       AsyncData(:final value) => AccountAuthenticatedPage(
         user: value,

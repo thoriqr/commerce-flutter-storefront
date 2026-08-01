@@ -43,6 +43,7 @@ class HomePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    debugPrint('[Home] BUILD');
     final heroAsync = ref.watch(homepageHeroProvider);
     final categoriesAsync = ref.watch(popularCategoryProvider);
     final collectionsAsync = ref.watch(collectionPreviewProvider);

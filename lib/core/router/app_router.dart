@@ -7,7 +7,9 @@ import 'package:commerce_flutter_storefront/features/account/presentation/pages/
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_profile_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_security_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/upsert_address_page.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/auth_transition_arguments.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/pages/auth_transition_page.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/pages/cart_page.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/pages/category_tree_page.dart';
@@ -126,6 +128,15 @@ final router = GoRouter(
         final orderCode = state.pathParameters['orderCode']!;
 
         return OrderDetailPage(orderCode: orderCode);
+      },
+    ),
+
+    GoRoute(
+      path: AuthRoutes.transition,
+      builder: (context, state) {
+        return AuthTransitionPage(
+          arguments: state.extra! as AuthTransitionArguments,
+        );
       },
     ),
   ],

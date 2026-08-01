@@ -1,9 +1,10 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/controllers/upsert_address_controller.dart';
-import 'package:commerce_flutter_storefront/features/account/presentation/mutations/account_mutations.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/create_address_mutation.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/update_address_mutation.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 import 'package:commerce_flutter_storefront/features/shipping/data/models/city.dart';
 import 'package:commerce_flutter_storefront/features/shipping/data/models/district.dart';
@@ -124,14 +125,16 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm>
         postalCode: _postalCodeController.text.trim(),
       );
 
-      final mutation = ref.read(accountMutationsProvider.notifier);
-
       int? createdAddressId;
 
       if (widget.isEdit) {
-        await mutation.updateAddress(widget.addressId!, request);
+        await ref
+            .read(updateAddressMutationProvider.notifier)
+            .mutate(widget.addressId!, request);
       } else {
-        final response = await mutation.createAddress(request);
+        final response = await ref
+            .read(createAddressMutationProvider.notifier)
+            .mutate(request);
 
         createdAddressId = response.addressId;
 
@@ -146,23 +149,20 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm>
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(accountMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, _) {
-          final message = error is AppException
-              ? error.message
-              : 'Something went wrong.';
+    ref.listenMutationError(createAddressMutationProvider, context);
 
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
-        },
-      );
-    });
+    ref.listenMutationError(updateAddressMutationProvider, context);
 
     final selection = ref.watch(upsertAddressControllerProvider);
 
-    final isBusy = isSubmitting || selection.restoringSelection;
+    final createMutation = ref.watch(createAddressMutationProvider);
+    final updateMutation = ref.watch(updateAddressMutationProvider);
+
+    final isBusy =
+        isSubmitting ||
+        selection.restoringSelection ||
+        createMutation.isLoading ||
+        updateMutation.isLoading;
 
     final provincesAsync = ref.watch(provincesProvider);
 

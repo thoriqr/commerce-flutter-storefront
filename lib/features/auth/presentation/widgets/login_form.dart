@@ -1,7 +1,9 @@
 import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
 import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
 import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
+import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/auth_transition_arguments.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/google_login_request.dart';
 import 'package:commerce_flutter_storefront/features/auth/data/models/login_request.dart';
@@ -61,30 +63,21 @@ class _LoginFormState extends ConsumerState<LoginForm>
     }
   }
 
-  void _finishLogin(LoginMutationResult result) {
+  void _goToTransition() {
     if (!mounted) {
       return;
     }
 
-    final redirect = widget.redirect;
+    debugPrint(
+      '[LoginForm] pushReplacement -> AuthTransitionPage '
+      'redirect=${widget.redirect?.location} '
+      'sameUser=${widget.redirect?.requiresSameUser}',
+    );
 
-    // ProtectedView owns this resolution.
-    if (redirect != null &&
-        redirect.requiresSameUser &&
-        !result.canRestorePreviousContext) {
-      return;
-    }
-
-    if (redirect != null) {
-      context.go(redirect.location);
-      return;
-    }
-
-    if (widget.isEmbedded) {
-      return;
-    }
-
-    context.pop();
+    context.replace(
+      AuthRoutes.transition,
+      extra: AuthTransitionArguments(redirect: widget.redirect),
+    );
   }
 
   Future<void> _login() {
@@ -95,7 +88,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
         return;
       }
 
-      final result = await ref
+      await ref
           .read(loginMutationProvider.notifier)
           .login(
             LoginRequest(
@@ -104,7 +97,7 @@ class _LoginFormState extends ConsumerState<LoginForm>
             ),
           );
 
-      _finishLogin(result);
+      _goToTransition();
     });
   }
 
@@ -129,11 +122,11 @@ class _LoginFormState extends ConsumerState<LoginForm>
         );
       }
 
-      final result = await ref
+      await ref
           .read(loginMutationProvider.notifier)
           .googleLogin(GoogleLoginRequest(idToken: idToken));
 
-      _finishLogin(result);
+      _goToTransition();
     });
   }
 

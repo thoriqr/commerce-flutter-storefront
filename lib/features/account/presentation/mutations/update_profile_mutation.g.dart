@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'login_mutation.dart';
+part of 'update_profile_mutation.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,33 +9,34 @@ part of 'login_mutation.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(LoginMutation)
-final loginMutationProvider = LoginMutationProvider._();
+@ProviderFor(UpdateProfileMutation)
+final updateProfileMutationProvider = UpdateProfileMutationProvider._();
 
-final class LoginMutationProvider
-    extends $AsyncNotifierProvider<LoginMutation, void> {
-  LoginMutationProvider._()
+final class UpdateProfileMutationProvider
+    extends $AsyncNotifierProvider<UpdateProfileMutation, void> {
+  UpdateProfileMutationProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'loginMutationProvider',
-        isAutoDispose: false,
+        name: r'updateProfileMutationProvider',
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$loginMutationHash();
+  String debugGetCreateSourceHash() => _$updateProfileMutationHash();
 
   @$internal
   @override
-  LoginMutation create() => LoginMutation();
+  UpdateProfileMutation create() => UpdateProfileMutation();
 }
 
-String _$loginMutationHash() => r'2c2abe33605a78d2a6fdf4aa266f7f6dd22a121a';
+String _$updateProfileMutationHash() =>
+    r'edecd3f8905871b32d41150fffa8346b163f4102';
 
-abstract class _$LoginMutation extends $AsyncNotifier<void> {
+abstract class _$UpdateProfileMutation extends $AsyncNotifier<void> {
   FutureOr<void> build();
   @$mustCallSuper
   @override

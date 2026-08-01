@@ -1,8 +1,8 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_profile_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_profile.dart';
-import 'package:commerce_flutter_storefront/features/account/presentation/mutations/account_mutations.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/update_profile_mutation.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/submitting_state_mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -51,7 +51,7 @@ class _AccountProfileFormState extends ConsumerState<AccountProfileForm>
         displayName: _displayNameController.text.trim(),
       );
 
-      await ref.read(accountMutationsProvider.notifier).updateProfile(request);
+      await ref.read(updateProfileMutationProvider.notifier).mutate(request);
 
       if (!mounted) {
         return;
@@ -63,20 +63,7 @@ class _AccountProfileFormState extends ConsumerState<AccountProfileForm>
 
   @override
   Widget build(BuildContext context) {
-    ref.listen(accountMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, _) {
-          final message = switch (error) {
-            AppException e => e.message,
-            _ => 'Something went wrong.',
-          };
-
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
-        },
-      );
-    });
+    ref.listenMutationError(updateProfileMutationProvider, context);
 
     return Form(
       key: _formKey,

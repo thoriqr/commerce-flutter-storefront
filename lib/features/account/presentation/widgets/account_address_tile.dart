@@ -1,7 +1,8 @@
-import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
-import 'package:commerce_flutter_storefront/features/account/presentation/mutations/account_mutations.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/delete_address_mutation.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/mutations/set_default_address_mutation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,23 +13,17 @@ class AccountAddressTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.listen(accountMutationsProvider, (previous, next) {
-      next.whenOrNull(
-        error: (error, _) {
-          final message = switch (error) {
-            AppException e => e.message,
-            _ => 'Something went wrong.',
-          };
+    ref.listenMutationError(deleteAddressMutationProvider, context);
 
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
-        },
-      );
-    });
+    ref.listenMutationError(setDefaultAddressMutationProvider, context);
 
-    final mutation = ref.watch(accountMutationsProvider);
-    final isLoading = mutation.isLoading;
+    final deleteMutation = ref.watch(deleteAddressMutationProvider);
+    final setDefaultMutation = ref.watch(setDefaultAddressMutationProvider);
+
+    final isDeleting = deleteMutation.isLoading;
+    final isSettingDefault = setDefaultMutation.isLoading;
+
+    final isBusy = isDeleting || isSettingDefault;
 
     return Card(
       child: Padding(
@@ -44,6 +39,7 @@ class AccountAddressTile extends ConsumerWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
+
                 if (address.isDefault) const Chip(label: Text('Default')),
               ],
             ),
@@ -72,7 +68,7 @@ class AccountAddressTile extends ConsumerWidget {
             Row(
               children: [
                 TextButton.icon(
-                  onPressed: isLoading
+                  onPressed: isBusy
                       ? null
                       : () {
                           AccountRoutes.pushEditAddress(context, address.id);
@@ -84,13 +80,13 @@ class AccountAddressTile extends ConsumerWidget {
                 const SizedBox(width: 12),
 
                 TextButton.icon(
-                  onPressed: isLoading
+                  onPressed: isBusy
                       ? null
                       : () async {
                           final confirmed =
                               await showDialog<bool>(
                                 context: context,
-                                builder: (_) {
+                                builder: (dialogContext) {
                                   return AlertDialog(
                                     title: const Text('Delete address?'),
                                     content: const Text(
@@ -99,13 +95,13 @@ class AccountAddressTile extends ConsumerWidget {
                                     actions: [
                                       TextButton(
                                         onPressed: () {
-                                          Navigator.pop(context, false);
+                                          Navigator.pop(dialogContext, false);
                                         },
                                         child: const Text('Cancel'),
                                       ),
                                       FilledButton(
                                         onPressed: () {
-                                          Navigator.pop(context, true);
+                                          Navigator.pop(dialogContext, true);
                                         },
                                         child: const Text('Delete'),
                                       ),
@@ -119,11 +115,17 @@ class AccountAddressTile extends ConsumerWidget {
                             return;
                           }
 
-                          await ref
-                              .read(accountMutationsProvider.notifier)
-                              .deleteAddress(address.id);
+                          ref
+                              .read(deleteAddressMutationProvider.notifier)
+                              .mutate(address.id);
                         },
-                  icon: const Icon(Icons.delete_outline, size: 18),
+                  icon: isDeleting
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.delete_outline, size: 18),
                   label: const Text('Delete'),
                 ),
 
@@ -131,14 +133,22 @@ class AccountAddressTile extends ConsumerWidget {
 
                 if (!address.isDefault)
                   FilledButton.tonal(
-                    onPressed: isLoading
+                    onPressed: isBusy
                         ? null
-                        : () async {
-                            await ref
-                                .read(accountMutationsProvider.notifier)
-                                .setDefaultAddress(address.id);
+                        : () {
+                            ref
+                                .read(
+                                  setDefaultAddressMutationProvider.notifier,
+                                )
+                                .mutate(address.id);
                           },
-                    child: const Text('Set Default'),
+                    child: isSettingDefault
+                        ? const SizedBox(
+                            width: 18,
+                            height: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Text('Set Default'),
                   ),
               ],
             ),

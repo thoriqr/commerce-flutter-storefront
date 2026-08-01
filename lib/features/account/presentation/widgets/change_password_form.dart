@@ -55,6 +55,7 @@ class _ChangePasswordFormState extends ConsumerState<ChangePasswordForm>
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('[Security] ChangePasswordForm BUILD');
     ref.listenMutationError(changePasswordMutationProvider, context);
 
     return Form(

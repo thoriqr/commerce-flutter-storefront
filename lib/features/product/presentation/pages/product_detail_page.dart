@@ -5,7 +5,6 @@ import 'package:commerce_flutter_storefront/features/product/presentation/provid
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_bottom_bar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_detail_content.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
-import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/protected_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -19,7 +18,7 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProtectedView(child: _ProductDetailContent(id: id));
+    return _ProductDetailContent(id: id);
   }
 }
 
@@ -68,7 +67,6 @@ class _ProductDetailContent extends ConsumerWidget {
           ),
         ],
       ),
-
       bottomNavigationBar: ProductBottomBar(
         productId: product.id,
         variantId: selectedVariantId,
