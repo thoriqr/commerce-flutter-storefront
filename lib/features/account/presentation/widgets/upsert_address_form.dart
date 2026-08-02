@@ -1,4 +1,5 @@
 import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
+import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/core/validation/validators.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/upsert_address_request.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_address_detail.dart';
@@ -143,7 +144,12 @@ class _UpsertAddressFormState extends ConsumerState<UpsertAddressForm>
 
       if (!mounted) return;
 
-      context.pop(createdAddressId);
+      if (context.canPop()) {
+        context.pop(createdAddressId);
+        return;
+      }
+
+      context.go(AccountRoutes.addresses);
     });
   }
 

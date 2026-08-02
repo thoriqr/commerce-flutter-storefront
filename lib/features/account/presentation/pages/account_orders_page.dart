@@ -1,23 +1,76 @@
+import 'package:commerce_flutter_storefront/core/constants/error_codes.dart';
+import 'package:commerce_flutter_storefront/core/exceptions/app_exception.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_guest_view.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_order_filter.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
+import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/order/data/models/order_listing_query_params.dart';
 import 'package:commerce_flutter_storefront/features/order/data/models/order_sort_status.dart';
 import 'package:commerce_flutter_storefront/features/order/presentation/providers/order_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_orders_content.dart';
 import 'package:commerce_flutter_storefront/features/order/data/mocks/order_listing_result_mock.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_error_view.dart';
 
-class AccountOrdersPage extends ConsumerStatefulWidget {
+class AccountOrdersPage extends ConsumerWidget {
   const AccountOrdersPage({super.key});
 
   @override
-  ConsumerState<AccountOrdersPage> createState() => _AccountOrdersPageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(hasLocalSessionProvider);
+
+    return switch (session) {
+      AsyncLoading() => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+
+      AsyncError(:final error) => Scaffold(
+        appBar: AppHeader(
+          title: 'Orders',
+          showCartButton: false,
+          onSearch: (_) {},
+        ),
+        body: AccountErrorView(
+          error: error,
+          onRetry: () {
+            ref.invalidate(hasLocalSessionProvider);
+          },
+        ),
+      ),
+
+      AsyncData(value: false) => Scaffold(
+        appBar: AppHeader(
+          title: 'Orders',
+          showCartButton: false,
+          onSearch: (_) {},
+        ),
+        body: AccountGuestView(
+          redirect: LoginRedirect(
+            GoRouterState.of(context).uri.toString(),
+            requiresSameUser: true,
+          ),
+        ),
+      ),
+
+      AsyncData(value: true) => const _AuthenticatedAccountOrders(),
+    };
+  }
 }
 
-class _AccountOrdersPageState extends ConsumerState<AccountOrdersPage> {
+class _AuthenticatedAccountOrders extends ConsumerStatefulWidget {
+  const _AuthenticatedAccountOrders();
+
+  @override
+  ConsumerState<_AuthenticatedAccountOrders> createState() =>
+      _AuthenticatedAccountOrdersState();
+}
+
+class _AuthenticatedAccountOrdersState
+    extends ConsumerState<_AuthenticatedAccountOrders> {
   OrderSortStatus status = OrderSortStatus.ongoing;
 
   int page = 1;
@@ -41,21 +94,15 @@ class _AccountOrdersPageState extends ConsumerState<AccountOrdersPage> {
           onRefresh: () {
             return ref.refresh(ordersProvider(params).future);
           },
-
           onNextPage: () {
-            if (!result.meta.hasNext) {
-              return;
-            }
+            if (!result.meta.hasNext) return;
 
             setState(() {
               page++;
             });
           },
-
           onPreviousPage: () {
-            if (!result.meta.hasPrev) {
-              return;
-            }
+            if (!result.meta.hasPrev) return;
 
             setState(() {
               page--;
@@ -63,6 +110,15 @@ class _AccountOrdersPageState extends ConsumerState<AccountOrdersPage> {
           },
         ),
       ),
+
+      AsyncError(:final error)
+          when error is AppException && error.code == ErrorCodes.unauthorized =>
+        AccountGuestView(
+          redirect: LoginRedirect(
+            GoRouterState.of(context).uri.toString(),
+            requiresSameUser: true,
+          ),
+        ),
 
       AsyncError(:final error) => AccountErrorView(
         error: error,
@@ -76,21 +132,15 @@ class _AccountOrdersPageState extends ConsumerState<AccountOrdersPage> {
         onRefresh: () {
           return ref.refresh(ordersProvider(params).future);
         },
-
         onNextPage: () {
-          if (!result.meta.hasNext) {
-            return;
-          }
+          if (!result.meta.hasNext) return;
 
           setState(() {
             page++;
           });
         },
-
         onPreviousPage: () {
-          if (!result.meta.hasPrev) {
-            return;
-          }
+          if (!result.meta.hasPrev) return;
 
           setState(() {
             page--;
@@ -119,7 +169,6 @@ class _AccountOrdersPageState extends ConsumerState<AccountOrdersPage> {
               },
             ),
           ),
-
           Expanded(child: body),
         ],
       ),

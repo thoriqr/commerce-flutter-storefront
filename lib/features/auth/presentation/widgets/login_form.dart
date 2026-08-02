@@ -68,12 +68,6 @@ class _LoginFormState extends ConsumerState<LoginForm>
       return;
     }
 
-    debugPrint(
-      '[LoginForm] pushReplacement -> AuthTransitionPage '
-      'redirect=${widget.redirect?.location} '
-      'sameUser=${widget.redirect?.requiresSameUser}',
-    );
-
     context.replace(
       AuthRoutes.transition,
       extra: AuthTransitionArguments(redirect: widget.redirect),

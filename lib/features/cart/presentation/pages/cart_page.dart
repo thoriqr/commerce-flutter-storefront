@@ -5,24 +5,14 @@ import 'package:commerce_flutter_storefront/features/cart/presentation/providers
 import 'package:commerce_flutter_storefront/features/cart/presentation/widgets/cart_content.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/widgets/cart_guest_view.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
-import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/protected_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:commerce_flutter_storefront/features/cart/data/mocks/cart_mock.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/widgets/cart_error_view.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends ConsumerWidget {
   const CartPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ProtectedView(child: _CartContent());
-  }
-}
-
-class _CartContent extends ConsumerWidget {
-  const _CartContent();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,13 +27,14 @@ class _CartContent extends ConsumerWidget {
         },
       ),
 
-      AsyncData(:final value) =>
-        value ? const _AuthenticatedCart() : const CartGuestView(),
+      AsyncData(value: false) => const CartGuestView(),
+
+      AsyncData(value: true) => const _AuthenticatedCart(),
     };
 
     return Scaffold(
       appBar: AppHeader(
-        title: "Shopping Cart",
+        title: 'Shopping Cart',
         showBackButton: true,
         showCartButton: false,
         showMenuButton: true,
@@ -72,14 +63,15 @@ class _AuthenticatedCart extends ConsumerWidget {
         ),
       ),
 
-      AsyncError(:final error) =>
-        error is AppException && error.code == ErrorCodes.unauthorized
-            ? const CartGuestView()
-            : CartErrorView(
-                onRetry: () {
-                  ref.invalidate(cartProvider);
-                },
-              ),
+      AsyncError(:final error)
+          when error is AppException && error.code == ErrorCodes.unauthorized =>
+        const CartGuestView(),
+
+      AsyncError() => CartErrorView(
+        onRetry: () {
+          ref.invalidate(cartProvider);
+        },
+      ),
 
       AsyncData(:final value) => CartContent(
         cart: value,

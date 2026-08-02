@@ -50,6 +50,10 @@ class CheckoutShippingCard extends ConsumerWidget {
 
     final mutation = ref.watch(setCheckoutShippingMutationProvider);
 
+    final canSelectShipping =
+        checkout.address != null &&
+        checkout.reason != CheckoutBlockReason.noAddress;
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -67,7 +71,7 @@ class CheckoutShippingCard extends ConsumerWidget {
                       const Spacer(),
 
                       TextButton(
-                        onPressed: mutation.isLoading
+                        onPressed: mutation.isLoading || !canSelectShipping
                             ? null
                             : () {
                                 _showShippingPicker(context, ref);
@@ -116,14 +120,15 @@ class CheckoutShippingCard extends ConsumerWidget {
                   const SizedBox(height: 12),
 
                   Text(
-                    'Select a shipping option to continue.',
+                    canSelectShipping
+                        ? 'Select a shipping option to continue.'
+                        : 'Please add a shipping address first.',
                     style: theme.textTheme.bodyMedium,
                   ),
 
                   const SizedBox(height: 16),
-
                   OutlinedButton(
-                    onPressed: mutation.isLoading
+                    onPressed: mutation.isLoading || !canSelectShipping
                         ? null
                         : () {
                             _showShippingPicker(context, ref);

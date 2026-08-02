@@ -1,6 +1,7 @@
 import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
+import 'package:commerce_flutter_storefront/features/account/constants/upsert_address_arguments.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_addresses_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_orders_page.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/pages/account_page.dart';
@@ -99,8 +100,11 @@ final router = GoRouter(
     GoRoute(
       path: AccountRoutes.addressNew,
       builder: (context, state) {
+        final args = state.extra as UpsertAddressArguments?;
+
         return UpsertAddressPage(
-          onCreated: state.extra as Future<void> Function(int addressId)?,
+          onCreated: args?.onCreated,
+          loginRedirect: args?.loginRedirect,
         );
       },
     ),

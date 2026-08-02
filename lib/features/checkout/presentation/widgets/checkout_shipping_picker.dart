@@ -1,3 +1,4 @@
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/utils/currency_utils.dart';
 import 'package:commerce_flutter_storefront/features/checkout/constants/shipping_constants.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/shipping_cost.dart';
@@ -255,6 +256,11 @@ class _CheckoutShippingPickerState
 
   @override
   Widget build(BuildContext context) {
+    ref.listenDismissOnSessionExpired(
+      shippingCostProvider(widget.sessionId, selectedCourier.value),
+      context,
+    );
+
     final shipping = ref.watch(
       shippingCostProvider(widget.sessionId, selectedCourier.value),
     );

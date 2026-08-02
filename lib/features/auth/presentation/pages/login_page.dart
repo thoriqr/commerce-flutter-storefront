@@ -4,16 +4,10 @@ import 'package:commerce_flutter_storefront/features/shared/presentation/widgets
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({
-    super.key,
-    this.redirect,
-    this.showAppBar = true,
-    this.isEmbedded = false,
-  });
+  const LoginPage({super.key, this.redirect, this.showAppBar = true});
 
   final LoginRedirect? redirect;
   final bool showAppBar;
-  final bool isEmbedded;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +18,7 @@ class LoginPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: LoginForm(redirect: redirect, isEmbedded: isEmbedded),
+          child: LoginForm(redirect: redirect),
         ),
       ),
     );

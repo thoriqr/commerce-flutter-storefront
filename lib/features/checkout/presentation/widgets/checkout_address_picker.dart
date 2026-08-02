@@ -1,15 +1,23 @@
+import 'package:commerce_flutter_storefront/core/extensions/widget_ref_extension.dart';
 import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/features/account/constants/upsert_address_arguments.dart';
 import 'package:commerce_flutter_storefront/features/account/data/models/user_addresses.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/providers/account_provider.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class CheckoutAddressPicker extends ConsumerWidget {
-  const CheckoutAddressPicker({super.key});
+  const CheckoutAddressPicker({super.key, required this.sessionId});
+
+  final int sessionId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listenDismissOnSessionExpired(userAddressesProvider, context);
+
     final addresses = ref.watch(userAddressesProvider);
 
     return SafeArea(
@@ -37,7 +45,10 @@ class CheckoutAddressPicker extends ConsumerWidget {
             ),
           ),
 
-          AsyncData(:final value) => _AddressPickerContent(addresses: value),
+          AsyncData(:final value) => _AddressPickerContent(
+            sessionId: sessionId,
+            addresses: value,
+          ),
         },
       ),
     );
@@ -45,8 +56,12 @@ class CheckoutAddressPicker extends ConsumerWidget {
 }
 
 class _AddressPickerContent extends StatelessWidget {
-  const _AddressPickerContent({required this.addresses});
+  const _AddressPickerContent({
+    required this.sessionId,
+    required this.addresses,
+  });
 
+  final int sessionId;
   final UserAddresses addresses;
 
   @override
@@ -83,6 +98,12 @@ class _AddressPickerContent extends StatelessWidget {
                 ? () async {
                     final addressId = await context.push<int>(
                       AccountRoutes.addressNew,
+                      extra: UpsertAddressArguments(
+                        loginRedirect: LoginRedirect(
+                          AppRoutes.checkoutSession(sessionId),
+                          requiresSameUser: true,
+                        ),
+                      ),
                     );
 
                     if (addressId == null || !context.mounted) {

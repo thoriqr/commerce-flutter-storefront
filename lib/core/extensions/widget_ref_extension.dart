@@ -32,4 +32,23 @@ extension WidgetRefX on WidgetRef {
       );
     });
   }
+
+  void listenDismissOnSessionExpired<T>(
+    ProviderListenable<AsyncValue<T>> provider,
+    BuildContext context,
+  ) {
+    listen(provider, (previous, next) {
+      next.whenOrNull(
+        error: (error, _) {
+          if (error is! AppException ||
+              error.code != ErrorCodes.sessionExpired ||
+              !context.mounted) {
+            return;
+          }
+
+          Navigator.of(context).maybePop();
+        },
+      );
+    });
+  }
 }

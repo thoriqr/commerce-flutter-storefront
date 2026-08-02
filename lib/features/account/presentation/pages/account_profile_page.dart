@@ -4,30 +4,16 @@ import 'package:commerce_flutter_storefront/features/account/presentation/provid
 
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_profile_form.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
-import 'package:commerce_flutter_storefront/features/auth/presentation/pages/login_page.dart';
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
-import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/protected_view.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_error_view.dart';
-import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
+import 'package:commerce_flutter_storefront/features/account/presentation/widgets/account_guest_view.dart';
+import 'package:go_router/go_router.dart';
 
-class AccountProfilePage extends StatelessWidget {
+class AccountProfilePage extends ConsumerWidget {
   const AccountProfilePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const ProtectedView(
-      requiresSameUser: true,
-      child: _AccountProfileContent(),
-    );
-  }
-}
-
-class _AccountProfileContent extends ConsumerWidget {
-  const _AccountProfileContent();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,9 +38,18 @@ class _AccountProfileContent extends ConsumerWidget {
         ),
       ),
 
-      AsyncData(value: false) => const LoginPage(
-        redirect: LoginRedirect(AccountRoutes.profile, requiresSameUser: true),
-        isEmbedded: true,
+      AsyncData(value: false) => Scaffold(
+        appBar: AppHeader(
+          title: 'Profile',
+          showCartButton: false,
+          onSearch: (_) {},
+        ),
+        body: AccountGuestView(
+          redirect: LoginRedirect(
+            GoRouterState.of(context).uri.toString(),
+            requiresSameUser: true,
+          ),
+        ),
       ),
 
       AsyncData(value: true) => const _AuthenticatedAccountProfile(),
@@ -72,21 +67,21 @@ class _AuthenticatedAccountProfile extends ConsumerWidget {
     final body = switch (profile) {
       AsyncLoading() => const Center(child: CircularProgressIndicator()),
 
-      AsyncError(:final error) =>
-        error is AppException && error.code == ErrorCodes.unauthorized
-            ? const LoginPage(
-                redirect: LoginRedirect(
-                  AccountRoutes.profile,
-                  requiresSameUser: true,
-                ),
-                isEmbedded: true,
-              )
-            : AccountErrorView(
-                error: error,
-                onRetry: () {
-                  ref.invalidate(userProfileProvider);
-                },
-              ),
+      AsyncError(:final error)
+          when error is AppException && error.code == ErrorCodes.unauthorized =>
+        AccountGuestView(
+          redirect: LoginRedirect(
+            GoRouterState.of(context).uri.toString(),
+            requiresSameUser: true,
+          ),
+        ),
+
+      AsyncError(:final error) => AccountErrorView(
+        error: error,
+        onRetry: () {
+          ref.invalidate(userProfileProvider);
+        },
+      ),
 
       AsyncData(:final value) => AccountProfileForm(user: value),
     };

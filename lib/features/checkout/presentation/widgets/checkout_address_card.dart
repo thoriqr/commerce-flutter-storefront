@@ -1,4 +1,7 @@
 import 'package:commerce_flutter_storefront/core/router/account_routes.dart';
+import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/features/account/constants/upsert_address_arguments.dart';
+import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/checkout_session.dart';
 import 'package:commerce_flutter_storefront/features/checkout/data/models/set_checkout_address_request.dart';
 import 'package:commerce_flutter_storefront/features/checkout/presentation/mutations/set_checkout_address_mutation.dart';
@@ -47,19 +50,25 @@ class CheckoutAddressCard extends ConsumerWidget {
                         : () {
                             context.push(
                               AccountRoutes.addressNew,
-                              extra: (int addressId) async {
-                                await ref
-                                    .read(
-                                      setCheckoutAddressMutationProvider
-                                          .notifier,
-                                    )
-                                    .setAddressCheckoutSession(
-                                      sessionId,
-                                      SetCheckoutAddressRequest(
-                                        addressId: addressId,
-                                      ),
-                                    );
-                              },
+                              extra: UpsertAddressArguments(
+                                loginRedirect: LoginRedirect(
+                                  AppRoutes.checkoutSession(sessionId),
+                                  requiresSameUser: true,
+                                ),
+                                onCreated: (int addressId) async {
+                                  await ref
+                                      .read(
+                                        setCheckoutAddressMutationProvider
+                                            .notifier,
+                                      )
+                                      .setAddressCheckoutSession(
+                                        sessionId,
+                                        SetCheckoutAddressRequest(
+                                          addressId: addressId,
+                                        ),
+                                      );
+                                },
+                              ),
                             );
                           },
                     child: mutation.isLoading
@@ -93,7 +102,9 @@ class CheckoutAddressCard extends ConsumerWidget {
                                       context: context,
                                       isScrollControlled: true,
                                       builder: (_) {
-                                        return const CheckoutAddressPicker();
+                                        return CheckoutAddressPicker(
+                                          sessionId: sessionId,
+                                        );
                                       },
                                     );
 

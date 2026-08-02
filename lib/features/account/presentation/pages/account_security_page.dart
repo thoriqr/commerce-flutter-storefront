@@ -62,7 +62,6 @@ class _AuthenticatedAccountSecurity extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    debugPrint('[Security] BUILD');
     final profile = ref.watch(userProfileProvider);
 
     final body = switch (profile) {

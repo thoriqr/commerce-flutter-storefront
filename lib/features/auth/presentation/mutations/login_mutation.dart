@@ -9,7 +9,6 @@ import 'package:commerce_flutter_storefront/features/auth/di/auth_repository_pro
 import 'package:commerce_flutter_storefront/features/auth/presentation/providers/auth_transition_provider.dart';
 import 'package:commerce_flutter_storefront/features/cart/presentation/providers/cart_provider.dart';
 import 'package:commerce_flutter_storefront/features/shared/mixins/async_mutation_mixin.dart';
-import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'login_mutation.g.dart';
@@ -37,15 +36,7 @@ class LoginMutation extends _$LoginMutation with AsyncMutationMixin {
 
     final lastUserId = await preferences.getLastUserId();
 
-    debugPrint(
-      '[LoginMutation] '
-      'lastUserId=$lastUserId '
-      'currentUserId=${result.userId}',
-    );
-
     final canRestore = lastUserId != null && lastUserId == result.userId;
-
-    debugPrint('[LoginMutation] canRestore=$canRestore');
 
     ref
         .read(authTransitionStateProvider.notifier)

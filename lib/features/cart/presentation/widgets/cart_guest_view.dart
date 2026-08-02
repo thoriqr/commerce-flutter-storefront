@@ -1,8 +1,7 @@
 import 'package:commerce_flutter_storefront/core/router/auth_routes.dart';
 import 'package:commerce_flutter_storefront/features/auth/constants/login_redirect.dart';
 import 'package:flutter/material.dart';
-
-import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CartGuestView extends StatelessWidget {
   const CartGuestView({super.key});
@@ -39,7 +38,9 @@ class CartGuestView extends StatelessWidget {
               onPressed: () {
                 AuthRoutes.pushLogin(
                   context,
-                  redirect: const LoginRedirect(AppRoutes.cart),
+                  redirect: LoginRedirect(
+                    GoRouterState.of(context).uri.toString(),
+                  ),
                 );
               },
               child: const Text('Login'),
