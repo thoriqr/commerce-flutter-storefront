@@ -1,28 +1,45 @@
 import 'package:commerce_flutter_storefront/features/product/data/mocks/product_summary_mock.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_summary.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/states/product_listing_state.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_empty_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'product_card.dart';
 
-class ProductGrid extends StatelessWidget {
-  const ProductGrid({super.key, required this.listing});
+class ProductGridSliver extends StatelessWidget {
+  const ProductGridSliver({
+    super.key,
+    required this.listing,
+    required this.onClearFilters,
+  });
 
   final AsyncValue<ProductListingState> listing;
+  final Future<void> Function() onClearFilters;
 
   @override
   Widget build(BuildContext context) {
-    final products = switch (listing) {
-      AsyncData(:final value) => value.products,
-      _ => ProductSummaryMock.items(6),
+    final state = switch (listing) {
+      AsyncData(:final value) => value,
+      _ => null,
     };
 
-    final isLoadingMore = switch (listing) {
-      AsyncData(:final value) => value.isLoadingMore,
-      _ => false,
-    };
+    final products = state?.products ?? ProductSummaryMock.items(6);
+
+    final isLoadingMore = state?.isLoadingMore ?? false;
+
+    final hasActiveFilters = (state?.activeFilterCount ?? 0) > 0;
+
+    if (!listing.isLoading && products.isEmpty) {
+      return SliverFillRemaining(
+        hasScrollBody: false,
+        child: ProductListingEmptyView(
+          hasActiveFilters: hasActiveFilters,
+          onClearFilters: onClearFilters,
+        ),
+      );
+    }
 
     return Skeletonizer.sliver(
       enabled: listing.isLoading,

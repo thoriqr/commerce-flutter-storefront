@@ -1,11 +1,14 @@
 import 'package:commerce_flutter_storefront/core/router/app_routes.dart';
+import 'package:commerce_flutter_storefront/features/catalog_filter/presentation/providers/catalog_filter_provider.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/providers/category_provider.dart';
 import 'package:commerce_flutter_storefront/features/category/presentation/widgets/category_header.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/providers/collection_provider.dart';
 import 'package:commerce_flutter_storefront/features/collection/presentation/widgets/collection_header.dart';
 import 'package:commerce_flutter_storefront/features/product/domain/product_source.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/controllers/product_listing_controller.dart';
-import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_grid.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/states/product_listing_state.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_grid_sliver.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_error_page.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_listing_toolbar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_search_header.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
@@ -85,9 +88,52 @@ class _ProductListingPageState extends ConsumerState<ProductListingPage> {
     }
   }
 
+  Object? _pageError(AsyncValue<ProductListingState> listing) {
+    if (listing.hasError) {
+      return listing.error;
+    }
+
+    switch (widget.source) {
+      case CollectionSource(:final slug):
+        final collection = ref.watch(collectionDetailProvider(slug));
+
+        if (collection.hasError) {
+          return collection.error;
+        }
+
+      case CategorySource(:final slugPath):
+        final category = ref.watch(categoryDetailProvider(slugPath));
+
+        if (category.hasError) {
+          return category.error;
+        }
+
+        final filters = ref.watch(catalogFilterByCategoryProvider(slugPath));
+
+        if (filters.hasError) {
+          return filters.error;
+        }
+
+      case SearchSource(:final query):
+        final filters = ref.watch(catalogFilterBySearchProvider(query));
+
+        if (filters.hasError) {
+          return filters.error;
+        }
+    }
+
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final listing = ref.watch(productListingControllerProvider(widget.source));
+
+    final pageError = _pageError(listing);
+
+    if (pageError != null) {
+      return ProductListingErrorPage(error: pageError, source: widget.source);
+    }
 
     return Scaffold(
       body: Column(
@@ -112,20 +158,41 @@ class _ProductListingPageState extends ConsumerState<ProductListingPage> {
           ),
 
           Expanded(
-            child: CustomScrollView(
-              controller: _controller,
-              slivers: [
-                SliverToBoxAdapter(child: _buildHeader()),
+            child: RefreshIndicator(
+              onRefresh: () {
+                return ref
+                    .read(
+                      productListingControllerProvider(widget.source).notifier,
+                    )
+                    .refresh();
+              },
+              child: CustomScrollView(
+                controller: _controller,
+                physics: const AlwaysScrollableScrollPhysics(),
+                slivers: [
+                  SliverToBoxAdapter(child: _buildHeader()),
 
-                SliverPersistentHeader(
-                  pinned: true,
-                  delegate: _ProductToolbarHeaderDelegate(
-                    child: ProductListingToolbar(source: widget.source),
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: _ProductToolbarHeaderDelegate(
+                      child: ProductListingToolbar(source: widget.source),
+                    ),
                   ),
-                ),
 
-                ProductGrid(listing: listing),
-              ],
+                  ProductGridSliver(
+                    listing: listing,
+                    onClearFilters: () {
+                      return ref
+                          .read(
+                            productListingControllerProvider(
+                              widget.source,
+                            ).notifier,
+                          )
+                          .clearAllFilters();
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],

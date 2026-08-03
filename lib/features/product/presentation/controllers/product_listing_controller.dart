@@ -1,3 +1,6 @@
+import 'package:commerce_flutter_storefront/features/catalog_filter/presentation/providers/catalog_filter_provider.dart';
+import 'package:commerce_flutter_storefront/features/category/presentation/providers/category_provider.dart';
+import 'package:commerce_flutter_storefront/features/collection/presentation/providers/collection_provider.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_listing_query_params.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_listing_result.dart';
 import 'package:commerce_flutter_storefront/features/product/data/models/product_sort_option.dart';
@@ -171,6 +174,37 @@ class ProductListingController extends _$ProductListingController {
 
       state = AsyncData(current.copyWith(isLoadingMore: false));
     }
+  }
+
+  Future<void> refresh() async {
+    final current = state.value;
+
+    if (current == null) return;
+
+    switch (source) {
+      case CollectionSource(:final slug):
+        ref.invalidate(collectionDetailProvider(slug));
+
+      case CategorySource(:final slugPath):
+        ref.invalidate(categoryDetailProvider(slugPath));
+        ref.invalidate(catalogFilterByCategoryProvider(slugPath));
+
+      case SearchSource(:final query):
+        ref.invalidate(catalogFilterBySearchProvider(query));
+    }
+
+    final params = current.params.copyWith(cursor: null);
+
+    final result = await _fetchProducts(source, params);
+
+    state = AsyncData(
+      current.copyWith(
+        products: result.products,
+        meta: result.meta,
+        params: params,
+        isLoadingMore: false,
+      ),
+    );
   }
 
   @override
