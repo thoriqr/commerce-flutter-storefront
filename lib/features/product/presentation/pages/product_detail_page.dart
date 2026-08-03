@@ -4,6 +4,7 @@ import 'package:commerce_flutter_storefront/features/product/presentation/provid
 import 'package:commerce_flutter_storefront/features/product/presentation/providers/selected_variant_id_provider.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_bottom_bar.dart';
 import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_detail_content.dart';
+import 'package:commerce_flutter_storefront/features/product/presentation/widgets/product_detail_error_page.dart';
 import 'package:commerce_flutter_storefront/features/shared/presentation/widgets/app_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,13 +28,30 @@ class _ProductDetailContent extends ConsumerWidget {
 
   final int id;
 
+  Future<void> _refresh(WidgetRef ref) async {
+    final product = await ref.read(productDetailProvider(id).future);
+
+    final selectedVariantId = ref.read(
+      selectedVariantIdProvider(product.initialVariantId),
+    );
+
+    ref.invalidate(productDetailProvider(id));
+    ref.invalidate(productVariantDetailProvider(id, selectedVariantId));
+
+    await Future.wait([
+      ref.read(productDetailProvider(id).future),
+      ref.read(productVariantDetailProvider(id, selectedVariantId).future),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productAsync = ref.watch(productDetailProvider(id));
 
     if (productAsync.hasError) {
-      return const Scaffold(
-        body: Center(child: Text('Failed to load product')),
+      return ProductDetailErrorPage(
+        error: productAsync.error!,
+        onRetry: () => _refresh(ref),
       );
     }
 
@@ -57,11 +75,14 @@ class _ProductDetailContent extends ConsumerWidget {
           ),
 
           Expanded(
-            child: Skeletonizer(
-              enabled: productAsync.isLoading,
-              child: ProductDetailContent(
-                product: product,
-                selectedVariantId: selectedVariantId,
+            child: RefreshIndicator(
+              onRefresh: () => _refresh(ref),
+              child: Skeletonizer(
+                enabled: productAsync.isLoading,
+                child: ProductDetailContent(
+                  product: product,
+                  selectedVariantId: selectedVariantId,
+                ),
               ),
             ),
           ),

@@ -84,6 +84,8 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
             productVariantDetailProvider(widget.productId, widget.variantId),
           );
 
+    final hasVariantError = variantAsync?.hasError ?? false;
+
     final variant = isPending
         ? ProductVariantDetailMock.item()
         : switch (variantAsync!) {
@@ -98,7 +100,10 @@ class _ProductBottomBarState extends ConsumerState<ProductBottomBar> {
         mutation.isLoading;
 
     final canAddToCart =
-        !isPending && widget.productIsAvailable && variant.isAvailable;
+        !isPending &&
+        !hasVariantError &&
+        widget.productIsAvailable &&
+        variant.isAvailable;
 
     return SafeArea(
       top: false,

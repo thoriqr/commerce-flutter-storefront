@@ -38,7 +38,7 @@ class ProductVariantInfo extends ConsumerWidget {
     );
 
     if (variantAsync.hasError) {
-      return const SizedBox.shrink();
+      return const _VariantUnavailable();
     }
 
     final variant = switch (variantAsync) {
@@ -129,5 +129,35 @@ class _Content extends StatelessWidget {
       case null:
         return Theme.of(context).colorScheme.onSurfaceVariant;
     }
+  }
+}
+
+class _VariantUnavailable extends StatelessWidget {
+  const _VariantUnavailable();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '-',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+
+        const SizedBox(height: 4),
+
+        Text(
+          'Selected variant is unavailable.',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.error,
+          ),
+        ),
+      ],
+    );
   }
 }
