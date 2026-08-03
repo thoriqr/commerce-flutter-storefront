@@ -30,6 +30,45 @@ class AccountOrderTile extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Expanded(
+                    child: Text(
+                      order.orderCode,
+                      style: theme.textTheme.titleSmall,
+                    ),
+                  ),
+
+                  Text(
+                    AppDateUtils.dateTime(order.createdAt),
+                    style: theme.textTheme.bodySmall,
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.secondaryContainer,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                  child: Text(
+                    order.status.label,
+                    style: theme.textTheme.labelSmall,
+                  ),
+                ),
+              ),
+
+              const Divider(height: 32),
+
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   SizedBox(
                     width: 80,
                     height: 80,
@@ -76,20 +115,6 @@ class AccountOrderTile extends StatelessWidget {
                             style: theme.textTheme.bodySmall,
                           ),
                         ],
-
-                        const SizedBox(height: 8),
-
-                        Text(
-                          order.status.label,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-
-                        const SizedBox(height: 4),
-
-                        Text(
-                          AppDateUtils.dateTime(order.createdAt),
-                          style: theme.textTheme.bodySmall,
-                        ),
                       ],
                     ),
                   ),
@@ -100,12 +125,12 @@ class AccountOrderTile extends StatelessWidget {
 
               Row(
                 children: [
-                  Text(
-                    CurrencyUtils.formatRupiah(order.total),
-                    style: theme.textTheme.titleMedium,
+                  Expanded(
+                    child: Text(
+                      CurrencyUtils.formatRupiah(order.total),
+                      style: theme.textTheme.titleMedium,
+                    ),
                   ),
-
-                  const Spacer(),
 
                   if (order.canConfirm)
                     FilledButton.tonal(

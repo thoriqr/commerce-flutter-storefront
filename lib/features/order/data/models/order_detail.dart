@@ -87,7 +87,7 @@ abstract class OrderDetail with _$OrderDetail {
     required OrderUserAddress address,
     required OrderShipping shipping,
     required List<OrderItem> items,
-    required OrderWarehouseOrigin warehouseOrigin,
+    required OrderWarehouseOrigin? warehouseOrigin,
     required List<OrderTimeline> timeline,
   }) = _OrderDetail;
 

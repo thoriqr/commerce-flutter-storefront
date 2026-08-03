@@ -22,9 +22,11 @@ _OrderDetail _$OrderDetailFromJson(Map<String, dynamic> json) => _OrderDetail(
   items: (json['items'] as List<dynamic>)
       .map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
       .toList(),
-  warehouseOrigin: OrderWarehouseOrigin.fromJson(
-    json['warehouseOrigin'] as Map<String, dynamic>,
-  ),
+  warehouseOrigin: json['warehouseOrigin'] == null
+      ? null
+      : OrderWarehouseOrigin.fromJson(
+          json['warehouseOrigin'] as Map<String, dynamic>,
+        ),
   timeline: (json['timeline'] as List<dynamic>)
       .map((e) => OrderTimeline.fromJson(e as Map<String, dynamic>))
       .toList(),

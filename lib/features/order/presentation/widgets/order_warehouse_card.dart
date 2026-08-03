@@ -4,10 +4,14 @@ import 'package:flutter/material.dart';
 class OrderWarehouseCard extends StatelessWidget {
   const OrderWarehouseCard({super.key, required this.warehouse});
 
-  final OrderWarehouseOrigin warehouse;
+  final OrderWarehouseOrigin? warehouse;
 
   @override
   Widget build(BuildContext context) {
+    if (warehouse == null) {
+      return const SizedBox.shrink();
+    }
+
     final theme = Theme.of(context);
 
     return Card(
@@ -20,20 +24,16 @@ class OrderWarehouseCard extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            Text(warehouse.name, style: theme.textTheme.titleSmall),
+            Text(warehouse!.name, style: theme.textTheme.titleSmall),
 
             const SizedBox(height: 8),
 
-            Text(
-              '${warehouse.district}, '
-              '${warehouse.city}',
-            ),
+            Text('${warehouse!.district}, ${warehouse!.city}'),
 
             const SizedBox(height: 4),
 
             Text(
-              '${warehouse.province} '
-              '${warehouse.postalCode}',
+              '${warehouse!.province} ${warehouse!.postalCode}',
               style: theme.textTheme.bodySmall,
             ),
 

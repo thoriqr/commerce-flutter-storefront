@@ -76,8 +76,6 @@ class OrderDetailContent extends StatelessWidget {
           const SizedBox(height: 16),
 
           OrderSummaryCard(order: order),
-
-          const SizedBox(height: 100),
         ],
       ),
     );

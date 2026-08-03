@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderDetail {
 
- String get orderCode; int get subtotal; int get shippingCost; int get total; OrderRawStatus get rawStatus; OrderStatus get status; PaymentStatus get paymentStatus; String get expiresAt; String? get paidAt; bool get canPay; OrderUserAddress get address; OrderShipping get shipping; List<OrderItem> get items; OrderWarehouseOrigin get warehouseOrigin; List<OrderTimeline> get timeline;
+ String get orderCode; int get subtotal; int get shippingCost; int get total; OrderRawStatus get rawStatus; OrderStatus get status; PaymentStatus get paymentStatus; String get expiresAt; String? get paidAt; bool get canPay; OrderUserAddress get address; OrderShipping get shipping; List<OrderItem> get items; OrderWarehouseOrigin? get warehouseOrigin; List<OrderTimeline> get timeline;
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,11 +48,11 @@ abstract mixin class $OrderDetailCopyWith<$Res>  {
   factory $OrderDetailCopyWith(OrderDetail value, $Res Function(OrderDetail) _then) = _$OrderDetailCopyWithImpl;
 @useResult
 $Res call({
- String orderCode, int subtotal, int shippingCost, int total, OrderRawStatus rawStatus, OrderStatus status, PaymentStatus paymentStatus, String expiresAt, String? paidAt, bool canPay, OrderUserAddress address, OrderShipping shipping, List<OrderItem> items, OrderWarehouseOrigin warehouseOrigin, List<OrderTimeline> timeline
+ String orderCode, int subtotal, int shippingCost, int total, OrderRawStatus rawStatus, OrderStatus status, PaymentStatus paymentStatus, String expiresAt, String? paidAt, bool canPay, OrderUserAddress address, OrderShipping shipping, List<OrderItem> items, OrderWarehouseOrigin? warehouseOrigin, List<OrderTimeline> timeline
 });
 
 
-$OrderUserAddressCopyWith<$Res> get address;$OrderShippingCopyWith<$Res> get shipping;$OrderWarehouseOriginCopyWith<$Res> get warehouseOrigin;
+$OrderUserAddressCopyWith<$Res> get address;$OrderShippingCopyWith<$Res> get shipping;$OrderWarehouseOriginCopyWith<$Res>? get warehouseOrigin;
 
 }
 /// @nodoc
@@ -65,7 +65,7 @@ class _$OrderDetailCopyWithImpl<$Res>
 
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? orderCode = null,Object? subtotal = null,Object? shippingCost = null,Object? total = null,Object? rawStatus = null,Object? status = null,Object? paymentStatus = null,Object? expiresAt = null,Object? paidAt = freezed,Object? canPay = null,Object? address = null,Object? shipping = null,Object? items = null,Object? warehouseOrigin = null,Object? timeline = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? orderCode = null,Object? subtotal = null,Object? shippingCost = null,Object? total = null,Object? rawStatus = null,Object? status = null,Object? paymentStatus = null,Object? expiresAt = null,Object? paidAt = freezed,Object? canPay = null,Object? address = null,Object? shipping = null,Object? items = null,Object? warehouseOrigin = freezed,Object? timeline = null,}) {
   return _then(_self.copyWith(
 orderCode: null == orderCode ? _self.orderCode : orderCode // ignore: cast_nullable_to_non_nullable
 as String,subtotal: null == subtotal ? _self.subtotal : subtotal // ignore: cast_nullable_to_non_nullable
@@ -80,8 +80,8 @@ as String?,canPay: null == canPay ? _self.canPay : canPay // ignore: cast_nullab
 as bool,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as OrderUserAddress,shipping: null == shipping ? _self.shipping : shipping // ignore: cast_nullable_to_non_nullable
 as OrderShipping,items: null == items ? _self.items : items // ignore: cast_nullable_to_non_nullable
-as List<OrderItem>,warehouseOrigin: null == warehouseOrigin ? _self.warehouseOrigin : warehouseOrigin // ignore: cast_nullable_to_non_nullable
-as OrderWarehouseOrigin,timeline: null == timeline ? _self.timeline : timeline // ignore: cast_nullable_to_non_nullable
+as List<OrderItem>,warehouseOrigin: freezed == warehouseOrigin ? _self.warehouseOrigin : warehouseOrigin // ignore: cast_nullable_to_non_nullable
+as OrderWarehouseOrigin?,timeline: null == timeline ? _self.timeline : timeline // ignore: cast_nullable_to_non_nullable
 as List<OrderTimeline>,
   ));
 }
@@ -107,9 +107,12 @@ $OrderShippingCopyWith<$Res> get shipping {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$OrderWarehouseOriginCopyWith<$Res> get warehouseOrigin {
-  
-  return $OrderWarehouseOriginCopyWith<$Res>(_self.warehouseOrigin, (value) {
+$OrderWarehouseOriginCopyWith<$Res>? get warehouseOrigin {
+    if (_self.warehouseOrigin == null) {
+    return null;
+  }
+
+  return $OrderWarehouseOriginCopyWith<$Res>(_self.warehouseOrigin!, (value) {
     return _then(_self.copyWith(warehouseOrigin: value));
   });
 }
@@ -194,7 +197,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orderCode,  int subtotal,  int shippingCost,  int total,  OrderRawStatus rawStatus,  OrderStatus status,  PaymentStatus paymentStatus,  String expiresAt,  String? paidAt,  bool canPay,  OrderUserAddress address,  OrderShipping shipping,  List<OrderItem> items,  OrderWarehouseOrigin warehouseOrigin,  List<OrderTimeline> timeline)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String orderCode,  int subtotal,  int shippingCost,  int total,  OrderRawStatus rawStatus,  OrderStatus status,  PaymentStatus paymentStatus,  String expiresAt,  String? paidAt,  bool canPay,  OrderUserAddress address,  OrderShipping shipping,  List<OrderItem> items,  OrderWarehouseOrigin? warehouseOrigin,  List<OrderTimeline> timeline)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderDetail() when $default != null:
 return $default(_that.orderCode,_that.subtotal,_that.shippingCost,_that.total,_that.rawStatus,_that.status,_that.paymentStatus,_that.expiresAt,_that.paidAt,_that.canPay,_that.address,_that.shipping,_that.items,_that.warehouseOrigin,_that.timeline);case _:
@@ -215,7 +218,7 @@ return $default(_that.orderCode,_that.subtotal,_that.shippingCost,_that.total,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orderCode,  int subtotal,  int shippingCost,  int total,  OrderRawStatus rawStatus,  OrderStatus status,  PaymentStatus paymentStatus,  String expiresAt,  String? paidAt,  bool canPay,  OrderUserAddress address,  OrderShipping shipping,  List<OrderItem> items,  OrderWarehouseOrigin warehouseOrigin,  List<OrderTimeline> timeline)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String orderCode,  int subtotal,  int shippingCost,  int total,  OrderRawStatus rawStatus,  OrderStatus status,  PaymentStatus paymentStatus,  String expiresAt,  String? paidAt,  bool canPay,  OrderUserAddress address,  OrderShipping shipping,  List<OrderItem> items,  OrderWarehouseOrigin? warehouseOrigin,  List<OrderTimeline> timeline)  $default,) {final _that = this;
 switch (_that) {
 case _OrderDetail():
 return $default(_that.orderCode,_that.subtotal,_that.shippingCost,_that.total,_that.rawStatus,_that.status,_that.paymentStatus,_that.expiresAt,_that.paidAt,_that.canPay,_that.address,_that.shipping,_that.items,_that.warehouseOrigin,_that.timeline);case _:
@@ -235,7 +238,7 @@ return $default(_that.orderCode,_that.subtotal,_that.shippingCost,_that.total,_t
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orderCode,  int subtotal,  int shippingCost,  int total,  OrderRawStatus rawStatus,  OrderStatus status,  PaymentStatus paymentStatus,  String expiresAt,  String? paidAt,  bool canPay,  OrderUserAddress address,  OrderShipping shipping,  List<OrderItem> items,  OrderWarehouseOrigin warehouseOrigin,  List<OrderTimeline> timeline)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String orderCode,  int subtotal,  int shippingCost,  int total,  OrderRawStatus rawStatus,  OrderStatus status,  PaymentStatus paymentStatus,  String expiresAt,  String? paidAt,  bool canPay,  OrderUserAddress address,  OrderShipping shipping,  List<OrderItem> items,  OrderWarehouseOrigin? warehouseOrigin,  List<OrderTimeline> timeline)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderDetail() when $default != null:
 return $default(_that.orderCode,_that.subtotal,_that.shippingCost,_that.total,_that.rawStatus,_that.status,_that.paymentStatus,_that.expiresAt,_that.paidAt,_that.canPay,_that.address,_that.shipping,_that.items,_that.warehouseOrigin,_that.timeline);case _:
@@ -272,7 +275,7 @@ class _OrderDetail implements OrderDetail {
   return EqualUnmodifiableListView(_items);
 }
 
-@override final  OrderWarehouseOrigin warehouseOrigin;
+@override final  OrderWarehouseOrigin? warehouseOrigin;
  final  List<OrderTimeline> _timeline;
 @override List<OrderTimeline> get timeline {
   if (_timeline is EqualUnmodifiableListView) return _timeline;
@@ -314,11 +317,11 @@ abstract mixin class _$OrderDetailCopyWith<$Res> implements $OrderDetailCopyWith
   factory _$OrderDetailCopyWith(_OrderDetail value, $Res Function(_OrderDetail) _then) = __$OrderDetailCopyWithImpl;
 @override @useResult
 $Res call({
- String orderCode, int subtotal, int shippingCost, int total, OrderRawStatus rawStatus, OrderStatus status, PaymentStatus paymentStatus, String expiresAt, String? paidAt, bool canPay, OrderUserAddress address, OrderShipping shipping, List<OrderItem> items, OrderWarehouseOrigin warehouseOrigin, List<OrderTimeline> timeline
+ String orderCode, int subtotal, int shippingCost, int total, OrderRawStatus rawStatus, OrderStatus status, PaymentStatus paymentStatus, String expiresAt, String? paidAt, bool canPay, OrderUserAddress address, OrderShipping shipping, List<OrderItem> items, OrderWarehouseOrigin? warehouseOrigin, List<OrderTimeline> timeline
 });
 
 
-@override $OrderUserAddressCopyWith<$Res> get address;@override $OrderShippingCopyWith<$Res> get shipping;@override $OrderWarehouseOriginCopyWith<$Res> get warehouseOrigin;
+@override $OrderUserAddressCopyWith<$Res> get address;@override $OrderShippingCopyWith<$Res> get shipping;@override $OrderWarehouseOriginCopyWith<$Res>? get warehouseOrigin;
 
 }
 /// @nodoc
@@ -331,7 +334,7 @@ class __$OrderDetailCopyWithImpl<$Res>
 
 /// Create a copy of OrderDetail
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? orderCode = null,Object? subtotal = null,Object? shippingCost = null,Object? total = null,Object? rawStatus = null,Object? status = null,Object? paymentStatus = null,Object? expiresAt = null,Object? paidAt = freezed,Object? canPay = null,Object? address = null,Object? shipping = null,Object? items = null,Object? warehouseOrigin = null,Object? timeline = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? orderCode = null,Object? subtotal = null,Object? shippingCost = null,Object? total = null,Object? rawStatus = null,Object? status = null,Object? paymentStatus = null,Object? expiresAt = null,Object? paidAt = freezed,Object? canPay = null,Object? address = null,Object? shipping = null,Object? items = null,Object? warehouseOrigin = freezed,Object? timeline = null,}) {
   return _then(_OrderDetail(
 orderCode: null == orderCode ? _self.orderCode : orderCode // ignore: cast_nullable_to_non_nullable
 as String,subtotal: null == subtotal ? _self.subtotal : subtotal // ignore: cast_nullable_to_non_nullable
@@ -346,8 +349,8 @@ as String?,canPay: null == canPay ? _self.canPay : canPay // ignore: cast_nullab
 as bool,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
 as OrderUserAddress,shipping: null == shipping ? _self.shipping : shipping // ignore: cast_nullable_to_non_nullable
 as OrderShipping,items: null == items ? _self._items : items // ignore: cast_nullable_to_non_nullable
-as List<OrderItem>,warehouseOrigin: null == warehouseOrigin ? _self.warehouseOrigin : warehouseOrigin // ignore: cast_nullable_to_non_nullable
-as OrderWarehouseOrigin,timeline: null == timeline ? _self._timeline : timeline // ignore: cast_nullable_to_non_nullable
+as List<OrderItem>,warehouseOrigin: freezed == warehouseOrigin ? _self.warehouseOrigin : warehouseOrigin // ignore: cast_nullable_to_non_nullable
+as OrderWarehouseOrigin?,timeline: null == timeline ? _self._timeline : timeline // ignore: cast_nullable_to_non_nullable
 as List<OrderTimeline>,
   ));
 }
@@ -374,9 +377,12 @@ $OrderShippingCopyWith<$Res> get shipping {
 /// with the given fields replaced by the non-null parameter values.
 @override
 @pragma('vm:prefer-inline')
-$OrderWarehouseOriginCopyWith<$Res> get warehouseOrigin {
-  
-  return $OrderWarehouseOriginCopyWith<$Res>(_self.warehouseOrigin, (value) {
+$OrderWarehouseOriginCopyWith<$Res>? get warehouseOrigin {
+    if (_self.warehouseOrigin == null) {
+    return null;
+  }
+
+  return $OrderWarehouseOriginCopyWith<$Res>(_self.warehouseOrigin!, (value) {
     return _then(_self.copyWith(warehouseOrigin: value));
   });
 }
